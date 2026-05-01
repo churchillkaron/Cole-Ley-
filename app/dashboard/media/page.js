@@ -1,9 +1,10 @@
+export const dynamic = "force-dynamic";
+
 "use client";
-// at TOP of file
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+
 
 export default function MediaPage() {
   const router = useRouter();

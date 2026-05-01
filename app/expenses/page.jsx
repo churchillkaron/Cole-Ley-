@@ -1,8 +1,10 @@
+export const dynamic = "force-dynamic";
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+
 // at TOP of file
 
 export default function ExpensesPage() {
