@@ -1,5 +1,6 @@
 "use client";
 
+import { getSupabase } from "@/lib/supabase";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -18,7 +19,10 @@ export default function InvoicePreview() {
   /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
   async function checkUser() {
-    const { data } = await supabase.auth.getUser();
+    const supabase = getSupabase();
+if (!supabase) return;
+
+const { data } = await supabase.auth.getUser();
 
     if (!data.user) {
       router.push("/");
