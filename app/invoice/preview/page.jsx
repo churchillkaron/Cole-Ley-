@@ -20,9 +20,9 @@ export default function InvoicePreview() {
   useEffect(() => {
   async function checkUser() {
     const supabase = getSupabase();
-if (!supabase) return;
+    if (!supabase) return;
 
-const { data } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
 
     if (!data.user) {
       router.push("/");
