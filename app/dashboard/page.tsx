@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import AppShell from "../components/AppShell";
-
+// at TOP of file
+export const dynamic = "force-dynamic";
 export default function Dashboard() {
   const router = useRouter();
 

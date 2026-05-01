@@ -1,5 +1,6 @@
 "use client";
-
+// at TOP of file
+export const dynamic = "force-dynamic";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
