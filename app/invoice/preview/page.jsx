@@ -19,8 +19,10 @@ export default function InvoicePreview() {
   /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
   async function checkUser() {
-    const supabase = getSupabase();
-    if (!supabase) return;
+   if (typeof window === "undefined") return;
+
+const supabase = getSupabase();
+if (!supabase) return;
 
     const { data } = await supabase.auth.getUser();
 
