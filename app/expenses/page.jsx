@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 // at TOP of file
-export const dynamic = "force-dynamic";
+
 export default function ExpensesPage() {
   const router = useRouter();
 
