@@ -1,26 +1,129 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* HERO */
+.hero {
+  height: 100vh;
+  position: relative;
+
+  background-image: url('/bg.png');
+  background-size: 120%;        /* 🔥 ZOOM */
+  background-position: 75% center; /* 🔥 MOVE RIGHT */
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+}
+
+/* OVERLAY */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.9) 0%,
+    rgba(0,0,0,0.7) 30%,
+    rgba(0,0,0,0.3) 60%,
+    transparent 100%
+  );
+}
+
+/* NAV */
+.nav {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 30px 60px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.logo {
+  font-family: serif;
+  letter-spacing: 6px;
+  color: #d4af37;
+}
+
+.links {
+  display: flex;
+  gap: 25px;
+}
+
+.links a {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.7);
+}
+
+.links .active {
+  color: #d4af37;
+}
+
+/* CONTENT */
+.content {
+  position: relative;
+  z-index: 2;
+  padding-left: 80px;
+  max-width: 600px;
+}
+
+.eyebrow {
+  color: #d4af37;
+  letter-spacing: 5px;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: serif;
+  font-size: 90px;
+  margin: 0;
+}
+
+.line {
+  width: 60px;
+  height: 2px;
+  background: #d4af37;
+  margin: 20px 0;
+}
+
+.desc {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* BUTTONS */
+.buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 12px 25px;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.primary {
+  background: #d4af37;
+  color: black;
+}
+
+.secondary {
+  border: 1px solid #d4af37;
+  color: #d4af37;
 }
