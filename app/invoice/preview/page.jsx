@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { getSupabase } from "@/lib/supabase";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
