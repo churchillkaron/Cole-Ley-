@@ -1,6 +1,7 @@
+"use client";
 export const dynamic = "force-dynamic";
 
-"use client";
+
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
