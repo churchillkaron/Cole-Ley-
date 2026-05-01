@@ -1,7 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-
+import { getSupabase } from "@/lib/supabase";
 
 export default function MediaPage() {
   return (
