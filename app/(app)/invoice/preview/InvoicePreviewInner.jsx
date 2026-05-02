@@ -107,7 +107,16 @@ async function downloadPDF() {
   const blob = pdf.output("blob");
   const url = URL.createObjectURL(blob);
 
-  window.open(url, "_blank"); // iPhone fix
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `invoice-${invoice?.invoice_number}.pdf`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  // cleanup
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function sendEmail() {
