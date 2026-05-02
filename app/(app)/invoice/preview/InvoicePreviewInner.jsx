@@ -104,7 +104,10 @@ async function downloadPDF() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  pdf.save(`invoice-${invoice?.invoice_number}.pdf`);
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
+
+  window.open(url, "_blank"); // iPhone fix
 }
 
 function sendEmail() {
@@ -153,8 +156,7 @@ return (
 
   {/* MOBILE FIX WRAPPER */}
   <div className="w-full overflow-x-auto flex justify-center">
-    <div className="scale-[0.6] sm:scale-100 origin-top">
-
+    <div id="invoice-scale-wrapper" className="scale-[0.6] sm:scale-100 origin-top">
       <div
         id="invoice"
         className="w-[794px] h-[1123px] bg-[#0a0a0a] text-white relative font-serif overflow-hidden"
