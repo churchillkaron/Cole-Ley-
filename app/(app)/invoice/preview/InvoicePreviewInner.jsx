@@ -102,27 +102,12 @@ async function generatePDF() {
 }
 async function downloadPDF() {
   const pdf = await generatePDF();
-  if (!pdf) return;
-
-  const blob = pdf.output("blob");
-
-  const formData = new FormData();
-  formData.append("file", blob, `invoice-${invoice.invoice_number}.pdf`);
-
-  const res = await fetch("/api/upload-pdf", {
-    method: "POST",
-    body: formData,
-  });
-
-  const data = await res.json();
-
-  if (!data.url) {
-    alert("Upload failed");
+  if (!pdf) {
+    alert("PDF failed");
     return;
   }
 
-  // 👉 OPEN REAL FILE (THIS FIXES IPHONE)
-  window.location.href = data.url;
+  pdf.save(`invoice-${invoice?.invoice_number || "invoice"}.pdf`);
 }
 
 function sendEmail() {
