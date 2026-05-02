@@ -2,7 +2,7 @@
 export const dynamic = "force-dynamic";
 
 
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

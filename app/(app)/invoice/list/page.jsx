@@ -3,18 +3,25 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getSupabase } from "@/lib/supabase"; 
+import { getSupabase } from "@/lib/supabase";
 
 export default function InvoiceListPage() {
-  const supabase = getSupabase(); 
+  const router = useRouter();
 
+  const [supabase, setSupabase] = useState(null);
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
-
-  /* 🔒 PROTECT PAGE (OWNER ONLY) */
+  // ✅ Initialize Supabase ONLY in browser
   useEffect(() => {
+    const client = getSupabase();
+    setSupabase(client);
+  }, []);
+
+  // 🔒 Protect page (owner only)
+  useEffect(() => {
+    if (!supabase) return;
+
     async function checkUser() {
       const { data } = await supabase.auth.getUser();
 
@@ -37,8 +44,9 @@ export default function InvoiceListPage() {
     }
 
     checkUser();
-  }, []);
+  }, [supabase, router]);
 
+  // 📄 Fetch invoices
   useEffect(() => {
     async function fetchInvoices() {
       try {
