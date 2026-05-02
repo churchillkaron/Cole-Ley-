@@ -20,7 +20,7 @@ export default function Home() {
   }
 
   try {
-
+const supabase = getSupabase();
 if (!supabase) return;
 
 const { data, error } = await supabase.auth.signInWithPassword({
