@@ -111,29 +111,36 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
+  // 🚨 Open window FIRST (important for iPhone)
+  const win = window.open("", "_blank");
+  if (!win) return;
+
   const pdf = await generatePDF();
-  if (!pdf) return;
+  if (!pdf) {
+    win.close();
+    return;
+  }
 
-  const dataUrl = pdf.output("dataurlstring");
+  const dataUrl = pdf.output("datauristring");
 
-  const newWindow = window.open();
-  if (!newWindow) return;
-
-  newWindow.document.write(`
+  win.document.write(`
     <html>
       <head>
         <title>Invoice ${invoice?.invoice_number}</title>
       </head>
       <body style="margin:0">
-        <iframe 
+        <embed 
           src="${dataUrl}" 
-          style="border:none;width:100%;height:100vh"
-        ></iframe>
+          type="application/pdf" 
+          width="100%" 
+          height="100%"
+        />
       </body>
     </html>
   `);
-}
 
+  win.document.close();
+}
 
 function sendEmail() {
 const subject = `Invoice ${invoice?.invoice_number}`;
