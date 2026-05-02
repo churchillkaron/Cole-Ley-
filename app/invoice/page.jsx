@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-
+import { getSupabase } from "@/lib/supabase";
 
 export default function InvoicePage() {
   const router = useRouter();
@@ -28,7 +28,10 @@ export default function InvoicePage() {
   /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
   async function checkUser() {
-    const { data } = await supabase.auth.getUser();
+  const supabase = getSupabase(); // ✅ FIX
+  if (!supabase) return;
+
+  const { data } = await supabase.auth.getUser();
 
     if (!data.user) {
       router.push("/");
