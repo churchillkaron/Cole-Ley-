@@ -111,9 +111,27 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
-const pdf = await generatePDF();
-if (!pdf) return;
-pdf.save(`invoice-${invoice?.invoice_number || "file"}.pdf`);
+  const pdf = await generatePDF();
+  if (!pdf) return;
+
+  const dataUrl = pdf.output("dataurlstring");
+
+  const newWindow = window.open();
+  if (!newWindow) return;
+
+  newWindow.document.write(`
+    <html>
+      <head>
+        <title>Invoice ${invoice?.invoice_number}</title>
+      </head>
+      <body style="margin:0">
+        <iframe 
+          src="${dataUrl}" 
+          style="border:none;width:100%;height:100vh"
+        ></iframe>
+      </body>
+    </html>
+  `);
 }
 
 
