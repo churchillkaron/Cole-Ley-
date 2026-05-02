@@ -75,28 +75,39 @@ else setLoading(false);
 }, [id]);
 
 async function generatePDF() {
-const element = document.getElementById("invoice");
-if (!element) return;
+  const element = document.getElementById("invoice");
+  const wrapper = document.getElementById("invoice-scale-wrapper");
 
+  if (!element || !wrapper) return;
 
-const canvas = await html2canvas(element, {
-  scale: 3,
-  useCORS: true,
-  backgroundColor: "#0a0a0a",
-});
+  // Save original transform
+  const originalTransform = wrapper.style.transform;
 
-const imgData = canvas.toDataURL("image/png");
+  // 🚀 Remove scaling BEFORE capture
+  wrapper.style.transform = "scale(1)";
 
-const pdf = new jsPDF({
-  orientation: "portrait",
-  unit: "px",
-  format: [794, 1123],
-});
+  const canvas = await html2canvas(element, {
+    scale: 3,
+    useCORS: true,
+    backgroundColor: "#0a0a0a",
+    width: 794,
+    height: 1123,
+  });
 
-pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
-return pdf;
+  // Restore scaling AFTER capture
+  wrapper.style.transform = originalTransform;
 
+  const imgData = canvas.toDataURL("image/png");
 
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "px",
+    format: [794, 1123],
+  });
+
+  pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
+
+  return pdf;
 }
 
 async function downloadPDF() {
@@ -105,11 +116,6 @@ if (!pdf) return;
 pdf.save(`invoice-${invoice?.invoice_number || "file"}.pdf`);
 }
 
-async function exportPDF() {
-const pdf = await generatePDF();
-if (!pdf) return;
-pdf.output("dataurlnewwindow");
-}
 
 function sendEmail() {
 const subject = `Invoice ${invoice?.invoice_number}`;
@@ -117,9 +123,16 @@ const body = `Please find your invoice attached.`;
 window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-function sendWhatsApp() {
-const text = `Invoice ${invoice?.invoice_number} for ${invoice?.client}`;
-window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+async function sendWhatsApp() {
+  const pdf = await generatePDF();
+  if (!pdf) return;
+
+  // download file first
+  pdf.save(`invoice-${invoice?.invoice_number}.pdf`);
+
+  // clean message
+  const text = `Invoice ${invoice?.invoice_number}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
 }
 
 if (loading) return <div className="text-white p-10">Loading...</div>;
@@ -133,9 +146,7 @@ return (
 <div className="bg-black flex justify-center py-10 sm:py-20 flex-col items-center">
 
   <div className="mb-6 flex gap-2 sm:gap-4 flex-wrap justify-center">
-    <button onClick={exportPDF} className="border px-4 py-2 text-sm border-[#d4af37] text-[#d4af37]">
-      EXPORT PDF
-    </button>
+    
 
     <button onClick={downloadPDF} className="border px-4 py-2 text-sm border-white/30 text-white/80">
       DOWNLOAD
