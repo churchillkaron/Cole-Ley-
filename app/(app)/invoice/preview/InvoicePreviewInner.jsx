@@ -111,7 +111,7 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
-  // 🚨 Open window FIRST (important for iPhone)
+  // open window FIRST (Safari requirement)
   const win = window.open("", "_blank");
   if (!win) return;
 
@@ -121,25 +121,12 @@ async function downloadPDF() {
     return;
   }
 
-  const dataUrl = pdf.output("datauristring");
+  // convert to blob
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
 
-  win.document.write(`
-    <html>
-      <head>
-        <title>Invoice ${invoice?.invoice_number}</title>
-      </head>
-      <body style="margin:0">
-        <embed 
-          src="${dataUrl}" 
-          type="application/pdf" 
-          width="100%" 
-          height="100%"
-        />
-      </body>
-    </html>
-  `);
-
-  win.document.close();
+  // redirect new window to blob URL
+  win.location.href = url;
 }
 
 function sendEmail() {
