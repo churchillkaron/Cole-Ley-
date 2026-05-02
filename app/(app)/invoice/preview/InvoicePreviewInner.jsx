@@ -110,16 +110,17 @@ async function generatePDF() {
   return pdf;
 }
 
-async function downloadPDF() {
-  const pdf = await generatePDF();
-  if (!pdf) return;
+function downloadPDF() {
+  const url = invoice?.pdf_url; // 👈 must exist
 
-  const blob = pdf.output("blob");
+  if (!url) {
+    alert("No PDF found");
+    return;
+  }
 
   const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
+  link.href = url;
   link.download = `invoice-${invoice?.invoice_number}.pdf`;
-
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
