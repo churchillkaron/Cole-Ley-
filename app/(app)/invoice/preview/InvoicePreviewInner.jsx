@@ -118,15 +118,22 @@ async function generatePDF() {
   return pdf;
 }
 async function downloadPDF() {
-  const pdf = await generatePDF();
-  if (!pdf) {
-    alert("PDF failed");
-    return;
-  }
+  const res = await fetch("/api/invoice/pdf", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(invoice),
+  });
 
-  pdf.save(`invoice-${invoice?.invoice_number || "invoice"}.pdf`);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `invoice-${invoice.invoice_number}.pdf`;
+  link.click();
 }
-
 function sendEmail() {
 const subject = `Invoice ${invoice?.invoice_number}`;
 const body = `Please find your invoice attached.`;
