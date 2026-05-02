@@ -13,6 +13,8 @@ export default function InvoicePage() {
   const [clientTaxId, setClientTaxId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [type, setType] = useState("invoice");
+  const [clients, setClients] = useState([]);
+const [selectedClientId, setSelectedClientId] = useState(null);
 
   const [taxEnabled, setTaxEnabled] = useState(false);
   const [taxRate, setTaxRate] = useState(7);
@@ -51,6 +53,20 @@ export default function InvoicePage() {
 
   checkUser();
 }, []);
+useEffect(() => {
+  async function fetchClients() {
+    const supabase = getSupabase();
+
+    const { data } = await supabase
+      .from("clients")
+      .select("*")
+      .order("name");
+
+    setClients(data || []);
+  }
+
+  fetchClients();
+}, []);
 
   function updateItem(index, field, value) {
     const updated = [...items];
@@ -74,10 +90,16 @@ export default function InvoicePage() {
   );
 
   async function handleGenerate() {
-    if (!client || items.length === 0) {
-      alert("Fill required fields");
-      return;
-    }
+    const supabase = getSupabase();
+
+if (!selectedClientId && client) {
+  await supabase.from("clients").insert({
+    name: client,
+    address: clientAddress,
+    tax_id: clientTaxId,
+  });
+}
+    
 
     try {
       setLoading(true);
@@ -118,7 +140,27 @@ export default function InvoicePage() {
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-6">
       <div className="w-full max-w-2xl p-6 sm:p-10 space-y-4">
+<select
+  className="w-full p-3 bg-gray-800 rounded"
+  onChange={(e) => {
+    const id = e.target.value;
+    setSelectedClientId(id);
 
+    const client = clients.find(c => c.id === id);
+    if (!client) return;
+
+    setClient(client.name || "");
+    setClientAddress(client.address || "");
+    setClientTaxId(client.tax_id || "");
+  }}
+>
+  <option value="">Select Client</option>
+  {clients.map(c => (
+    <option key={c.id} value={c.id}>
+      {c.name}
+    </option>
+  ))}
+</select>
         <input
           className="w-full p-3 bg-gray-800 rounded"
           value={client}
