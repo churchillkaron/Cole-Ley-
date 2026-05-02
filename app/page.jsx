@@ -2,7 +2,7 @@
 export const dynamic = "force-dynamic";
 
 
-import { getSupabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,7 @@ export default function Home() {
   }
 
   try {
-const supabase = getSupabase();
+
 if (!supabase) return;
 
 const { data, error } = await supabase.auth.signInWithPassword({
