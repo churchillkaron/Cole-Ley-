@@ -1,11 +1,13 @@
-"use client";export const dynamic = "force-dynamic";
-
+"use client";
+export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { getSupabase } from "@/lib/supabase"; 
 
 export default function InvoiceListPage() {
+  const supabase = getSupabase(); 
+
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,29 +15,29 @@ export default function InvoiceListPage() {
 
   /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
-  async function checkUser() {
-    const { data } = await supabase.auth.getUser();
+    async function checkUser() {
+      const { data } = await supabase.auth.getUser();
 
-    if (!data.user) {
-      router.push("/");
-      return;
+      if (!data.user) {
+        router.push("/");
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+
+      const role = profile?.role?.trim().toLowerCase();
+
+      if (role !== "owner") {
+        router.push("/media");
+      }
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", data.user.id)
-      .single();
-
-    const role = profile?.role?.trim().toLowerCase();
-
-    if (role !== "owner") {
-      router.push("/media");
-    }
-  }
-
-  checkUser();
-}, []);
+    checkUser();
+  }, []);
 
   useEffect(() => {
     async function fetchInvoices() {
@@ -86,7 +88,6 @@ export default function InvoiceListPage() {
               className="p-5 bg-[#111] rounded cursor-pointer hover:bg-[#1a1a1a] transition"
             >
               <div className="flex justify-between items-center">
-                {/* LEFT */}
                 <div>
                   <div className="text-[#d4af37] text-sm">
                     {inv.invoice_number}
@@ -113,7 +114,6 @@ export default function InvoiceListPage() {
                   </button>
                 </div>
 
-                {/* RIGHT */}
                 <div className="text-right">
                   <div className="text-white text-lg font-semibold">
                     {Number(inv.amount).toFixed(2)} THB

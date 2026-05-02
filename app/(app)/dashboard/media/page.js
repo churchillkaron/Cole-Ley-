@@ -3,7 +3,7 @@
 
 
 
-
+import { getSupabase } from "@/lib/supabase";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 

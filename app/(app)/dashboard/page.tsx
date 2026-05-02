@@ -28,9 +28,9 @@ export default function Dashboard() {
     fetchData()
   }, [])
 
-  return (
-    <AppShell>
-
+return (
+  <div>
+    <div>
       {/* TITLE */}
       <div className="mb-12">
         <h1 className="text-4xl font-serif tracking-wide text-[#e5c06b]">
@@ -41,7 +41,6 @@ export default function Dashboard() {
 
       {/* FINANCE OVERVIEW */}
       <div className="grid grid-cols-3 gap-8 mb-12">
-
         {/* INCOME */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-6 backdrop-blur-xl">
           <p className="text-white/50 text-sm">Income</p>
@@ -61,16 +60,18 @@ export default function Dashboard() {
         {/* PROFIT */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-6 backdrop-blur-xl">
           <p className="text-white/50 text-sm">Profit</p>
-          <p className={`text-2xl mt-2 ${profit >= 0 ? "text-green-400" : "text-red-400"}`}>
+          <p
+            className={`text-2xl mt-2 ${
+              profit >= 0 ? "text-green-400" : "text-red-400"
+            }`}
+          >
             {profit.toFixed(2)} THB
           </p>
         </div>
-
       </div>
 
       {/* GRID */}
       <div className="grid grid-cols-3 gap-8">
-
         {/* MEDIA */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
           <h2 className="text-xl font-serif mb-3 text-white">
@@ -89,10 +90,10 @@ export default function Dashboard() {
           </a>
         </div>
 
-        {/* INVOICES */}
+        {/* INVOICE */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
           <h2 className="text-xl font-serif mb-3 text-white">
-            Invoices
+            Invoice
           </h2>
 
           <p className="text-white/50 text-sm mb-6">
@@ -100,7 +101,7 @@ export default function Dashboard() {
           </p>
 
           <a
-            href="/invoice/list"
+            href="/invoice"
             className="text-[#caa85a] text-sm tracking-[2px] flex items-center gap-2 group-hover:gap-3 transition"
           >
             Open →
@@ -125,10 +126,10 @@ export default function Dashboard() {
           </a>
         </div>
 
-        {/* BOOKINGS */}
+        {/* BOOKING */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
           <h2 className="text-xl font-serif mb-3 text-white">
-            Bookings
+            Booking
           </h2>
 
           <p className="text-white/50 text-sm mb-6">
@@ -136,7 +137,24 @@ export default function Dashboard() {
           </p>
 
           <a
-            href="/dashboard/bookings"
+            href="/dashboard/booking"
+            className="text-[#caa85a] text-sm tracking-[2px] flex items-center gap-2 group-hover:gap-3 transition"
+          >
+            Open →
+          </a>
+        </div>
+         {/* INVOICE HISTORY */}
+        <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
+          <h2 className="text-xl font-serif mb-3 text-white">
+            Invoice history
+          </h2>
+
+          <p className="text-white/50 text-sm mb-6">
+            See old invoices
+          </p>
+
+          <a
+            href="/invoice/list"
             className="text-[#caa85a] text-sm tracking-[2px] flex items-center gap-2 group-hover:gap-3 transition"
           >
             Open →
@@ -144,7 +162,7 @@ export default function Dashboard() {
         </div>
 
       </div>
-
-    </AppShell>
-  )
+    </div>
+  </div>
+)
 }
