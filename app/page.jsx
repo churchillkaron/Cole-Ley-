@@ -1,9 +1,8 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-
 import { getSupabase } from "@/lib/supabase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -11,80 +10,102 @@ export default function Home() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [isMobile, setIsMobile] = useState(false);
 
- const handleLogin = async () => {
-  console.log("SUPABASE URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
-  if (!email || !password) {
-    alert("Enter email and password");
-    return;
-  }
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-  try {
-const supabase = getSupabase();
-if (!supabase) return;
+  const handleLogin = async () => {
+    console.log("SUPABASE URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
 
-const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    // ✅ NOW data exists
-    console.log("LOGGED IN USER:", data?.user?.email);
-    console.log("USER ID:", data?.user?.id);
-    console.log("LOGIN ERROR:", error);
-
-    if (error) {
-      alert(error.message);
+    if (!email || !password) {
+      alert("Enter email and password");
       return;
     }
 
-    const user = data.user;
+    try {
+      const supabase = getSupabase();
+      if (!supabase) return;
 
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    console.log("PROFILE:", profile);
+      console.log("LOGGED IN USER:", data?.user?.email);
+      console.log("USER ID:", data?.user?.id);
+      console.log("LOGIN ERROR:", error);
 
-    if (!profile) {
-      alert("NO PROFILE FOUND");
-      return;
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      const user = data.user;
+
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      console.log("PROFILE:", profile);
+
+      if (!profile) {
+        alert("NO PROFILE FOUND");
+        return;
+      }
+
+      alert("ROLE: " + profile.role);
+
+      const role = profile.role?.trim().toLowerCase();
+
+      console.log("FINAL ROLE CHECK:", role);
+
+      if (role === "owner") {
+        console.log("GOING TO DASHBOARD");
+        router.push("/dashboard");
+        return;
+      }
+
+      if (role === "client") {
+        console.log("GOING TO MEDIA");
+        router.push("/media");
+        return;
+      }
+
+      console.log("UNKNOWN ROLE:", role);
+    } catch (err) {
+      console.error(err);
+      alert("Error");
     }
-
-    alert("ROLE: " + profile.role);
-const role = profile.role?.trim().toLowerCase();
-
-console.log("FINAL ROLE CHECK:", role);
-
-if (role === "owner") {
-  console.log("GOING TO DASHBOARD");
-  router.push("/dashboard");
-  return; // 🔥 VERY IMPORTANT
-}
-
-if (role === "client") {
-  console.log("GOING TO MEDIA");
-  router.push("/media");
-  return; // 🔥 VERY IMPORTANT
-}
-
-console.log("UNKNOWN ROLE:", role);
-  } catch (err) {
-    console.error(err);
-    alert("Error");
-  }
-};
+  };
 
   return (
     <main style={main}>
       {/* NAV */}
-      <div style={{ ...nav, top: 30, left: 60 }}>
+      <div
+        style={{
+          ...nav,
+          top: isMobile ? 20 : 30,
+          left: isMobile ? 0 : 60,
+          width: isMobile ? "100%" : "calc(100% - 120px)",
+          justifyContent: isMobile ? "center" : "space-between",
+        }}
+      >
         <div style={brand}></div>
 
-        <div style={navMenu}>
+        <div
+          style={{
+            ...navMenu,
+            gap: isMobile ? 14 : 28,
+            fontSize: isMobile ? 10 : 12,
+          }}
+        >
           <span style={{ ...navItem, color: "#caa85a" }}>HOME</span>
           <span style={navItem}>MUSIC</span>
           <span style={navItem}>SHOWS</span>
@@ -99,9 +120,11 @@ console.log("UNKNOWN ROLE:", role);
         alt="Cole Ley Logo"
         style={{
           ...move,
-          top: -80,
-          left: 20,
-          width: 620,
+          top: isMobile ? 55 : -80,
+          left: isMobile ? "50%" : 20,
+          transform: isMobile ? "translateX(-50%)" : "none",
+          width: isMobile ? "78%" : 620,
+          maxWidth: 620,
           zIndex: 2,
           pointerEvents: "none",
           filter: "drop-shadow(0 0 40px rgba(202,168,90,0.5))",
@@ -112,24 +135,51 @@ console.log("UNKNOWN ROLE:", role);
       <div
         style={{
           ...move,
-          top: 250,
-          left: 100,
+          top: isMobile ? 240 : 250,
+          left: isMobile ? "50%" : 100,
+          transform: isMobile ? "translateX(-50%)" : "none",
+          width: isMobile ? "90%" : "auto",
           maxWidth: 620,
+          textAlign: isMobile ? "center" : "left",
           zIndex: 2,
         }}
       >
-        <p style={tagline}>ARTIST · PERFORMER · EXPERIENCE</p>
-        <h1 style={title}>COLE LEY</h1>
-        <div style={line} />
+        <p
+          style={{
+            ...tagline,
+            letterSpacing: isMobile ? 3 : 6,
+            fontSize: isMobile ? 10 : 12,
+          }}
+        >
+          ARTIST · PERFORMER · EXPERIENCE
+        </p>
+
+        <h1
+          style={{
+            ...title,
+            fontSize: isMobile ? "clamp(42px, 14vw, 70px)" : 90,
+          }}
+        >
+          COLE LEY
+        </h1>
+
+        <div
+          style={{
+            ...line,
+            margin: isMobile ? "20px auto" : "25px 0",
+          }}
+        />
       </div>
 
       {/* LOGIN */}
       <div
         style={{
           ...move,
-          top: 480,
-          left: 100,
-          width: 360,
+          top: isMobile ? 500 : 480,
+          left: isMobile ? "50%" : 100,
+          transform: isMobile ? "translateX(-50%)" : "none",
+          width: isMobile ? "88%" : 360,
+          maxWidth: 360,
           zIndex: 3,
         }}
       >
@@ -152,8 +202,6 @@ console.log("UNKNOWN ROLE:", role);
           <button style={loginBtn} onClick={handleLogin}>
             LOGIN
           </button>
-
-        
         </div>
       </div>
     </main>
@@ -165,7 +213,7 @@ console.log("UNKNOWN ROLE:", role);
 const main = {
   position: "relative",
   minHeight: "100vh",
-  overflow: "hidden",
+  overflowX: "hidden",
   backgroundImage:
     "linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 100%), url('/bg.png')",
   backgroundSize: "cover",
@@ -182,7 +230,6 @@ const move = {
 
 const nav = {
   ...move,
-  width: "calc(100% - 120px)",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
