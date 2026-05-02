@@ -76,26 +76,13 @@ else setLoading(false);
 
 async function generatePDF() {
   const element = document.getElementById("invoice");
-  const wrapper = document.getElementById("invoice-scale-wrapper");
-
-  if (!element || !wrapper) return;
-
-  // Save original transform
-  const originalTransform = wrapper.style.transform;
-
-  // 🚀 Remove scaling BEFORE capture
-  wrapper.style.transform = "scale(1)";
+  if (!element) return;
 
   const canvas = await html2canvas(element, {
-    scale: 3,
+    scale: 2,
     useCORS: true,
     backgroundColor: "#0a0a0a",
-    width: 794,
-    height: 1123,
   });
-
-  // Restore scaling AFTER capture
-  wrapper.style.transform = originalTransform;
 
   const imgData = canvas.toDataURL("image/png");
 
@@ -108,22 +95,6 @@ async function generatePDF() {
   pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
 
   return pdf;
-}
-
-function downloadPDF() {
-  const url = invoice?.pdf_url; // 👈 must exist
-
-  if (!url) {
-    alert("No PDF found");
-    return;
-  }
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `invoice-${invoice?.invoice_number}.pdf`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }
 
 function sendEmail() {
