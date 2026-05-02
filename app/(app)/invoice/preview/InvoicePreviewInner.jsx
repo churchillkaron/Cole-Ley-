@@ -111,22 +111,18 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
-  // open window FIRST (Safari requirement)
-  const win = window.open("", "_blank");
-  if (!win) return;
-
   const pdf = await generatePDF();
-  if (!pdf) {
-    win.close();
-    return;
-  }
+  if (!pdf) return;
 
-  // convert to blob
   const blob = pdf.output("blob");
-  const url = URL.createObjectURL(blob);
 
-  // redirect new window to blob URL
-  win.location.href = url;
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `invoice-${invoice?.invoice_number}.pdf`;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function sendEmail() {
