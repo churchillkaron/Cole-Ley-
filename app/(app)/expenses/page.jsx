@@ -1,13 +1,9 @@
-
 "use client";
 export const dynamic = "force-dynamic";
 
-
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-// at TOP of file
+import { getSupabase } from "@/lib/supabase";
 
 export default function ExpensesPage() {
   const router = useRouter();
@@ -31,7 +27,10 @@ export default function ExpensesPage() {
   /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
   async function checkUser() {
-    const { data } = await supabase.auth.getUser();
+   const supabase = getSupabase();
+if (!supabase) return;
+
+const { data } = await supabase.auth.getUser();
 
     if (!data.user) {
       router.push("/");
@@ -226,10 +225,10 @@ export default function ExpensesPage() {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen p-10 space-y-6">
-      <h1 className="text-2xl">Expenses</h1>
+    <div className="bg-black text-white min-h-screen p-4 sm:p-10 space-y-6">
+      <h1 className="text-xl sm:text-2xl">Expenses</h1>
 
-      <div className="space-y-3 bg-[#111] p-5 rounded">
+      <div className="space-y-3 bg-[#111] p-4 sm:p-5 rounded">
         <input className="w-full p-2 bg-gray-800" placeholder="Paid To" value={person} onChange={(e) => setPerson(e.target.value)} />
         <input className="w-full p-2 bg-gray-800" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
         <input type="date" className="w-full p-2 bg-gray-800" value={date} onChange={(e) => setDate(e.target.value)} />
@@ -243,21 +242,21 @@ export default function ExpensesPage() {
           if (f) handleOCR(f);
         }} />
 
-        <button onClick={handleSave} className="bg-white text-black px-4 py-2">
+        <button onClick={handleSave} className="bg-white text-black px-4 py-2 w-full sm:w-auto">
           Save Expense
         </button>
       </div>
 
-      <div className="flex gap-4 bg-[#111] p-4 rounded">
-        <input type="date" className="bg-gray-800 p-2" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
-        <input type="date" className="bg-gray-800 p-2" value={toDate} onChange={(e) => setToDate(e.target.value)} />
-        <button onClick={applyFilter} className="bg-white text-black px-4">Apply</button>
+      <div className="flex flex-col sm:flex-row gap-4 bg-[#111] p-4 rounded">
+        <input type="date" className="bg-gray-800 p-2 w-full" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+        <input type="date" className="bg-gray-800 p-2 w-full" value={toDate} onChange={(e) => setToDate(e.target.value)} />
+        <button onClick={applyFilter} className="bg-white text-black px-4 w-full sm:w-auto">Apply</button>
       </div>
 
       <div className="space-y-3">
         {filtered.map((exp) => (
           <div key={exp.id} className="p-4 bg-[#111] rounded">
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm sm:text-base">
               <span>{exp.person}</span>
               <span>{Number(exp.amount).toFixed(2)} THB</span>
             </div>
@@ -275,8 +274,8 @@ export default function ExpensesPage() {
         ))}
       </div>
 
-      <div className="bg-[#111] p-6 rounded space-y-4">
-        <h2 className="text-xl">Report</h2>
+      <div className="bg-[#111] p-4 sm:p-6 rounded space-y-4">
+        <h2 className="text-lg sm:text-xl">Report</h2>
 
         <div>Total: {total.toFixed(2)} THB</div>
 
@@ -294,12 +293,12 @@ export default function ExpensesPage() {
           ))}
         </div>
 
-        <div className="flex gap-3">
-          <button onClick={exportPDF} className="bg-yellow-500 text-black px-3 py-1">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button onClick={exportPDF} className="bg-yellow-500 text-black px-3 py-2">
             Export PDF
           </button>
 
-          <button onClick={exportExcel} className="bg-green-500 text-black px-3 py-1">
+          <button onClick={exportExcel} className="bg-green-500 text-black px-3 py-2">
             Export Excel
           </button>
         </div>
@@ -307,10 +306,10 @@ export default function ExpensesPage() {
 
       {preview && (
         <div
-          className="fixed inset-0 bg-black/80 flex justify-center items-center"
+          className="fixed inset-0 bg-black/80 flex justify-center items-center p-4"
           onClick={() => setPreview(null)}
         >
-          <img src={preview} className="max-h-[90vh]" />
+          <img src={preview} className="max-h-[90vh] w-full sm:w-auto" />
         </div>
       )}
     </div>

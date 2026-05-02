@@ -29,18 +29,18 @@ export default function Dashboard() {
   }, [])
 
 return (
-  <div>
+  <div className="px-4 sm:px-0">
     <div>
       {/* TITLE */}
       <div className="mb-12">
-        <h1 className="text-4xl font-serif tracking-wide text-[#e5c06b]">
+        <h1 className="text-3xl sm:text-4xl font-serif tracking-wide text-[#e5c06b]">
           Artist Dashboard
         </h1>
         <div className="w-12 h-[2px] bg-[#caa85a] mt-4" />
       </div>
 
       {/* FINANCE OVERVIEW */}
-      <div className="grid grid-cols-3 gap-8 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 mb-12">
         {/* INCOME */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-6 backdrop-blur-xl">
           <p className="text-white/50 text-sm">Income</p>
@@ -71,7 +71,7 @@ return (
       </div>
 
       {/* GRID */}
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
         {/* MEDIA */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
           <h2 className="text-xl font-serif mb-3 text-white">
@@ -143,6 +143,7 @@ return (
             Open →
           </a>
         </div>
+
          {/* INVOICE HISTORY */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
           <h2 className="text-xl font-serif mb-3 text-white">

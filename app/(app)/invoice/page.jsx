@@ -1,8 +1,6 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-
-
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { getSupabase } from "@/lib/supabase";
@@ -28,7 +26,7 @@ export default function InvoicePage() {
   /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
   async function checkUser() {
-  const supabase = getSupabase(); // ✅ FIX
+  const supabase = getSupabase();
   if (!supabase) return;
 
   const { data } = await supabase.auth.getUser();
@@ -53,6 +51,7 @@ export default function InvoicePage() {
 
   checkUser();
 }, []);
+
   function updateItem(index, field, value) {
     const updated = [...items];
     updated[index][field] = field === "description" ? value : Number(value);
@@ -117,8 +116,8 @@ export default function InvoicePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-      <div className="w-full max-w-2xl p-10 space-y-4">
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-6">
+      <div className="w-full max-w-2xl p-6 sm:p-10 space-y-4">
 
         <input
           className="w-full p-3 bg-gray-800 rounded"
@@ -151,7 +150,7 @@ export default function InvoicePage() {
         {/* ITEMS */}
         <div className="space-y-3">
           {items.map((item, i) => (
-            <div key={i} className="flex gap-2">
+            <div key={i} className="flex flex-col sm:flex-row gap-2">
 
               <input
                 className="flex-1 p-2 bg-gray-800 rounded"
@@ -164,7 +163,7 @@ export default function InvoicePage() {
 
               <input
                 type="number"
-                className="w-20 p-2 bg-gray-800 rounded"
+                className="w-full sm:w-20 p-2 bg-gray-800 rounded"
                 value={item.qty}
                 onChange={(e) =>
                   updateItem(i, "qty", e.target.value)
@@ -173,14 +172,16 @@ export default function InvoicePage() {
 
               <input
                 type="number"
-                className="w-28 p-2 bg-gray-800 rounded"
+                className="w-full sm:w-28 p-2 bg-gray-800 rounded"
                 value={item.price}
                 onChange={(e) =>
                   updateItem(i, "price", e.target.value)
                 }
               />
 
-              <button onClick={() => removeItem(i)}>✕</button>
+              <button onClick={() => removeItem(i)} className="sm:w-auto w-full">
+                ✕
+              </button>
             </div>
           ))}
         </div>
