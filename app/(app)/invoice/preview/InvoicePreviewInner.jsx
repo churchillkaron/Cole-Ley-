@@ -118,21 +118,25 @@ async function generatePDF() {
   return pdf;
 }
 async function downloadPDF() {
-  const res = await fetch("/api/invoice/pdf", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(invoice),
+  const pdf = await generatePDF();
+  if (!pdf) return;
+
+  const blob = pdf.output("blob");
+
+  const file = new File([blob], `invoice-${invoice.invoice_number}.pdf`, {
+    type: "application/pdf",
   });
 
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `invoice-${invoice.invoice_number}.pdf`;
-  link.click();
+  // ✅ THIS is the correct iPhone behavior
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      files: [file],
+      title: `Invoice ${invoice.invoice_number}`,
+    });
+  } else {
+    // desktop fallback
+    pdf.save(`invoice-${invoice.invoice_number}.pdf`);
+  }
 }
 function sendEmail() {
 const subject = `Invoice ${invoice?.invoice_number}`;
