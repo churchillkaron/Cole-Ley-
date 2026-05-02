@@ -13,96 +13,103 @@ export default function InvoicePage() {
   const [clientTaxId, setClientTaxId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [type, setType] = useState("invoice");
+
   const [clients, setClients] = useState([]);
-const [selectedClientId, setSelectedClientId] = useState(null);
+  const [selectedClientId, setSelectedClientId] = useState(null);
 
   const [taxEnabled, setTaxEnabled] = useState(false);
   const [taxRate, setTaxRate] = useState(7);
 
   const [items, setItems] = useState([
-  { description: "", qty: "", price: "" }
-]);
+    { description: "", qty: "", price: "" }
+  ]);
 
   const [loading, setLoading] = useState(false);
 
-  /* 🔒 PROTECT PAGE (OWNER ONLY) */
   useEffect(() => {
-  async function checkUser() {
-  const supabase = getSupabase();
-  if (!supabase) return;
+    async function checkUser() {
+      const supabase = getSupabase();
+      if (!supabase) return;
 
-  const { data } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getUser();
 
-    if (!data.user) {
-      router.push("/");
-      return;
+      if (!data.user) {
+        router.push("/");
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+
+      if (profile?.role?.trim().toLowerCase() !== "owner") {
+        router.push("/media");
+      }
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", data.user.id)
-      .single();
+    checkUser();
+  }, [router]);
 
-    const role = profile?.role?.trim().toLowerCase();
+  useEffect(() => {
+    async function fetchClients() {
+      const supabase = getSupabase();
+      if (!supabase) return;
 
-    if (role !== "owner") {
-      router.push("/media");
+      const { data } = await supabase
+        .from("clients")
+        .select("*")
+        .order("brand", { ascending: true });
+
+      setClients(data || []);
     }
-  }
 
-  checkUser();
-}, []);
-useEffect(() => {
-  async function fetchClients() {
-    const supabase = getSupabase();
-
-    const { data } = await supabase
-      .from("clients")
-      .select("*")
-      .order("name");
-
-    setClients(data || []);
-  }
-
-  fetchClients();
-}, []);
+    fetchClients();
+  }, []);
 
   function updateItem(index, field, value) {
     const updated = [...items];
-    updated[index][field] = field === "description" ? value : Number(value);
+    updated[index][field] =
+      field === "description" ? value : value === "" ? "" : Number(value);
     setItems(updated);
   }
 
   function addItem() {
-   setItems([...items, { description: "", qty: "", price: "" }]);
+    setItems([...items, { description: "", qty: "", price: "" }]);
   }
 
   function removeItem(index) {
     if (items.length === 1) return;
-    const updated = items.filter((_, i) => i !== index);
-    setItems(updated);
+    setItems(items.filter((_, i) => i !== index));
   }
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + item.qty * item.price,
-    0
-  );
+  const subtotal = items.reduce((sum, item) => {
+    return sum + (Number(item.qty) || 0) * (Number(item.price) || 0);
+  }, 0);
 
   async function handleGenerate() {
     const supabase = getSupabase();
+    if (!supabase) return;
 
-if (!selectedClientId && client) {
-  await supabase.from("clients").insert({
-    name: client,
-    address: clientAddress,
-    tax_id: clientTaxId,
-  });
-}
-    
+    const validItems = items.filter(i => i.description && i.qty && i.price);
+
+    if (!client || validItems.length === 0) {
+      alert("Fill required fields");
+      return;
+    }
 
     try {
       setLoading(true);
+
+      if (!selectedClientId) {
+        await supabase.from("clients").insert({
+          name: client,
+          brand: client,
+          address: clientAddress,
+          tax_id: clientTaxId,
+        });
+      }
 
       const res = await fetch("/api/invoice/create", {
         method: "POST",
@@ -113,7 +120,7 @@ if (!selectedClientId && client) {
           client_tax_id: clientTaxId,
           date,
           type,
-          items,
+          items: validItems,
           amount: subtotal,
           tax_enabled: taxEnabled,
           tax_rate: taxEnabled ? taxRate : 0,
@@ -123,175 +130,171 @@ if (!selectedClientId && client) {
       const data = await res.json();
 
       if (!res.ok || !data?.invoice?.invoice_number) {
-        alert(data?.error || "Create failed");
-        return;
+        throw new Error(data?.error || "Create failed");
       }
 
       router.push(`/invoice/preview?id=${data.invoice.invoice_number}`);
 
     } catch (err) {
       console.error(err);
-      alert("Error");
+      alert("Error creating invoice");
     } finally {
       setLoading(false);
     }
   }
-return (
-  <div className="min-h-screen bg-black text-white px-4 py-6 flex justify-center">
-    <div className="w-full max-w-2xl bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 sm:p-8 space-y-5">
+
+  return (
+  <div className="min-h-screen bg-black text-white flex justify-center px-4 py-10">
+    <div className="w-full max-w-2xl">
 
       {/* TITLE */}
-      <h1 className="text-xl sm:text-2xl text-[#d4af37] tracking-wide font-light">
-        Create Invoice
+      <h1 className="text-center text-[#d4af37] tracking-[0.4em] text-lg mb-8">
+        CREATE INVOICE
       </h1>
 
-      {/* CLIENT SELECT */}
-      <select
-        className="w-full p-3 bg-black border border-white/20 rounded-lg text-white focus:outline-none focus:border-[#d4af37]"
-        onChange={(e) => {
-          const id = e.target.value;
-          setSelectedClientId(id);
+      {/* GLASS CARD */}
+      <div className="relative rounded-3xl p-8 space-y-6 
+        bg-white/5 backdrop-blur-2xl 
+        border border-white/10 
+        shadow-[0_0_60px_rgba(212,175,55,0.15)]">
 
-          const client = clients.find(c => c.id === id);
-          if (!client) return;
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 to-transparent opacity-20 pointer-events-none" />
 
-          setClient(client.brand || client.name);
-          setClientAddress(client.address || "");
-          setClientTaxId(client.tax_id || "");
-        }}
-      >
-        <option value="">Select Client</option>
-        {clients.map(c => (
-          <option key={c.id} value={c.id}>
-            {c.brand || c.name}
-          </option>
-        ))}
-      </select>
+        {/* CLIENT SELECT */}
+        {/* CLIENT SELECT */}
+<select
+  className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none focus:border-[#d4af37] focus:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+  onChange={(e) => {
+    const id = e.target.value;
 
-      {/* CLIENT NAME */}
-      <input
-        className="w-full p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-        value={client}
-        onChange={(e) => setClient(e.target.value)}
-        placeholder="Client Name"
-      />
+    setSelectedClientId(id);
 
-      {/* ADDRESS */}
-      <textarea
-        className="w-full p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-        value={clientAddress}
-        onChange={(e) => setClientAddress(e.target.value)}
-        placeholder="Client Address"
-      />
+    const c = clients.find(c => String(c.id) === String(id)); // ✅ FIX
+    if (!c) return;
 
-      {/* TAX */}
-      <input
-        className="w-full p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-        value={clientTaxId}
-        onChange={(e) => setClientTaxId(e.target.value)}
-        placeholder="Client Tax ID"
-      />
+    setClient(c.brand || c.name);
+    setClientAddress(c.address || "");
+    setClientTaxId(c.tax_id || "");
+  }}
+>
+  <option value="">Select Client</option>
+  {clients.map(c => (
+    <option key={c.id} value={c.id}>
+      {c.brand || c.name}
+    </option>
+  ))}
+</select>
 
-      {/* DATE */}
-      <input
-        type="date"
-        className="w-full p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-      />
+        {/* INPUTS */}
+        <input
+          className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none focus:border-[#d4af37] focus:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+          value={client}
+          onChange={(e)=>setClient(e.target.value)}
+          placeholder="Client Name"
+        />
 
-      {/* ITEMS */}
-      <div className="space-y-4 border-t border-white/10 pt-4">
-        {items.map((item, i) => (
-          <div key={i} className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <textarea
+          className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none focus:border-[#d4af37] focus:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+          value={clientAddress}
+          onChange={(e)=>setClientAddress(e.target.value)}
+          placeholder="Client Address"
+        />
 
-            {/* DESCRIPTION */}
-            <input
-              className="flex-1 p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-              placeholder="Description"
-              value={item.description}
-              onChange={(e) =>
-                updateItem(i, "description", e.target.value)
-              }
-            />
+        <input
+          className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none focus:border-[#d4af37] focus:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+          value={clientTaxId}
+          onChange={(e)=>setClientTaxId(e.target.value)}
+          placeholder="Tax ID"
+        />
 
-            {/* QTY + PRICE */}
-            <div className="flex gap-2 w-full sm:w-auto">
-              <input
-                type="number"
-                placeholder="Qty"
-                className="w-1/2 sm:w-20 p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-                value={item.qty}
-                onChange={(e) =>
-                  updateItem(i, "qty", e.target.value)
-                }
-              />
+        <input
+          type="date"
+          className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none focus:border-[#d4af37] focus:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+          value={date}
+          onChange={(e)=>setDate(e.target.value)}
+        />
+
+        {/* ITEMS */}
+        <div className="space-y-4 pt-4 border-t border-white/10">
+          {items.map((item, i) => (
+            <div key={i} className="space-y-2">
 
               <input
-                type="number"
-                placeholder="Price"
-                className="w-1/2 sm:w-28 p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-                value={item.price}
-                onChange={(e) =>
-                  updateItem(i, "price", e.target.value)
-                }
+                className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none focus:border-[#d4af37] focus:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+                placeholder="Description"
+                value={item.description}
+                onChange={(e)=>updateItem(i,"description",e.target.value)}
               />
+
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  placeholder="Qty"
+                  className="w-1/3 p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none"
+                  value={item.qty || ""}
+                  onChange={(e)=>updateItem(i,"qty",e.target.value)}
+                />
+
+                <input
+                  type="number"
+                  placeholder="Price"
+                  className="w-2/3 p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none"
+                  value={item.price || ""}
+                  onChange={(e)=>updateItem(i,"price",e.target.value)}
+                />
+
+                <button onClick={()=>removeItem(i)} className="text-red-400 px-2">
+                  ✕
+                </button>
+              </div>
             </div>
+          ))}
+        </div>
 
-            {/* REMOVE */}
-            <button
-              onClick={() => removeItem(i)}
-              className="text-red-400 hover:text-red-300 text-sm"
-            >
-              ✕
-            </button>
+        <button onClick={addItem} className="text-[#d4af37] text-sm">
+          + ADD ITEM
+        </button>
+
+        {/* TAX */}
+        <div
+          onClick={()=>setTaxEnabled(!taxEnabled)}
+          className="flex justify-between items-center p-3 border border-white/10 rounded-xl cursor-pointer"
+        >
+          <span>Apply VAT</span>
+          <div className={`w-10 h-5 rounded-full ${taxEnabled ? "bg-[#d4af37]" : "bg-white/20"} relative`}>
+            <div className={`absolute top-1 left-1 w-3 h-3 bg-black rounded-full transition ${taxEnabled ? "translate-x-5" : ""}`} />
           </div>
-        ))}
+        </div>
+
+        {taxEnabled && (
+          <input
+            type="number"
+            value={taxRate}
+            onChange={(e)=>setTaxRate(Number(e.target.value))}
+            className="w-full p-3 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md outline-none"
+            placeholder="Tax %"
+          />
+        )}
+
+        {/* TOTAL */}
+        <div className="text-right pt-4 border-t border-white/10">
+          <span className="text-white/50">Subtotal:</span>{" "}
+          <span className="text-white text-lg">{subtotal.toFixed(2)} THB</span>
+        </div>
+
+        {/* GENERATE */}
+        <button
+          onClick={handleGenerate}
+          disabled={loading}
+          className="w-full py-4 rounded-xl font-semibold tracking-widest 
+          bg-gradient-to-r from-[#d4af37] to-[#f5d98f] 
+          text-black 
+          hover:scale-[1.02] transition"
+        >
+          {loading ? "CREATING..." : "GENERATE INVOICE"}
+        </button>
+
       </div>
-
-      {/* ADD ITEM */}
-      <button
-        onClick={addItem}
-        className="text-[#d4af37] text-sm hover:opacity-80"
-      >
-        + Add Item
-      </button>
-
-      {/* TAX */}
-      <div className="flex items-center gap-3 pt-2">
-        <input
-          type="checkbox"
-          checked={taxEnabled}
-          onChange={() => setTaxEnabled(!taxEnabled)}
-        />
-        <span className="text-white/80">Apply VAT</span>
-      </div>
-
-      {taxEnabled && (
-        <input
-          type="number"
-          placeholder="Tax %"
-          value={taxRate}
-          onChange={(e) => setTaxRate(Number(e.target.value))}
-          className="w-full p-3 bg-black border border-white/20 rounded-lg focus:outline-none focus:border-[#d4af37]"
-        />
-      )}
-
-      {/* TOTAL */}
-      <div className="text-right text-lg border-t border-white/10 pt-4">
-        <span className="text-white/60">Subtotal:</span>{" "}
-        <span className="text-white">{subtotal.toFixed(2)} THB</span>
-      </div>
-
-      {/* BUTTON */}
-      <button
-        onClick={handleGenerate}
-        disabled={loading}
-        className="w-full py-3 rounded-lg bg-[#d4af37] text-black font-medium hover:opacity-90 transition"
-      >
-        {loading ? "Creating..." : "Generate Invoice"}
-      </button>
-
     </div>
   </div>
 );
