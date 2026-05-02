@@ -105,18 +105,24 @@ async function downloadPDF() {
   if (!pdf) return;
 
   const blob = pdf.output("blob");
-  const url = URL.createObjectURL(blob);
 
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `invoice-${invoice?.invoice_number}.pdf`;
+  const formData = new FormData();
+  formData.append("file", blob, `invoice-${invoice.invoice_number}.pdf`);
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const res = await fetch("/api/upload-pdf", {
+    method: "POST",
+    body: formData,
+  });
 
-  // cleanup
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  const data = await res.json();
+
+  if (!data.url) {
+    alert("Upload failed");
+    return;
+  }
+
+  // 👉 OPEN REAL FILE (THIS FIXES IPHONE)
+  window.location.href = data.url;
 }
 
 function sendEmail() {
