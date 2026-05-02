@@ -80,13 +80,30 @@ async function generatePDF() {
   const jsPDF = (await import("jspdf")).default;
 
   const element = document.getElementById("invoice");
-  if (!element) throw new Error("Invoice element not found");
+  const wrapper = document.getElementById("invoice-scale-wrapper");
 
-  const canvas = await html2canvas(element, {
+  if (!element || !wrapper) return;
+
+  // 🔥 FORCE FIXED LAYOUT (THIS IS THE KEY)
+  const clone = element.cloneNode(true);
+  clone.style.transform = "scale(1)";
+  clone.style.position = "fixed";
+  clone.style.top = "0";
+  clone.style.left = "0";
+  clone.style.width = "794px";
+  clone.style.height = "1123px";
+  clone.style.zIndex = "9999";
+  clone.style.background = "#0a0a0a";
+
+  document.body.appendChild(clone);
+
+  const canvas = await html2canvas(clone, {
     scale: 2,
     useCORS: true,
     backgroundColor: "#0a0a0a",
   });
+
+  document.body.removeChild(clone);
 
   const imgData = canvas.toDataURL("image/png");
 
