@@ -14,6 +14,7 @@ export default function Home() {
   
 
  const handleLogin = async () => {
+  console.log("SUPABASE URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
   if (!email || !password) {
     alert("Enter email and password");
     return;
