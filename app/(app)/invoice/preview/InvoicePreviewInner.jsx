@@ -2,8 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+
 import { getSupabase } from "@/lib/supabase";
 
 export default function InvoicePreviewInner() {
@@ -75,8 +74,13 @@ else setLoading(false);
 }, [id]);
 
 async function generatePDF() {
+  if (typeof window === "undefined") return;
+
+  const html2canvas = (await import("html2canvas")).default;
+  const jsPDF = (await import("jspdf")).default;
+
   const element = document.getElementById("invoice");
-  if (!element) return;
+  if (!element) throw new Error("Invoice element not found");
 
   const canvas = await html2canvas(element, {
     scale: 2,
@@ -95,6 +99,12 @@ async function generatePDF() {
   pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
 
   return pdf;
+}
+async function downloadPDF() {
+  const pdf = await generatePDF();
+  if (!pdf) return;
+
+  pdf.save(`invoice-${invoice?.invoice_number}.pdf`);
 }
 
 function sendEmail() {
