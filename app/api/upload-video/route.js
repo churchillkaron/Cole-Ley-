@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { v2 as cloudinary } from "cloudinary";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
