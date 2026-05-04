@@ -8,10 +8,8 @@ export async function POST(req: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    // ✅ FIRST: get body
     const body = await req.json()
 
-    // ✅ THEN: destructure
     const {
       client,
       client_address,
@@ -32,12 +30,73 @@ export async function POST(req: Request) {
       )
     }
 
-    // ✅ DATE LOGIC
     const now = new Date()
     const year = now.getFullYear()
     const month = String(now.getMonth() + 1).padStart(2, "0")
 
-    // ✅ COUNT MONTHLY INVOICES
+    // ===============================
+    // ✅ QUOTATION LOGIC (NEW)
+    // ===============================
+    if (type === "quotation") {
+
+      const { count, error: countError } = await supabase
+        .from("quotations")
+        .select("*", { count: "exact", head: true })
+        .ilike("quotation_number", `QUO-${year}-${month}-%`)
+
+      if (countError) {
+        return NextResponse.json(
+          { error: countError.message },
+          { status: 500 }
+        )
+      }
+
+      const nextNumber = (count || 0) + 1
+      const padded = String(nextNumber).padStart(3, "0")
+
+      const quotation_number = `QUO-${year}-${month}-${padded}`
+
+      const { data, error } = await supabase
+        .from("quotations")
+        .insert([
+          {
+            quotation_number,
+            client,
+            client_address,
+            client_tax_id,
+            date,
+            amount,
+            details,
+            type,
+            tax_enabled,
+            tax_rate,
+            items,
+          },
+        ])
+        .select()
+        .single()
+
+      if (error) {
+        console.error(error)
+        return NextResponse.json(
+          { error: error.message },
+          { status: 500 }
+        )
+      }
+
+      // 🔥 return same structure so frontend does NOT break
+      return NextResponse.json({
+        invoice: {
+          ...data,
+          invoice_number: quotation_number
+        }
+      })
+    }
+
+    // ===============================
+    // ✅ INVOICE LOGIC (UNCHANGED)
+    // ===============================
+
     const { count, error: countError } = await supabase
       .from("invoices")
       .select("*", { count: "exact", head: true })
@@ -55,7 +114,6 @@ export async function POST(req: Request) {
 
     const invoice_number = `CL-${year}-${month}-${padded}`
 
-    // ✅ INSERT (now includes items)
     const { data, error } = await supabase
       .from("invoices")
       .insert([
@@ -70,7 +128,7 @@ export async function POST(req: Request) {
           type,
           tax_enabled,
           tax_rate,
-          items, // ✅ IMPORTANT
+          items,
         },
       ])
       .select()
