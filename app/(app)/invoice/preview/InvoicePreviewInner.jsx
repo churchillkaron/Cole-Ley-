@@ -8,6 +8,7 @@ import { getSupabase } from "@/lib/supabase";
 export default function InvoicePreviewInner() {
 const params = useSearchParams();
 const id = params.get("id");
+const mode = params.get("mode"); // ✅ NEW
 const router = useRouter();
 
 const [invoice, setInvoice] = useState(null);
@@ -48,10 +49,18 @@ checkUser();
 
 useEffect(() => {
 async function fetchInvoice() {
-try {
-const res = await fetch(`/api/invoice/get?id=${id}`);
-const data = await res.json();
 
+  // ✅ NEW: DRAFT MODE (FROM FORM PREVIEW)
+  if (mode === "draft") {
+    const data = JSON.parse(localStorage.getItem("preview_invoice"));
+    setInvoice(data);
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/invoice/get?id=${id}`);
+    const data = await res.json();
 
     if (!res.ok || !data?.invoice) {
       setInvoice(null);
@@ -67,11 +76,11 @@ const data = await res.json();
   }
 }
 
-if (id) fetchInvoice();
+if (id || mode === "draft") fetchInvoice();
 else setLoading(false);
 
 
-}, [id]);
+}, [id, mode]);
 
 async function generatePDF() {
   if (typeof window === "undefined") return;
@@ -84,7 +93,6 @@ async function generatePDF() {
 
   if (!element || !wrapper) return;
 
-  // 🔥 FORCE FIXED LAYOUT (THIS IS THE KEY)
   const clone = element.cloneNode(true);
   clone.style.transform = "scale(1)";
   clone.style.position = "fixed";
@@ -117,30 +125,30 @@ async function generatePDF() {
 
   return pdf;
 }
+
 async function downloadPDF() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
   const blob = pdf.output("blob");
 
-  const file = new File([blob], `invoice-${invoice.invoice_number}.pdf`, {
+  const file = new File([blob], `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`, {
     type: "application/pdf",
   });
 
-  // ✅ THIS is the correct iPhone behavior
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     await navigator.share({
       files: [file],
-      title: `Invoice ${invoice.invoice_number}`,
+      title: `${invoice.type || "invoice"} ${invoice.invoice_number || ""}`,
     });
   } else {
-    // desktop fallback
-    pdf.save(`invoice-${invoice.invoice_number}.pdf`);
+    pdf.save(`${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`);
   }
 }
+
 function sendEmail() {
-const subject = `Invoice ${invoice?.invoice_number}`;
-const body = `Please find your invoice attached.`;
+const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
+const body = `Please find your ${invoice?.type || "invoice"} attached.`;
 window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
@@ -148,11 +156,9 @@ async function sendWhatsApp() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  // download file first
-  pdf.save(`invoice-${invoice?.invoice_number}.pdf`);
+  pdf.save(`${invoice?.type || "invoice"}-${invoice?.invoice_number || "preview"}.pdf`);
 
-  // clean message
-  const text = `Invoice ${invoice?.invoice_number}`;
+  const text = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
 }
 
@@ -167,7 +173,6 @@ return (
 <div className="bg-black flex justify-center py-10 sm:py-20 flex-col items-center">
 
   <div className="mb-6 flex gap-2 sm:gap-4 flex-wrap justify-center">
-    
 
     <button onClick={downloadPDF} className="border px-4 py-2 text-sm border-white/30 text-white/80">
       DOWNLOAD
@@ -180,9 +185,19 @@ return (
     <button onClick={sendWhatsApp} className="border px-4 py-2 text-sm border-green-500 text-green-500">
       WHATSAPP
     </button>
+
+    {/* ✅ NEW: EDIT BUTTON IN DRAFT MODE */}
+    {mode === "draft" && (
+      <button
+        onClick={() => router.push("/invoice")}
+        className="border px-4 py-2 text-sm border-yellow-400 text-yellow-400"
+      >
+        EDIT
+      </button>
+    )}
+
   </div>
 
-  {/* MOBILE FIX WRAPPER */}
   <div className="w-full overflow-x-auto flex justify-center">
     <div id="invoice-scale-wrapper" className="scale-[0.6] sm:scale-100 origin-top">
       <div
@@ -202,11 +217,11 @@ return (
 
         <div className="absolute top-[120px] right-[80px] text-right">
           <p className="tracking-[5px] text-[#d4af37] text-sm mb-4">
-            INVOICE
+            {invoice.type === "quotation" ? "QUOTATION" : "INVOICE"}
           </p>
 
           <p>
-            <span className="text-[#d4af37]">NO.</span> {invoice.invoice_number}
+            <span className="text-[#d4af37]">NO.</span> {invoice.invoice_number || "PREVIEW"}
           </p>
 
           <p>
