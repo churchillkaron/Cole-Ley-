@@ -1,13 +1,16 @@
+
+
 export const runtime = "nodejs";
 
+import { TextEncoder } from "util";
+globalThis.TextEncoder = TextEncoder;
 import { v2 as cloudinary } from "cloudinary";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
 import os from "os";
-import { detectFace } from "../../lib/face";
-import { TextEncoder } from "util";
-global.TextEncoder = TextEncoder;
+//import { detectFace } from "../../lib/face";
+
 
 // ✅ FFmpeg path
 ffmpeg.setFfmpegPath("/opt/homebrew/bin/ffmpeg");
