@@ -6,6 +6,8 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { detectFace } from "../../lib/face";
+import { TextEncoder } from "util";
+global.TextEncoder = TextEncoder;
 
 // ✅ FFmpeg path
 ffmpeg.setFfmpegPath("/opt/homebrew/bin/ffmpeg");
