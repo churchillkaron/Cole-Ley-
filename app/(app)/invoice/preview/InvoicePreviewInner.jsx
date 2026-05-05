@@ -149,20 +149,35 @@ async function downloadPDF() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
+  const fileName = `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`;
   const blob = pdf.output("blob");
 
-  const file = new File([blob], `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`, {
+  const file = new File([blob], fileName, {
     type: "application/pdf",
   });
 
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+  // ✅ iPhone BEST behavior → share sheet
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
     await navigator.share({
       files: [file],
-      title: `${invoice.type || "invoice"} ${invoice.invoice_number || ""}`,
+      title: fileName,
     });
-  } else {
-    pdf.save(`${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`);
+    return;
   }
+
+  // ✅ fallback (desktop / android)
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 1000);
 }
 
 function sendEmail() {
