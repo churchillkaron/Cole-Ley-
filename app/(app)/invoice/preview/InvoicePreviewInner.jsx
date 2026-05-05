@@ -135,7 +135,7 @@ async function generatePDF() {
   backgroundColor: "#0a0a0a",
 });
 
-    const imgData = canvas.toDataURL("image/jpeg", 0.7); // 🔥 compression
+    const imgData = canvas.toDataURL("image/jpeg", 0.9); // 🔥 compression
 
     if (i > 0) pdf.addPage();
 
@@ -146,24 +146,28 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
-  // ✅ OPEN WINDOW FIRST (critical for iPhone)
-  const newWindow = window.open("", "_blank");
-
   const pdf = await generatePDF();
-  if (!pdf) {
-    newWindow.close();
+  if (!pdf) return;
+
+  const blob = pdf.output("blob");
+
+  const file = new File(
+    [blob],
+    `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`,
+    { type: "application/pdf" }
+  );
+
+  // ✅ THIS is what made iPhone work before
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({
+      files: [file],
+      title: `${invoice.type || "invoice"} ${invoice.invoice_number || ""}`,
+    });
     return;
   }
 
-  const blob = pdf.output("blob");
-  const url = URL.createObjectURL(blob);
-
-  // ✅ write into new window
-  newWindow.location.href = url;
-
-  setTimeout(() => {
-    URL.revokeObjectURL(url);
-  }, 5000);
+  // fallback
+  pdf.save(`${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`);
 }
 function sendEmail() {
 const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
