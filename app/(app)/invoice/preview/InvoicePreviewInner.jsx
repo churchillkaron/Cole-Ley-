@@ -149,30 +149,7 @@ async function downloadPDF() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  const blob = pdf.output("blob");
-
-  const fileName = `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`;
-
-  try {
-    // 🔥 iOS FIX: must use array of files + correct type
-    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "application/pdf" })] })) {
-      const file = new File([blob], fileName, {
-        type: "application/pdf",
-      });
-
-      await navigator.share({
-        files: [file],
-        title: fileName,
-      });
-
-      return;
-    }
-  } catch (err) {
-    console.error("Share failed:", err);
-  }
-
-  // ✅ fallback (desktop / unsupported)
-  pdf.save(fileName);
+  pdf.save(`${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`);
 }
 function sendEmail() {
 const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
@@ -184,9 +161,13 @@ async function sendWhatsApp() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  pdf.save(`${invoice?.type || "invoice"}-${invoice?.invoice_number || "preview"}.pdf`);
+  const fileName = `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`;
 
-  const text = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
+  // ✅ Save file first (this is what worked before)
+  pdf.save(fileName);
+
+  // ✅ Then open WhatsApp
+  const text = `${invoice.type === "quotation" ? "Quotation" : "Invoice"} ${invoice.invoice_number || ""}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
 }
 
@@ -205,7 +186,7 @@ return (
       <button
   onClick={() => {
     downloadPDF();
-    alert("Tap Share → Save to Files to download the invoice");
+    
   }}
 >
   DOWNLOAD
