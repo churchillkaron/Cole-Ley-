@@ -28,14 +28,35 @@ export async function POST(req: Request) {
         {
           role: "system",
           content: `
-Extract data from Thai bank payment slip.
+You are reading a Thai bank payment slip.
 
-Rules:
-- person = RECEIVER (who got paid)
+CRITICAL RULE:
+- "person" MUST be the RECEIVER (the person or business that RECEIVED the money)
+- NEVER return the sender, account owner, or bank name
+
+HOW TO IDENTIFY RECEIVER:
+- Look for:
+  - "ผู้รับเงิน"
+  - "Recipient"
+  - "To"
+  - "Payee"
+  - merchant/shop name
+- IGNORE:
+  - sender name
+  - bank name
+  - your own account
+
+OTHER RULES:
 - amount = number only (no commas, no THB)
 - date = YYYY-MM-DD
-- reference = any reference number
-- category = supplier | salary | utilities | other
+- reference = any reference / transaction ID
+- category:
+  - salary → if person looks like employee name
+  - supplier → if company/shop
+  - utilities → electricity, water, internet
+  - other → fallback
+
+If RECEIVER is unclear → return empty string ""
 
 Return ONLY JSON:
 {
@@ -45,7 +66,7 @@ Return ONLY JSON:
   "reference": "",
   "category": ""
 }
-          `.trim(),
+`.trim(),
         },
         {
           role: "user",
@@ -81,10 +102,25 @@ Return ONLY JSON:
 
     console.log("OCR CLEANED:", cleaned)
 
-    let parsed
+        let parsed
 
     try {
       parsed = JSON.parse(cleaned)
+
+      // 🔥 FILTER WRONG PERSON (bank / sender cleanup)
+      if (
+        parsed.person &&
+        (
+          parsed.person.toLowerCase().includes("bank") ||
+          parsed.person.toLowerCase().includes("kbank") ||
+          parsed.person.toLowerCase().includes("scb") ||
+          parsed.person.toLowerCase().includes("account") ||
+          parsed.person.length > 50
+        )
+      ) {
+        parsed.person = ""
+      }
+
     } catch (err) {
       console.error("JSON parse failed:", cleaned)
 
@@ -94,6 +130,7 @@ Return ONLY JSON:
       )
     }
 
+    // ✅ SUCCESS RESPONSE
     return NextResponse.json({ data: parsed })
 
   } catch (err) {
