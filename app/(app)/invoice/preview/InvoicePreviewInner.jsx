@@ -195,7 +195,19 @@ return (
       <button onClick={downloadPDF} className="border px-4 py-2 text-sm border-white/30 text-white/80">
         DOWNLOAD
       </button>
-
+<button
+  onClick={() => {
+    <a
+  href={`/api/invoice/pdf?id=${id}`}
+  target="_self"
+  className="button"
+>
+  Download PDF
+</a>
+  }}
+>
+  Download PDF
+</button>
       <button onClick={sendEmail} className="border px-4 py-2 text-sm border-blue-400 text-blue-400">
         EMAIL
       </button>

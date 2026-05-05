@@ -1,15 +1,16 @@
-import { renderToStream } from "@react-pdf/renderer";
-import InvoicePDF from "@/lib/pdf/InvoicePDF";
+import { NextResponse } from "next/server";
 
-export async function POST(req) {
-  const invoice = await req.json();
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
 
-  const stream = await renderToStream(<InvoicePDF invoice={invoice} />);
+  // TODO: fetch invoice from database
 
-  return new Response(stream, {
+  const html = `<html><body><h1>Invoice ${id}</h1></body></html>`;
+
+  return new NextResponse(html, {
     headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename=invoice-${invoice.invoice_number}.pdf`,
+      "Content-Type": "text/html",
     },
   });
 }
