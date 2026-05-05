@@ -149,7 +149,11 @@ async function downloadPDF() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  pdf.save(`${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`);
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
+
+  // 🔥 THIS triggers iPhone preview with share menu
+  window.open(url, "_blank");
 }
 function sendEmail() {
 const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
@@ -161,14 +165,17 @@ async function sendWhatsApp() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  const fileName = `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`;
+  const blob = pdf.output("blob");
+  const url = URL.createObjectURL(blob);
 
-  // ✅ Save file first (this is what worked before)
-  pdf.save(fileName);
+  // Open PDF preview first
+  window.open(url, "_blank");
 
-  // ✅ Then open WhatsApp
+  // Then open WhatsApp
   const text = `${invoice.type === "quotation" ? "Quotation" : "Invoice"} ${invoice.invoice_number || ""}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  setTimeout(() => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
+  }, 1000);
 }
 
 if (loading) return <div className="text-white p-10">Loading...</div>;
