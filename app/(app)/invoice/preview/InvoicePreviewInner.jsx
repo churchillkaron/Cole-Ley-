@@ -150,10 +150,25 @@ async function downloadPDF() {
   if (!pdf) return;
 
   const blob = pdf.output("blob");
-  const url = URL.createObjectURL(blob);
 
-  // 🔥 THIS triggers iPhone preview with share menu
-  window.open(url, "_blank");
+  const file = new File(
+    [blob],
+    `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`,
+    { type: "application/pdf" }
+  );
+
+  // ✅ Native iPhone share sheet
+  if (navigator.share) {
+    await navigator.share({
+      files: [file],
+      title: "Invoice",
+      text: "Send invoice",
+    });
+  } else {
+    // fallback (desktop)
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  }
 }
 function sendEmail() {
 const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
