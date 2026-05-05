@@ -145,7 +145,7 @@ async function generatePDF() {
   return pdf;
 }
 
-aasync function downloadPDF() {
+async function downloadPDF() {
   if (!invoice?.pdf_url) {
     alert("No PDF available");
     return;
