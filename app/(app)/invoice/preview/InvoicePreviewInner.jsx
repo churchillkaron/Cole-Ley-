@@ -149,35 +149,16 @@ async function downloadPDF() {
   const pdf = await generatePDF();
   if (!pdf) return;
 
-  const fileName = `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`;
   const blob = pdf.output("blob");
-
-  const file = new File([blob], fileName, {
-    type: "application/pdf",
-  });
-
-  // ✅ iPhone BEST behavior → share sheet
-  if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({
-      files: [file],
-      title: fileName,
-    });
-    return;
-  }
-
-  // ✅ fallback (desktop / android)
   const url = URL.createObjectURL(blob);
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+  // ✅ iPhone-safe open
+  window.open(url, "_blank");
 
+  // cleanup
   setTimeout(() => {
     URL.revokeObjectURL(url);
-  }, 1000);
+  }, 2000);
 }
 
 function sendEmail() {
