@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { getSupabase } from "@/lib/supabase";
-import ApprovePageInner from "./ApprovePageInner";
+
 export default function MusicPage() {
   const [tracks, setTracks] = useState([]);
   const [current, setCurrent] = useState(null);
