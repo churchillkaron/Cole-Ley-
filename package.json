@@ -15,6 +15,7 @@
     "@mediapipe/face_detection": "^0.4.1646425229",
     "@react-pdf/renderer": "^4.5.1",
     "@supabase/supabase-js": "^2.105.1",
+    "@tensorflow/tfjs-node": "^4.22.0",
     "@vladmandic/face-api": "^1.7.15",
     "canvas": "^3.2.3",
     "cloudinary": "^2.10.0",

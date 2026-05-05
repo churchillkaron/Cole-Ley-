@@ -18,7 +18,8 @@ export default function MusicPage() {
 
       setTracks(data || []);
     }
-
+console.log("VIDEO:", data.video_url);
+console.log("CINEMATIC:", data.cinematic_url);
     fetchMusic();
   }, []);
 
@@ -143,6 +144,7 @@ export default function MusicPage() {
                     NO IMAGE
                   </div>
                 )}
+                
 
                 {/* VIDEO PREVIEW */}
                 {perf.video_url && (

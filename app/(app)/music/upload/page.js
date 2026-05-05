@@ -101,7 +101,6 @@ export default function UploadPerformancePage() {
       });
 
       const data = await res.json();
-      console.log("UPLOAD RESPONSE:", data);
 
       if (!res.ok) {
         throw new Error(data.error || "Upload failed");
@@ -138,20 +137,31 @@ export default function UploadPerformancePage() {
 
       const finalTitle = title || aiTitle;
 
-      // 🔥 VIDEO VARIANTS
-      const previewUrl = `${base}/so_${offset},c_fit,b_black,w_720,h_720/l_${logo},h_280,c_fit,g_south,y_5/fl_layer_apply/${publicId}.mp4`;
+      // ✅ FIXED TRANSFORM SYSTEM
+      const luxuryStyle = getLuxuryStyle(style);
+      const baseTransform = "q_auto:good";
+      const styleTransform = luxuryStyle;
+      const logoLayer = `l_${logo},h_220,c_fit`;
+      const logoApply = `fl_layer_apply,g_south,y_30`;
 
-      const cinematicUrl = `${base}/c_fill,w_1280,h_720/l_${logo},h_400,c_fit,g_south_west,x_30,y_10/fl_layer_apply/${publicId}.mp4`;
+      // ✅ VIDEO VARIANTS (FIXED)
+      const previewUrl =
+        `${base}/so_${offset},c_fit,b_black,w_720,h_720/${baseTransform}/${styleTransform}` +
+        `/${logoLayer}/${logoApply}/${publicId}.mp4`;
 
-      const reelUrl = `${base}/so_${offset},c_fit,b_black,w_720,h_1280/l_${logo},h_300,c_fit,g_south,y_5/fl_layer_apply/${publicId}.mp4`;
+      const cinematicUrl =
+  `${base}/c_fill,g_auto,w_1280,h_720/${baseTransform}/${styleTransform}` +
+  `/l_${logo},h_360,c_fit/fl_layer_apply,g_south_west,x_20,y_20/${publicId}.mp4`;
+      const reelUrl =
+        `${base}/c_fill,g_auto,w_720,h_1280/${baseTransform}/${styleTransform}` +
+        `/l_${logo},h_360,c_fit/fl_layer_apply,g_south,y_35/${publicId}.mp4`;
 
-      // wait for Cloudinary processing
       await new Promise((res) => setTimeout(res, 8000));
 
       await supabase.from("music").insert({
         title: finalTitle,
         description,
-        video_url: cinematicUrl, // 🔥 USE cinematic version
+        video_url: cinematicUrl,
         thumbnail_url: thumbnailUrl,
         preview_url: previewUrl,
         cinematic_url: cinematicUrl,

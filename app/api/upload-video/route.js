@@ -1,7 +1,10 @@
 
 
 export const runtime = "nodejs";
+import { execFile } from "child_process";
+import { promisify } from "util";
 
+const execFileAsync = promisify(execFile);
 import { TextEncoder } from "util";
 globalThis.TextEncoder = TextEncoder;
 import { v2 as cloudinary } from "cloudinary";
@@ -9,7 +12,7 @@ import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
 import os from "os";
-//import { detectFace } from "../../lib/face";
+
 
 
 // ✅ FFmpeg path
@@ -55,23 +58,27 @@ export async function POST(req) {
 
     // 2️⃣ Detect faces
     const positions = [];
-    const files = fs.readdirSync(framesDir);
+const files = fs.readdirSync(framesDir);
+for (const file of files) {
+  const fullPath = path.join(framesDir, file);
 
-    for (const file of files) {
-      const fullPath = path.join(framesDir, file);
+  try {
+  const { stdout, stderr } = await execFileAsync("node", [
+    "worker/face.js",
+    fullPath,
+  ]);
 
-      try {
-        const face = await detectFace(fullPath);
+  console.log("WORKER OUT:", stdout);
+  console.log("WORKER ERR:", stderr);
+const face = JSON.parse(stdout);
 
-        console.log("Frame:", file, "Face:", face); // ✅ DEBUG
-
-        if (face) {
-          positions.push(face);
-        }
-      } catch (err) {
-        console.warn("Face detection failed:", file);
-      }
-    }
+if (face && typeof face.x === "number") {
+  positions.push(face);
+}
+} catch (err) {
+  console.error("WORKER FULL ERROR:", err);
+}
+}
 
     // 3️⃣ Fallback if no faces
     if (!positions.length) {
@@ -79,22 +86,42 @@ export async function POST(req) {
       positions.push({ x: 300, y: 0 });
     }
 
-    // 4️⃣ Calculate average X
-    const avgX =
-      positions.reduce((sum, f) => sum + f.x, 0) / positions.length;
+   // 4️⃣ Calculate average X
+const validPositions = positions.filter(
+  (p) => p && typeof p.x === "number"
+);
 
-    const cropX = Math.max(0, Math.floor(avgX - 360));
+if (validPositions.length === 0) {
+  console.warn("⚠️ No valid faces, fallback");
+  validPositions.push({ x: 360, y: 0 }); // center fallback
+}
 
-    console.log("🎯 Crop position:", cropX);
+const avgX =
+  validPositions.reduce((sum, f) => sum + f.x, 0) /
+  validPositions.length;
 
-    console.log("🔄 Rendering cinematic video...");
+// 🔥 SCALE FACE POSITION
+const frameWidth = 500; // IMPORTANT: same as your extracted frame width
+const videoWidth = 1280;
 
+const scaledX = (avgX / frameWidth) * videoWidth;
+
+// ✅ SAFE CROP CALCULATION
+const cropWidth = 720;
+
+const cropX = Math.max(
+  0,
+  Math.min(videoWidth - cropWidth, Math.floor(scaledX - cropWidth / 2))
+);
+
+console.log("SCALED X:", scaledX);
+console.log("FINAL cropX:", cropX);
     // 5️⃣ Apply crop + quality
     await new Promise((resolve, reject) => {
       ffmpeg(inputPath)
         .outputOptions([
-          `-vf crop=720:1280:${cropX}:0`,
-          "-c:v libx264",
+         `-vf scale=1280:-1,crop=720:1280:${cropX}:0`,
+"-c:v libx264",
           "-preset medium",
           "-crf 20",
           "-profile:v high",
@@ -142,9 +169,10 @@ export async function POST(req) {
     }
 
     return Response.json({
-      video_url: result.secure_url,
-      public_id: result.public_id,
-    });
+  video_url: result.secure_url,
+  cinematic_url: result.secure_url, // 🔥 TEMP FIX (use same for now)
+  public_id: result.public_id,
+});
 
   } catch (err) {
     console.error("UPLOAD API ERROR:", err);

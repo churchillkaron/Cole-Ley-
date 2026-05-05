@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 import { NextResponse } from "next/server"
+import crypto from "crypto"
 
 export async function POST(req: Request) {
   try {
@@ -21,6 +22,11 @@ export async function POST(req: Request) {
       tax_enabled,
       tax_rate,
       items,
+
+      // ✅ NEW FIELDS
+      valid_until,
+      notes,
+      terms,
     } = body
 
     if (!client || !amount) {
@@ -35,7 +41,7 @@ export async function POST(req: Request) {
     const month = String(now.getMonth() + 1).padStart(2, "0")
 
     // ===============================
-    // ✅ QUOTATION LOGIC (NEW)
+    // ✅ QUOTATION LOGIC (UPDATED)
     // ===============================
     if (type === "quotation") {
 
@@ -52,9 +58,9 @@ export async function POST(req: Request) {
       }
 
       const nextNumber = (count || 0) + 1
-      const padded = String(nextNumber).padStart(3, "0")
+      const padded = String(nextNumber).padStart(4, "0")
 
-      const quotation_number = `QUO-${year}-${month}-${padded}`
+      const quotation_number = `QT-${year}-${padded}`
 
       const { data, error } = await supabase
         .from("quotations")
@@ -67,10 +73,19 @@ export async function POST(req: Request) {
             date,
             amount,
             details,
-            type,
+            type: "quotation",
             tax_enabled,
             tax_rate,
             items,
+
+            // 🔥 NEW SYSTEM FIELDS
+            approval_token: crypto.randomUUID(),
+            status: "sent",
+
+            // 🔥 NEW QUOTATION FIELDS
+            valid_until: valid_until || null,
+            notes: notes || "",
+            terms: terms || "",
           },
         ])
         .select()
@@ -84,11 +99,12 @@ export async function POST(req: Request) {
         )
       }
 
-      // 🔥 return same structure so frontend does NOT break
+      // ✅ NORMALIZED RESPONSE (IMPORTANT)
       return NextResponse.json({
         invoice: {
           ...data,
-          invoice_number: quotation_number
+          invoice_number: quotation_number,
+          type: "quotation",
         }
       })
     }
@@ -125,7 +141,7 @@ export async function POST(req: Request) {
           date,
           amount,
           details,
-          type,
+          type: "invoice",
           tax_enabled,
           tax_rate,
           items,
@@ -142,7 +158,12 @@ export async function POST(req: Request) {
       )
     }
 
-    return NextResponse.json({ invoice: data })
+    return NextResponse.json({
+      invoice: {
+        ...data,
+        type: "invoice"
+      }
+    })
 
   } catch (err) {
     console.error(err)
