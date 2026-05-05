@@ -151,23 +151,28 @@ async function downloadPDF() {
 
   const blob = pdf.output("blob");
 
-  const file = new File(
-    [blob],
-    `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`,
-    { type: "application/pdf" }
-  );
+  const fileName = `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`;
 
-  // ✅ THIS is what made iPhone work before
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({
-      files: [file],
-      title: `${invoice.type || "invoice"} ${invoice.invoice_number || ""}`,
-    });
-    return;
+  try {
+    // 🔥 iOS FIX: must use array of files + correct type
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "application/pdf" })] })) {
+      const file = new File([blob], fileName, {
+        type: "application/pdf",
+      });
+
+      await navigator.share({
+        files: [file],
+        title: fileName,
+      });
+
+      return;
+    }
+  } catch (err) {
+    console.error("Share failed:", err);
   }
 
-  // fallback
-  pdf.save(`${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`);
+  // ✅ fallback (desktop / unsupported)
+  pdf.save(fileName);
 }
 function sendEmail() {
 const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
