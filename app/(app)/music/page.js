@@ -221,7 +221,7 @@ console.log("CINEMATIC:", data.cinematic_url);
 
             <div className="rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)]">
               <video
-                src={current.video_url}
+                src={current.cinematic_url || current.video_url}
                 controls
                 autoPlay
                 playsInline

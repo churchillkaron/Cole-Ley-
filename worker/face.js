@@ -22,8 +22,7 @@ async function loadModels() {
 
   modelsLoaded = true;
 }
-const img = await canvas.loadImage(imagePath);
-// optional: improve detection by scaling
+
 // 👉 main function
 export async function detectFace(imagePath) {
   await loadModels();
@@ -31,15 +30,14 @@ export async function detectFace(imagePath) {
   const img = await canvas.loadImage(imagePath);
 
   const detections = await faceapi.detectAllFaces(
-  img,
-  new faceapi.SsdMobilenetv1Options({
-    minConfidence: 0.5,
-  })
-);
+    img,
+    new faceapi.SsdMobilenetv1Options({
+      minConfidence: 0.5,
+    })
+  );
 
   if (!detections.length) return [];
 
-  // ✅ return ALL faces (not just one)
   return detections.map((d) => ({
     x: d.box.x + d.box.width / 2,
     y: d.box.y + d.box.height / 2,
@@ -48,17 +46,19 @@ export async function detectFace(imagePath) {
   }));
 }
 
-// 👉 CLI test
+// 👉 CLI mode (USED BY YOUR CINEMATIC PIPELINE)
 if (process.argv[2]) {
   const imgPath = process.argv[2];
 
-  detectFace(imgPath)
-    .then((res) => {
-      process.stdout.write(JSON.stringify(res || []));
-      process.exit(0);
-    })
-    .catch(() => {
-      process.stdout.write("[]");
-      process.exit(0);
-    });
+  try {
+    const res = await detectFace(imgPath);
+
+    // ✅ ONLY OUTPUT JSON (critical for parsing)
+    process.stdout.write(JSON.stringify(res || []));
+  } catch (err) {
+    // ❌ NO console.log (breaks parser)
+    process.stdout.write("[]");
+  }
+
+  process.exit(0);
 }
