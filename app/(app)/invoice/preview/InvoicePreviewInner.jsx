@@ -145,32 +145,20 @@ async function generatePDF() {
   return pdf;
 }
 
-async function downloadPDF() {
-  try {
-    const pdf = await generatePDF();
-    if (!pdf) return;
+aasync function downloadPDF() {
+  if (!invoice?.pdf_url) {
+    alert("No PDF available");
+    return;
+  }
 
-    const blob = pdf.output("blob");
-
-    const file = new File(
-      [blob],
-      "invoice.pdf",
-      { type: "application/pdf" }
-    );
-
-    // 🔥 MUST be directly triggered
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: "Invoice",
-      });
-    } else {
-      alert("Sharing not supported");
-    }
-
-  } catch (err) {
-    console.error(err);
-    alert("Error: " + err.message);
+  // ✅ This triggers native iPhone share sheet
+  if (navigator.share) {
+    await navigator.share({
+      title: "Invoice",
+      url: invoice.pdf_url,
+    });
+  } else {
+    window.open(invoice.pdf_url, "_blank");
   }
 }
 function sendEmail() {
