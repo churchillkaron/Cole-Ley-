@@ -146,25 +146,25 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
+  // ✅ OPEN WINDOW FIRST (critical for iPhone)
+  const newWindow = window.open("", "_blank");
+
   const pdf = await generatePDF();
-  if (!pdf) return;
+  if (!pdf) {
+    newWindow.close();
+    return;
+  }
 
   const blob = pdf.output("blob");
-  const reader = new FileReader();
+  const url = URL.createObjectURL(blob);
 
-reader.onloadend = function () {
-  const base64data = reader.result;
-  window.location.href = base64data;
-};
+  // ✅ write into new window
+  newWindow.location.href = url;
 
-reader.readAsDataURL(blob);
-
-  // cleanup
   setTimeout(() => {
     URL.revokeObjectURL(url);
-  }, 2000);
+  }, 5000);
 }
-
 function sendEmail() {
 const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
 const body = `Please find your ${invoice?.type || "invoice"} attached.`;
