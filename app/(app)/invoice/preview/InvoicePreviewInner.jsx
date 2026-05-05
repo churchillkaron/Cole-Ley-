@@ -130,7 +130,7 @@ async function generatePDF() {
 
   for (let i = 0; i < pages.length; i++) {
    const canvas = await html2canvas(pages[i], {
-  scale: 1, // 🔥 reduce from 2 → 1
+  scale: 1.5, // 🔥 reduce from 2 → 1
   useCORS: true,
   backgroundColor: "#0a0a0a",
 });
@@ -193,9 +193,14 @@ return (
 
     {/* ACTION BUTTONS */}
     <div className="mb-6 flex gap-2 sm:gap-4 flex-wrap justify-center z-20">
-      <button onClick={downloadPDF} className="border px-4 py-2 text-sm border-white/30 text-white/80">
-        DOWNLOAD
-      </button>
+      <button
+  onClick={() => {
+    downloadPDF();
+    alert("Tap Share → Save to Files to download the invoice");
+  }}
+>
+  DOWNLOAD
+</button>
 
       <button onClick={sendEmail} className="border px-4 py-2 text-sm border-blue-400 text-blue-400">
         EMAIL
