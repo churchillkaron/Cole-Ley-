@@ -150,10 +150,14 @@ async function downloadPDF() {
   if (!pdf) return;
 
   const blob = pdf.output("blob");
-  const url = URL.createObjectURL(blob);
+  const reader = new FileReader();
 
-  // ✅ iPhone-safe open
-  window.open(url, "_blank");
+reader.onloadend = function () {
+  const base64data = reader.result;
+  window.location.href = base64data;
+};
+
+reader.readAsDataURL(blob);
 
   // cleanup
   setTimeout(() => {
