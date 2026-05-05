@@ -129,12 +129,13 @@ async function generatePDF() {
   });
 
   for (let i = 0; i < pages.length; i++) {
-    const canvas = await html2canvas(pages[i], {
-      scale: 2,
-      backgroundColor: "#0a0a0a",
-    });
+   const canvas = await html2canvas(pages[i], {
+  scale: 1, // 🔥 reduce from 2 → 1
+  useCORS: true,
+  backgroundColor: "#0a0a0a",
+});
 
-    const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas.toDataURL("image/jpeg", 0.7); // 🔥 compression
 
     if (i > 0) pdf.addPage();
 
@@ -195,18 +196,8 @@ return (
       <button onClick={downloadPDF} className="border px-4 py-2 text-sm border-white/30 text-white/80">
         DOWNLOAD
       </button>
-<button
-  onClick={() => {
-    <a
-  href={`/api/invoice/pdf?id=${id}`}
-  target="_self"
-  className="button"
->
-  Download PDF
-</a>
-  }}
->
-  Download PDF
+<button onClick={downloadPDF}>
+  DOWNLOAD
 </button>
       <button onClick={sendEmail} className="border px-4 py-2 text-sm border-blue-400 text-blue-400">
         EMAIL
