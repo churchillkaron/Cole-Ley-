@@ -192,9 +192,7 @@ return (
       <button onClick={downloadPDF} className="border px-4 py-2 text-sm border-white/30 text-white/80">
         DOWNLOAD
       </button>
-<button onClick={downloadPDF}>
-  DOWNLOAD
-</button>
+
       <button onClick={sendEmail} className="border px-4 py-2 text-sm border-blue-400 text-blue-400">
         EMAIL
       </button>
