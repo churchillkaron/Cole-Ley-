@@ -146,28 +146,31 @@ async function generatePDF() {
 }
 
 async function downloadPDF() {
-  const pdf = await generatePDF();
-  if (!pdf) return;
+  try {
+    const pdf = await generatePDF();
+    if (!pdf) return;
 
-  const blob = pdf.output("blob");
+    const blob = pdf.output("blob");
 
-  const file = new File(
-    [blob],
-    `${invoice.type || "invoice"}-${invoice.invoice_number || "preview"}.pdf`,
-    { type: "application/pdf" }
-  );
+    const file = new File(
+      [blob],
+      "invoice.pdf",
+      { type: "application/pdf" }
+    );
 
-  // ✅ Native iPhone share sheet
-  if (navigator.share) {
-    await navigator.share({
-      files: [file],
-      title: "Invoice",
-      text: "Send invoice",
-    });
-  } else {
-    // fallback (desktop)
-    const url = URL.createObjectURL(blob);
-    window.open(url, "_blank");
+    // 🔥 MUST be directly triggered
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "Invoice",
+      });
+    } else {
+      alert("Sharing not supported");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Error: " + err.message);
   }
 }
 function sendEmail() {
@@ -205,12 +208,11 @@ return (
 
     {/* ACTION BUTTONS */}
     <div className="mb-6 flex gap-2 sm:gap-4 flex-wrap justify-center z-20">
-      <button
-  onClick={() => {
-    downloadPDF();
-    
-  }}
+     <button
+  onClick={downloadPDF}
+  style={{ zIndex: 9999, position: "relative" }}
 >
+    
   DOWNLOAD
 </button>
 
