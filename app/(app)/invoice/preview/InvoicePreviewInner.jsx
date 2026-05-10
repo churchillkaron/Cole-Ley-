@@ -139,26 +139,28 @@ async function generatePDF() {
 
     if (i > 0) pdf.addPage();
 
-    pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
+  pdf.addImage(imgData, "JPEG", 0, 0, 794, 1123);
   }
 
   return pdf;
 }
 
 async function downloadPDF() {
-  if (!invoice?.pdf_url) {
-    alert("No PDF available");
-    return;
-  }
+  try {
+    const pdf = await generatePDF();
 
-  // ✅ This triggers native iPhone share sheet
-  if (navigator.share) {
-    await navigator.share({
-      title: "Invoice",
-      url: invoice.pdf_url,
-    });
-  } else {
-    window.open(invoice.pdf_url, "_blank");
+    if (!pdf) {
+      alert("PDF generation failed");
+      return;
+    }
+
+    pdf.save(
+      `${invoice?.type || "document"}-${invoice?.invoice_number || "file"}.pdf`
+    );
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to download PDF");
   }
 }
 function sendEmail() {
@@ -272,7 +274,7 @@ return (
   </p>
 
 </div>
-\{/* DATE BLOCK */}
+{/* DATE BLOCK */}
 <div className="absolute top-[220px] right-[80px] text-right">
 
   <p className="text-[12px] tracking-[3px] text-white/70">
