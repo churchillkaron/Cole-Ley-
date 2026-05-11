@@ -26,7 +26,6 @@ export async function POST(req: Request) {
       tax_rate,
       items,
 
-      // quotation fields
       valid_until,
       notes,
       terms,
@@ -201,4 +200,3 @@ export async function POST(req: Request) {
     )
   }
 }
-
