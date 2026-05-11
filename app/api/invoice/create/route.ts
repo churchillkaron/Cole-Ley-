@@ -1,6 +1,9 @@
+
 import { createClient } from "@supabase/supabase-js"
 import { NextResponse } from "next/server"
 import crypto from "crypto"
+
+export const runtime = "nodejs"
 
 export async function POST(req: Request) {
   try {
@@ -23,7 +26,7 @@ export async function POST(req: Request) {
       tax_rate,
       items,
 
-      // ✅ NEW FIELDS
+      // quotation fields
       valid_until,
       notes,
       terms,
@@ -40,17 +43,20 @@ export async function POST(req: Request) {
     const year = now.getFullYear()
     const month = String(now.getMonth() + 1).padStart(2, "0")
 
-    // ===============================
-    // ✅ QUOTATION LOGIC (UPDATED)
-    // ===============================
+    // ==========================================
+    // QUOTATION
+    // ==========================================
+
     if (type === "quotation") {
 
       const { count, error: countError } = await supabase
         .from("quotations")
         .select("*", { count: "exact", head: true })
-        .ilike("quotation_number", `QUO-${year}-${month}-%`)
+        .ilike("quotation_number", `QT-${year}-%`)
 
       if (countError) {
+        console.error(countError)
+
         return NextResponse.json(
           { error: countError.message },
           { status: 500 }
@@ -58,6 +64,7 @@ export async function POST(req: Request) {
       }
 
       const nextNumber = (count || 0) + 1
+
       const padded = String(nextNumber).padStart(4, "0")
 
       const quotation_number = `QT-${year}-${padded}`
@@ -67,24 +74,31 @@ export async function POST(req: Request) {
         .insert([
           {
             quotation_number,
+
             client,
             client_address,
             client_tax_id,
+
             date,
             amount,
-            details,
+
+            details: details || null,
+
             type: "quotation",
+
             tax_enabled,
             tax_rate,
+
             items,
 
-            // 🔥 NEW SYSTEM FIELDS
             approval_token: crypto.randomUUID(),
+
             status: "sent",
 
-            // 🔥 NEW QUOTATION FIELDS
             valid_until: valid_until || null,
+
             notes: notes || "",
+
             terms: terms || "",
           },
         ])
@@ -93,25 +107,25 @@ export async function POST(req: Request) {
 
       if (error) {
         console.error(error)
+
         return NextResponse.json(
           { error: error.message },
           { status: 500 }
         )
       }
 
-      // ✅ NORMALIZED RESPONSE (IMPORTANT)
       return NextResponse.json({
         invoice: {
           ...data,
           invoice_number: quotation_number,
           type: "quotation",
-        }
+        },
       })
     }
 
-    // ===============================
-    // ✅ INVOICE LOGIC (UNCHANGED)
-    // ===============================
+    // ==========================================
+    // INVOICE
+    // ==========================================
 
     const { count, error: countError } = await supabase
       .from("invoices")
@@ -119,6 +133,8 @@ export async function POST(req: Request) {
       .ilike("invoice_number", `CL-${year}-${month}-%`)
 
     if (countError) {
+      console.error(countError)
+
       return NextResponse.json(
         { error: countError.message },
         { status: 500 }
@@ -126,6 +142,7 @@ export async function POST(req: Request) {
     }
 
     const nextNumber = (count || 0) + 1
+
     const padded = String(nextNumber).padStart(3, "0")
 
     const invoice_number = `CL-${year}-${month}-${padded}`
@@ -135,15 +152,21 @@ export async function POST(req: Request) {
       .insert([
         {
           invoice_number,
+
           client,
           client_address,
           client_tax_id,
+
           date,
           amount,
-          details,
+
+          details: details || null,
+
           type: "invoice",
+
           tax_enabled,
           tax_rate,
+
           items,
         },
       ])
@@ -152,6 +175,7 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error(error)
+
       return NextResponse.json(
         { error: error.message },
         { status: 500 }
@@ -161,15 +185,20 @@ export async function POST(req: Request) {
     return NextResponse.json({
       invoice: {
         ...data,
-        type: "invoice"
-      }
+        invoice_number,
+        type: "invoice",
+      },
     })
 
-  } catch (err) {
-    console.error(err)
+  } catch (err: any) {
+    console.error("SERVER ERROR:", err)
+
     return NextResponse.json(
-      { error: "server error" },
+      {
+        error: err?.message || "server error",
+      },
       { status: 500 }
     )
   }
 }
+
