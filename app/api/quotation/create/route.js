@@ -12,63 +12,107 @@ export async function POST(req) {
 
     const year = new Date().getFullYear();
 
-// 🔥 get latest quotation
-const { data: last } = await supabase
-  .from("invoices")
-  .select("invoice_number")
-  .ilike("invoice_number", `QT-${year}-%`)
-  .order("invoice_number", { ascending: false })
-  .limit(1);
+    // ==========================================
+    // GET LATEST QUOTATION NUMBER
+    // ==========================================
 
-// 🔥 extract last number
-let nextNumber = 1;
+    const { data: last, error: lastError } = await supabase
+      .from("quotations")
+      .select("quotation_number")
+      .ilike("quotation_number", `QT-${year}-%`)
+      .order("quotation_number", { ascending: false })
+      .limit(1);
 
-if (last && last.length > 0) {
-  const lastNum = parseInt(last[0].invoice_number.split("-")[2]);
-  nextNumber = lastNum + 1;
-}
+    if (lastError) {
+      console.error("FETCH LAST QUOTATION ERROR:", lastError);
 
-// 🔥 format: QT-2026-0001
-const invoiceNumber = `QT-${year}-${String(nextNumber).padStart(4, "0")}`;
+      return NextResponse.json(
+        { error: lastError.message },
+        { status: 400 }
+      );
+    }
+
+    let nextNumber = 1;
+
+    if (last && last.length > 0) {
+      const lastNum = parseInt(
+        last[0].quotation_number.split("-")[2]
+      );
+
+      nextNumber = lastNum + 1;
+    }
+
+    const padded = String(nextNumber).padStart(4, "0");
+
+    // QT-2026-0001
+    const quotation_number = `QT-${year}-${padded}`;
+
+    // ==========================================
+    // CLEAN DATA
+    // ==========================================
+
     const cleanData = {
-      client: body.client,
-      client_address: body.client_address,
-      client_tax_id: body.client_tax_id,
-      date: body.date,
-      type: "quotation",
-      items: body.items,
-      amount: body.amount,
-      tax_enabled: body.tax_enabled,
-      tax_rate: body.tax_rate,
-      invoice_number: invoiceNumber,
+      quotation_number,
 
-      // optional fields
+      client: body.client || "",
+      client_address: body.client_address || "",
+      client_tax_id: body.client_tax_id || "",
+
+      date: body.date,
+
+      type: "quotation",
+
+      items: body.items || [],
+
+      amount: Number(body.amount || 0),
+
+      tax_enabled: Boolean(body.tax_enabled),
+      tax_rate: Number(body.tax_rate || 0),
+
       valid_until: body.valid_until || null,
       notes: body.notes || null,
       terms: body.terms || null,
+
       rider: body.rider || null,
       performance_type: body.performance_type || null,
       venue: body.venue || null,
       performance_time: body.performance_time || null,
       soundcheck_time: body.soundcheck_time || null,
+
       food_drinks: Boolean(body.food_drinks),
     };
 
+    // ==========================================
+    // INSERT QUOTATION
+    // ==========================================
+
     const { data, error } = await supabase
-      .from("invoices")
+      .from("quotations")
       .insert(cleanData)
       .select()
       .single();
 
     if (error) {
       console.error("SUPABASE ERROR:", error);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json({ invoice: data });
+    return NextResponse.json({
+      quotation: data,
+    });
 
   } catch (err) {
     console.error("SERVER ERROR:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        error: err.message || "Server Error",
+      },
+      { status: 500 }
+    );
   }
 }

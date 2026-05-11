@@ -140,11 +140,32 @@ export async function POST(req: Request) {
       )
     }
 
-    const nextNumber = (count || 0) + 1
+   const { data: latestInvoice, error: latestError } = await supabase
+  .from("invoices")
+  .select("invoice_number")
+  .ilike("invoice_number", `CL-${year}-${month}-%`)
+  .order("invoice_number", { ascending: false })
+  .limit(1)
+  .single()
 
-    const padded = String(nextNumber).padStart(3, "0")
+if (latestError && latestError.code !== "PGRST116") {
+  return NextResponse.json(
+    { error: latestError.message },
+    { status: 500 }
+  )
+}
 
-    const invoice_number = `CL-${year}-${month}-${padded}`
+let nextNumber = 1
+
+if (latestInvoice?.invoice_number) {
+  const parts = latestInvoice.invoice_number.split("-")
+  const lastNumber = parseInt(parts[3] || "0")
+  nextNumber = lastNumber + 1
+}
+
+const padded = String(nextNumber).padStart(3, "0")
+
+const invoice_number = `CL-${year}-${month}-${padded}`
 
     const { data, error } = await supabase
       .from("invoices")
