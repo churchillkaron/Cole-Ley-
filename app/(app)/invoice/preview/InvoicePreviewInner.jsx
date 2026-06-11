@@ -3,461 +3,400 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { getSupabase } from "@/lib/supabase";
+import { getSupabase } from "../../../../lib/supabase";
 
 export default function InvoicePreviewInner() {
-const params = useSearchParams();
-const id = params.get("id");
-const mode = params.get("mode");
-const router = useRouter();
+  const params = useSearchParams();
+  const id = params.get("id");
+  const router = useRouter();
 
-const [invoice, setInvoice] = useState(null);
-const [loading, setLoading] = useState(true);
+  const [invoice, setInvoice] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-/* 🔒 PROTECT PAGE (OWNER ONLY) */
-useEffect(() => {
-async function checkUser() {
-if (typeof window === "undefined") return;
+  useEffect(() => {
+    async function checkUser() {
+      if (typeof window === "undefined") return;
 
-  const supabase = getSupabase();
-  if (!supabase) return;
+      const supabase = getSupabase();
+      if (!supabase) return;
 
-  const { data } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getUser();
 
-  if (!data.user) {
-    router.push("/");
-    return;
-  }
+      if (!data.user) {
+        router.push("/");
+        return;
+      }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", data.user.id)
-    .single();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
 
-  const role = profile?.role?.trim().toLowerCase();
+      const role = profile?.role?.trim().toLowerCase();
 
-  if (role !== "owner") {
-    router.push("/media");
-  }
-}
-
-checkUser();
-}, [router]);
-
-useEffect(() => {
-async function fetchInvoice() {
-
-  if (mode === "draft") {
-    const data = JSON.parse(localStorage.getItem("preview_invoice"));
-    setInvoice(data);
-    setLoading(false);
-    return;
-  }
-
-  try {
-    const type = params.get("type");
-
-    const endpoint =
-      type === "quotation"
-        ? `/api/quotation/get?id=${id}`
-        : `/api/invoice/get?id=${id}`;
-
-    const res = await fetch(endpoint);
-    const data = await res.json();
-
-    if (!res.ok || !data?.invoice) {
-      setInvoice(null);
-      return;
+      if (role !== "owner") {
+        router.push("/media");
+      }
     }
 
-    setInvoice(data.invoice);
-  } catch (err) {
-    console.error(err);
-    setInvoice(null);
-  } finally {
-    setLoading(false);
-  }
-}
+    checkUser();
+  }, [router]);
 
-if (id || mode === "draft") fetchInvoice();
-else setLoading(false);
+  useEffect(() => {
+    async function fetchInvoice() {
+      try {
+        const res = await fetch(`/api/invoice/get?id=${id}`);
+        const data = await res.json();
 
-}, [id, mode]);
+        if (!res.ok || !data?.invoice) {
+          setInvoice(null);
+          return;
+        }
 
-/* 🔥 NEW: CONVERT FUNCTION */
-async function convertToInvoice() {
-  try {
-    const res = await fetch("/api/quotation/convert", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        quotation_id: invoice.invoice_number,
-      }),
+        setInvoice(data.invoice);
+      } catch (err) {
+        console.error(err);
+        setInvoice(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (id) fetchInvoice();
+    else setLoading(false);
+  }, [id]);
+
+  async function generatePDF() {
+    if (typeof window === "undefined") return;
+
+    const html2canvas = (await import("html2canvas")).default;
+    const jsPDF = (await import("jspdf")).default;
+
+    const element = document.getElementById("invoice");
+    if (!element) return;
+
+    const clone = element.cloneNode(true);
+    clone.style.transform = "scale(1)";
+    clone.style.position = "fixed";
+    clone.style.top = "0";
+    clone.style.left = "0";
+    clone.style.width = "794px";
+    clone.style.height = "1123px";
+    clone.style.zIndex = "9999";
+    clone.style.background = "#ffffff";
+
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
     });
 
-    const data = await res.json();
+    document.body.removeChild(clone);
 
-    if (data?.invoice?.invoice_number) {
-      router.push(`/invoice/preview?id=${data.invoice.invoice_number}&type=invoice`);
-    } else {
-      alert("Conversion failed");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Error converting quotation");
-  }
-}
+    const imgData = canvas.toDataURL("image/png");
 
-async function generatePDF() {
-  if (typeof window === "undefined") return;
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "px",
+      format: [794, 1123],
+    });
 
-  const html2canvas = (await import("html2canvas")).default;
-  const jsPDF = (await import("jspdf")).default;
+    pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
 
-  const page1 = document.getElementById("invoice");
-  const page2 = document.getElementById("invoice-page-2");
-
-  const pages = [page1, page2].filter(Boolean);
-
-  const pdf = new jsPDF({
-    orientation: "portrait",
-    unit: "px",
-    format: [794, 1123],
-  });
-
-  for (let i = 0; i < pages.length; i++) {
-   const canvas = await html2canvas(pages[i], {
-  scale: 1.5, // 🔥 reduce from 2 → 1
-  useCORS: true,
-  backgroundColor: "#0a0a0a",
-});
-
-    const imgData = canvas.toDataURL("image/jpeg", 0.9); // 🔥 compression
-
-    if (i > 0) pdf.addPage();
-
-  pdf.addImage(imgData, "JPEG", 0, 0, 794, 1123);
+    return pdf;
   }
 
-  return pdf;
-}
-
-async function downloadPDF() {
-  try {
+  async function downloadPDF() {
     const pdf = await generatePDF();
+    if (!pdf) return;
 
-    if (!pdf) {
-      alert("PDF generation failed");
+    pdf.save(`invoice-${invoice.invoice_number}.pdf`);
+  }
+
+  async function sharePDF() {
+    const pdf = await generatePDF();
+    if (!pdf) return;
+
+    const blob = pdf.output("blob");
+
+    const file = new File([blob], `invoice-${invoice.invoice_number}.pdf`, {
+      type: "application/pdf",
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: `Invoice ${invoice.invoice_number}`,
+        text: `Invoice ${invoice.invoice_number}`,
+      });
       return;
     }
 
-    pdf.save(
-      `${invoice?.type || "document"}-${invoice?.invoice_number || "file"}.pdf`
-    );
-
-  } catch (err) {
-    console.error(err);
-    alert("Failed to download PDF");
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
   }
-}
+
+  
+  async function markPaid() {
+    try {
+      const res = await fetch("/api/invoice/pay", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          invoice_number: invoice.invoice_number,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Failed");
+        return;
+      }
+
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to mark paid");
+    }
+  }
+
 function sendEmail() {
-const subject = `${invoice?.type === "quotation" ? "Quotation" : "Invoice"} ${invoice?.invoice_number || ""}`;
-const body = `Please find your ${invoice?.type || "invoice"} attached.`;
-window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
 
-async function sendWhatsApp() {
-  const pdf = await generatePDF();
-  if (!pdf) return;
+    const subject = `Invoice ${invoice?.invoice_number}`;
+    const body = `Please find your invoice attached.`;
 
-  const blob = pdf.output("blob");
-  const url = URL.createObjectURL(blob);
+    window.location.href = `mailto:?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+  }
 
-  // Open PDF preview first
-  window.open(url, "_blank");
+  if (loading) return <div className="text-white p-10">Loading...</div>;
+  if (!invoice) return <div className="text-red-500 p-10">No invoice</div>;
 
-  // Then open WhatsApp
-  const text = `${invoice.type === "quotation" ? "Quotation" : "Invoice"} ${invoice.invoice_number || ""}`;
-  setTimeout(() => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
-  }, 1000);
-}
+  const subtotal = Number(invoice.amount);
+  const tax = invoice.tax_enabled ? (subtotal * invoice.tax_rate) / 100 : 0;
+  const total = subtotal + tax;
+  const status = invoice.status || "pending";
 
-if (loading) return <div className="text-white p-10">Loading...</div>;
-if (!invoice) return <div className="text-red-500 p-10">No invoice</div>;
-
-const subtotal = Number(invoice.amount);
-const tax = invoice.tax_enabled ? (subtotal * invoice.tax_rate) / 100 : 0;
-const total = subtotal + tax;
-
-return (
-  <div className="bg-black flex justify-center py-10 sm:py-20 flex-col items-center relative">
-
-    {/* ACTION BUTTONS */}
-    <div className="mb-6 flex gap-2 sm:gap-4 flex-wrap justify-center z-20">
-     <button
-  onClick={downloadPDF}
-  style={{ zIndex: 9999, position: "relative" }}
->
-    
-  DOWNLOAD
-</button>
-
-      <button onClick={sendEmail} className="border px-4 py-2 text-sm border-blue-400 text-blue-400">
-        EMAIL
-      </button>
-
-      <button onClick={sendWhatsApp} className="border px-4 py-2 text-sm border-green-500 text-green-500">
-        WHATSAPP
-      </button>
-
-      {invoice.type === "quotation" && (
+  return (
+    <div className="min-h-screen bg-[#111111] flex justify-center py-8 sm:py-12 flex-col items-center">
+      <div className="mb-6 flex gap-2 sm:gap-4 flex-wrap justify-center">
         <button
-          onClick={convertToInvoice}
-          className="border px-4 py-2 text-sm border-[#d4af37] text-[#d4af37]"
+          onClick={downloadPDF}
+          className="border px-4 py-2 text-sm border-white/30 text-white/80"
         >
-          CONVERT TO INVOICE
+          DOWNLOAD PDF
         </button>
-      )}
 
-      {mode === "draft" && (
         <button
-          onClick={() => router.push("/invoice")}
-          className="border px-4 py-2 text-sm border-yellow-400 text-yellow-400"
+          onClick={sharePDF}
+          className="border px-4 py-2 text-sm border-green-500 text-green-500"
         >
-          EDIT
+          SHARE PDF
         </button>
-      )}
-    </div>
 
-    <div className="w-full overflow-x-auto flex justify-center">
+        {status !== "paid" && (
+          <button
+            onClick={markPaid}
+            className="border px-4 py-2 text-sm border-[#b89432] text-[#b89432]"
+          >
+            MARK PAID
+          </button>
+        )}
 
-      <div id="invoice-scale-wrapper" className="scale-[0.6] sm:scale-100 origin-top flex flex-col items-center gap-10">
+        <button
+          onClick={sendEmail}
+          className="border px-4 py-2 text-sm border-blue-400 text-blue-400"
+        >
+          EMAIL
+        </button>
+      </div>
 
-        {/* ================= PAGE 1 ================= */}
+      <div className="w-full overflow-x-auto flex justify-center px-4">
         <div
-          id="invoice"
-          className="w-[794px] h-[1123px] text-white relative font-serif overflow-hidden"
+          id="invoice-scale-wrapper"
+          className="scale-[0.6] sm:scale-100 origin-top"
         >
+          <div
+            id="invoice"
+            className="w-[794px] h-[1123px] bg-white text-[#111111] relative font-sans overflow-hidden px-[70px] py-[40px]"
+          >
+            <div className="flex justify-between items-start border-b border-[#d8c28a] pb-2">
+              <div className="pl-6 pt-2">
+                <img
+                  src="/logo-cole.png"
+                  alt="Cole Ley"
+                  className="w-[380px] h-auto object-contain"
+                />
+              </div>
 
-          {/* BACKGROUND */}
-          <img
-  src="/quotation-bg.png"
-  className="absolute inset-0 w-full h-full object-cover opacity-90"
-/>
+              <div className="text-right">
+                <p className="tracking-[5px] text-[#b89432] text-[16px] font-semibold mb-5">
+                  {status === "paid" ? "RECEIPT" : "INVOICE"}
+                </p>
 
-          {/* DARK OVERLAY */}
-          <div className="absolute inset-0 bg-black/0" />
+                <p className="text-[13px] text-[#555555]">
+                  <span className="text-[#b89432] font-semibold">NO.</span>{" "}
+                  {invoice.invoice_number}
+                </p>
 
-          {/* TOP FADE */}
-          <div className="absolute top-0 left-0 w-full h-[300px] bg-gradient-to-b from-black/90 to-transparent" />
+                <p className="text-[13px] text-[#555555] mt-1">
+                  <span className="text-[#b89432] font-semibold">DATE</span>{" "}
+                  {invoice.date}
+                </p>
 
-          {/* CONTENT */}
-          <div className="relative z-10">
+                {status === "paid" && (
+                  <>
+                    <p className="text-[13px] text-[#555555] mt-3">
+                      <span className="text-[#b89432] font-semibold">
+                        RECEIPT NO.
+                      </span>{" "}
+                      {invoice.receipt_number}
+                    </p>
 
-            {/* LOGO */}
-            <div className="absolute top-[-20px] left-[-30px]">
-              <img src="/logo-cole.png" className="w-[580px]" />
-            </div>
-{/* QUOTATION TITLE UNDER LOGO */}
-<div className="absolute top-[250px] left-[80px]">
+                    <p className="text-[13px] text-[#555555] mt-1">
+                      <span className="text-[#b89432] font-semibold">
+                        PAID DATE
+                      </span>{" "}
+                      {invoice.paid_date}
+                    </p>
+                  </>
+                )}
 
-  <p className="serif text-[40px] tracking-[6px] text-[white] leading-none">
-    {invoice.type === "quotation" ? "QUOTATION" : "INVOICE"}
-  </p>
-
-  <p className="mt-3 text-[18px] tracking-[4px] text-[white]">
-    {invoice.invoice_number}
-  </p>
-
-</div>
-{/* DATE BLOCK */}
-<div className="absolute top-[220px] right-[80px] text-right">
-
-  <p className="text-[12px] tracking-[3px] text-white/70">
-    DATE {invoice.date}
-  </p>
-
-  {invoice.type === "quotation" && (
-    <p className="mt-2 text-[12px] tracking-[3px] text-[#d4af37]">
-      VALID UNTIL {invoice.valid_until}
-    </p>
-  )}
-
-</div>
-            <div className="absolute top-[350px] left-[80px] right-[80px] flex justify-between">
-
-  {/* FROM */}
-  <div className="w-[45%]">
-    <p className="text-xs tracking-[4px] text-[#d4af37] mb-3">FROM</p>
-
-    <p className="serif text-xl text-white mb-2">
-      COLE LEY CO., LTD
-    </p>
-
-    <p className="text-white/70 text-sm leading-relaxed">
-      Phuket 83130, Thailand
-    </p>
-
-    <p className="text-white/50 text-sm mt-2">
-      +66 (0) 94427 1265  
-      <br />
-      cole@coleley.com
-    </p>
-  </div>
-
-  {/* BILL TO */}
-  <div className="w-[45%] text-right">
-    <p className="text-xs tracking-[4px] text-[#d4af37] mb-3">BILL TO</p>
-
-    <p className="serif text-xl text-white mb-2">
-      {invoice.client}
-    </p>
-
-    <p className="text-white/70 text-sm leading-relaxed">
-      {invoice.client_address}
-    </p>
-
-    {invoice.client_tax_id && (
-      <p className="text-white/40 text-xs mt-2">
-        TAX ID: {invoice.client_tax_id}
-      </p>
-    )}
-  </div>
-
-</div>
-
-            {/* DESCRIPTION */}
-            <div className="absolute top-[570px] left-[80px] right-[80px] flex justify-between text-[#d4af37]">
-              <span>DESCRIPTION</span>
-              <span>AMOUNT</span>
+                <div className="mt-4 inline-block border border-[#d8c28a] px-2 py-[4px] text-[10px] tracking-[2px] text-[#b89432]">
+                  {status.toUpperCase()}
+                </div>
+              </div>
             </div>
 
-            {/* LINE */}
-            <div className="absolute top-[575px] left-[80px] right-[80px] h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+            <div className="grid grid-cols-2 gap-12 mt-2">
+              <div>
+                <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-4">
+                  FROM
+                </p>
 
-            {/* ITEMS */}
-            <div className="absolute top-[620px] left-[80px] right-[80px] space-y-3">
-              {invoice.items?.map((item, i) => (
-                <div key={i} className="flex justify-between">
-                  <span>
-                    {item.description} ({item.qty} × {item.price})
+                <p className="text-[15px] font-semibold">Cole Ley Co., Ltd.</p>
+
+                <p className="text-[12px] text-[#666666] mt-2 leading-5">
+                  27/10 Soi Plukjae<br />
+                  Phuket 83130, Thailand
+                </p>
+
+                <p className="text-[12px] text-[#666666] mt-3 leading-5">
+                  +66 (0) 94427 1265<br />
+                  cole@coleley.com<br />
+                  Tax ID: 0835566030354
+                </p>
+              </div>
+
+              <div>
+                <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-4">
+                  BILL TO
+                </p>
+
+                <p className="text-[18px] font-semibold">
+                  {invoice.client || "-"}
+                </p>
+
+                <p className="text-[12px] text-[#666666] mt-2 leading-5 whitespace-pre-line">
+                  {invoice.client_address || "-"}
+                </p>
+
+                <p className="text-[12px] text-[#666666] mt-3">
+                  Tax ID: {invoice.client_tax_id || "-"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <div className="grid grid-cols-[1fr_70px_110px_120px] border-b border-[#d8c28a] pb-3 text-[11px] tracking-[2px] text-[#b89432] font-semibold">
+                <div>DESCRIPTION</div>
+                <div className="text-center">QTY</div>
+                <div className="text-right">UNIT</div>
+                <div className="text-right">AMOUNT</div>
+              </div>
+
+              <div className="min-h-[320px]">
+                {invoice.items?.map((item, i) => {
+                  const qty = Number(item.qty) || 0;
+                  const price = Number(item.price) || 0;
+                  const lineTotal = qty * price;
+
+                  return (
+                    <div
+                      key={i}
+                      className="grid grid-cols-[1fr_70px_110px_120px] border-b border-[#eeeeee] py-4 text-[13px]"
+                    >
+                      <div className="pr-6 leading-5">{item.description}</div>
+                      <div className="text-center text-[#666666]">{qty}</div>
+                      <div className="text-right text-[#666666]">
+                        {price.toFixed(2)}
+                      </div>
+                      <div className="text-right font-medium">
+                        {lineTotal.toFixed(2)} THB
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex justify-between items-start mt-6">
+              <div className="w-[300px] border border-[#eadcae] p-4">
+                <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-4">
+                  PAYMENT DETAILS
+                </p>
+
+                <p className="text-[13px] font-semibold">Kasikorn Bank</p>
+
+                <p className="text-[12px] text-[#666666] mt-2 leading-5">
+                  Account Name: Cole Ley Co., Ltd.<br />
+                  Account No: 166 8505 097
+                </p>
+
+                <p className="text-[11px] text-[#777777] mt-4 leading-5">
+                  Please use invoice number as payment reference.
+                </p>
+              </div>
+
+              <div className="w-[285px]">
+                <div className="flex justify-between text-[13px] text-[#666666] py-2">
+                  <span>Subtotal</span>
+                  <span>{subtotal.toFixed(2)} THB</span>
+                </div>
+
+                {invoice.tax_enabled && (
+                  <div className="flex justify-between text-[13px] text-[#666666] py-2 border-t border-[#eeeeee]">
+                    <span>VAT ({invoice.tax_rate}%)</span>
+                    <span>{tax.toFixed(2)} THB</span>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-end mt-3 pt-4 border-t border-[#d8c28a]">
+                  <span className="text-[12px] tracking-[3px] text-[#b89432] font-semibold">
+                    TOTAL
                   </span>
-                  <span>{(item.qty * item.price).toFixed(2)} THB</span>
+                  <span className="text-[18px] text-[#111111] font-semibold">
+                    {total.toFixed(2)} THB
+                  </span>
                 </div>
-              ))}
-            </div>
-{/* EVENT DETAILS */}
-<div className="absolute top-[680px] left-[80px] right-[80px] text-sm text-white/70 space-y-2">
-
-  {invoice.performance_type && (
-    <p><span className="text-[#d4af37]">Performance:</span> {invoice.performance_type}</p>
-  )}
-
-  {invoice.venue && (
-    <p><span className="text-[#d4af37]">Venue:</span> {invoice.venue}</p>
-  )}
-
-  {invoice.performance_time && (
-    <p><span className="text-[#d4af37]">Performance Time:</span> {invoice.performance_time}</p>
-  )}
-
-  {invoice.soundcheck_time && (
-    <p><span className="text-[#d4af37]">Soundcheck:</span> {invoice.soundcheck_time}</p>
-  )}
-
-  {invoice.food_drinks && (
-    <p><span className="text-[#d4af37]">Food & Drinks:</span> Included</p>
-  )}
-
-</div>
-{/* NOTES */}
-{invoice.notes && (
-  <div className="absolute top-[820px] left-[80px] right-[350px] text-sm text-white/60">
-    <p className="text-[#d4af37] mb-1">NOTES</p>
-    <p>{invoice.notes}</p>
-  </div>
-)}
-            {/* TOTAL */}
-            <div className="absolute top-[850px] right-[80px] w-[250px] space-y-2">
-              <div className="flex justify-between text-white/60">
-                <span>Subtotal</span>
-                <span>{subtotal.toFixed(2)}</span>
-              </div>
-
-              {invoice.tax_enabled && (
-                <div className="flex justify-between text-white/60">
-                  <span>VAT ({invoice.tax_rate}%)</span>
-                  <span>{tax.toFixed(2)}</span>
-                </div>
-              )}
-
-              <div className="flex justify-between mt-4">
-                <span className="text-[#d4af37]">TOTAL</span>
-                <span className="text-2xl text-[#e7c87a]">
-                  {total.toFixed(2)} THB
-                </span>
               </div>
             </div>
 
-            {/* BOTTOM LINE */}
-            <div className="absolute top-[820px] left-[80px] right-[80px] h-[1px] bg-[#d4af37]" />
-
-      {/* PAYMENT */}
-<div className="absolute top-[980px] left-[80px] text-white/60 text-sm z-20">
-
-  <p className="text-[#d4af37] mb-2 tracking-[3px]">
-    PAYMENT DETAILS
-  </p>
-
-  <p>Kasikorn Bank</p>
-  <p>Account Name: Cole Ley Co., Ltd.</p>
-  <p>Account No: 166 8505 097</p>
-
-</div>
+            <div className="absolute left-[70px] right-[70px] bottom-[25px] flex justify-between text-[10px] text-[#999999] border-t border-[#eeeeee] pt-4">
+              <span>www.coleley.com</span>
+              <span>cole@coleley.com</span>
+              <span>+66 (0) 94427 1265</span>
+            </div>
           </div>
         </div>
-
-        {/* ================= PAGE 2 ================= */}
-       {invoice.type === "quotation" && (
-  <div
-    id="invoice-page-2"
-    className="w-[794px] h-[1123px] text-white relative font-serif overflow-hidden"
-  >
-
-    {/* BACKGROUND */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black" />
-    <div className="absolute bottom-0 w-full h-[300px] bg-gradient-to-t from-[#d4af37]/10 to-transparent" />
-
-    {/* CONTENT */}
-    <div className="relative z-10">
-
-      <div className="absolute top-[120px] right-[80px] text-right">
-        <p className="tracking-[5px] text-[#d4af37] text-sm mb-4">
-          TERMS & RIDER
-        </p>
-      </div>
-
-      <div className="absolute top-[250px] left-[80px] right-[80px] text-sm text-white/70 whitespace-pre-line">
-        <p className="text-[#d4af37] mb-3">TERMS & CONDITIONS</p>
-        <p>{invoice.terms}</p>
-      </div>
-
-      <div className="absolute top-[500px] left-[80px] right-[80px] text-sm text-white/70 whitespace-pre-line">
-        <p className="text-[#d4af37] mb-3">TECHNICAL RIDER</p>
-        <p>{invoice.rider}</p>
-      </div>
-
-    </div>
-  </div>
-)}
-      
-
       </div>
     </div>
-  </div>
-);
+  );
 }
