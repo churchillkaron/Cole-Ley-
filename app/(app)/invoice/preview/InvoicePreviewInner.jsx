@@ -1,22 +1,24 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-
+import { useEffect, useMemo, useState } from "react";
 import { getSupabase } from "../../../../lib/supabase";
 
 export default function InvoicePreviewInner() {
   const params = useSearchParams();
-  const id = params.get("id");
   const router = useRouter();
 
-  const [invoice, setInvoice] = useState(null);
+  const id = params.get("id");
+  const type = params.get("type") === "quotation" ? "quotation" : "invoice";
+
+  const [documentData, setDocumentData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const isQuotation = type === "quotation";
+  const label = isQuotation ? "QUOTATION" : "INVOICE";
 
   useEffect(() => {
     async function checkUser() {
-      if (typeof window === "undefined") return;
-
       const supabase = getSupabase();
       if (!supabase) return;
 
@@ -44,37 +46,57 @@ export default function InvoicePreviewInner() {
   }, [router]);
 
   useEffect(() => {
-    async function fetchInvoice() {
+    async function fetchDocument() {
       try {
-        const res = await fetch(`/api/invoice/get?id=${id}`);
+        const endpoint = isQuotation
+          ? "/api/quotation/get"
+          : "/api/invoice/get";
+
+        const res = await fetch(`${endpoint}?id=${id}`);
         const data = await res.json();
 
-        if (!res.ok || !data?.invoice) {
-          setInvoice(null);
+        const doc = isQuotation ? data.quotation : data.invoice;
+
+        if (!res.ok || !doc) {
+          setDocumentData(null);
           return;
         }
 
-        setInvoice(data.invoice);
+        setDocumentData(doc);
       } catch (err) {
         console.error(err);
-        setInvoice(null);
+        setDocumentData(null);
       } finally {
         setLoading(false);
       }
     }
 
-    if (id) fetchInvoice();
+    if (id) fetchDocument();
     else setLoading(false);
-  }, [id]);
+  }, [id, isQuotation]);
+
+  const documentNumber = useMemo(() => {
+    if (!documentData) return "";
+    return isQuotation
+      ? documentData.quotation_number
+      : documentData.invoice_number;
+  }, [documentData, isQuotation]);
+
+  const status = documentData?.status || "pending";
+  const subtotal = Number(documentData?.amount || 0);
+  const taxEnabled = Boolean(documentData?.tax_enabled);
+  const taxRate = Number(documentData?.tax_rate || 0);
+  const tax = taxEnabled ? (subtotal * taxRate) / 100 : 0;
+  const total = subtotal + tax;
 
   async function generatePDF() {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") return null;
 
     const html2canvas = (await import("html2canvas")).default;
     const jsPDF = (await import("jspdf")).default;
 
     const element = document.getElementById("invoice");
-    if (!element) return;
+    if (!element) return null;
 
     const clone = element.cloneNode(true);
     clone.style.transform = "scale(1)";
@@ -96,7 +118,7 @@ export default function InvoicePreviewInner() {
 
     document.body.removeChild(clone);
 
-    const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas.toDataURL("image/jpeg", 0.86);
 
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -104,7 +126,7 @@ export default function InvoicePreviewInner() {
       format: [794, 1123],
     });
 
-    pdf.addImage(imgData, "PNG", 0, 0, 794, 1123);
+    pdf.addImage(imgData, "JPEG", 0, 0, 794, 1123);
 
     return pdf;
   }
@@ -113,7 +135,7 @@ export default function InvoicePreviewInner() {
     const pdf = await generatePDF();
     if (!pdf) return;
 
-    pdf.save(`invoice-${invoice.invoice_number}.pdf`);
+    pdf.save(`${label.toLowerCase()}-${documentNumber}.pdf`);
   }
 
   async function sharePDF() {
@@ -121,16 +143,15 @@ export default function InvoicePreviewInner() {
     if (!pdf) return;
 
     const blob = pdf.output("blob");
-
-    const file = new File([blob], `invoice-${invoice.invoice_number}.pdf`, {
+    const file = new File([blob], `${label.toLowerCase()}-${documentNumber}.pdf`, {
       type: "application/pdf",
     });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({
         files: [file],
-        title: `Invoice ${invoice.invoice_number}`,
-        text: `Invoice ${invoice.invoice_number}`,
+        title: `${label} ${documentNumber}`,
+        text: `${label} ${documentNumber}`,
       });
       return;
     }
@@ -139,8 +160,9 @@ export default function InvoicePreviewInner() {
     window.open(url, "_blank");
   }
 
-  
   async function markPaid() {
+    if (isQuotation) return;
+
     try {
       const res = await fetch("/api/invoice/pay", {
         method: "POST",
@@ -148,7 +170,7 @@ export default function InvoicePreviewInner() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          invoice_number: invoice.invoice_number,
+          invoice_number: documentNumber,
         }),
       });
 
@@ -166,10 +188,11 @@ export default function InvoicePreviewInner() {
     }
   }
 
-function sendEmail() {
-
-    const subject = `Invoice ${invoice?.invoice_number}`;
-    const body = `Please find your invoice attached.`;
+  function sendEmail() {
+    const subject = `${label} ${documentNumber}`;
+    const body = isQuotation
+      ? "Please find your quotation attached."
+      : "Please find your invoice attached.";
 
     window.location.href = `mailto:?subject=${encodeURIComponent(
       subject
@@ -177,12 +200,14 @@ function sendEmail() {
   }
 
   if (loading) return <div className="text-white p-10">Loading...</div>;
-  if (!invoice) return <div className="text-red-500 p-10">No invoice</div>;
 
-  const subtotal = Number(invoice.amount);
-  const tax = invoice.tax_enabled ? (subtotal * invoice.tax_rate) / 100 : 0;
-  const total = subtotal + tax;
-  const status = invoice.status || "pending";
+  if (!documentData) {
+    return (
+      <div className="min-h-screen bg-[#111111] text-red-400 p-10">
+        No {isQuotation ? "quotation" : "invoice"} found
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#111111] flex justify-center py-8 sm:py-12 flex-col items-center">
@@ -201,7 +226,7 @@ function sendEmail() {
           SHARE PDF
         </button>
 
-        {status !== "paid" && (
+        {!isQuotation && status !== "paid" && (
           <button
             onClick={markPaid}
             className="border px-4 py-2 text-sm border-[#b89432] text-[#b89432]"
@@ -225,57 +250,69 @@ function sendEmail() {
         >
           <div
             id="invoice"
-            className="w-[794px] h-[1123px] bg-white text-[#111111] relative font-sans overflow-hidden px-[70px] py-[40px]"
+            className="relative w-[794px] h-[1123px] bg-white text-[#111111] font-sans flex flex-col overflow-hidden px-[70px] pt-[40px] pb-[95px]"
           >
+            <div className="flex-1">
             <div className="flex justify-between items-start border-b border-[#d8c28a] pb-2">
               <div className="pl-6 pt-2">
                 <img
-                  src="/logo-cole.png"
+                  src="/cole-logo1.png"
                   alt="Cole Ley"
                   className="w-[380px] h-auto object-contain"
                 />
               </div>
 
-              <div className="text-right">
+              <div className="relative z-20 text-right">
                 <p className="tracking-[5px] text-[#b89432] text-[16px] font-semibold mb-5">
-                  {status === "paid" ? "RECEIPT" : "INVOICE"}
+                  {!isQuotation && status === "paid" ? "RECEIPT" : label}
                 </p>
 
                 <p className="text-[13px] text-[#555555]">
                   <span className="text-[#b89432] font-semibold">NO.</span>{" "}
-                  {invoice.invoice_number}
+                  {documentNumber}
                 </p>
 
                 <p className="text-[13px] text-[#555555] mt-1">
                   <span className="text-[#b89432] font-semibold">DATE</span>{" "}
-                  {invoice.date}
+                  {documentData.date}
                 </p>
 
-                {status === "paid" && (
+                {isQuotation && documentData.valid_until && (
+                  <p className="text-[13px] text-[#555555] mt-1">
+                    <span className="text-[#b89432] font-semibold">
+                      VALID UNTIL
+                    </span>{" "}
+                    {documentData.valid_until}
+                  </p>
+                )}
+
+                {!isQuotation && status === "paid" && (
                   <>
-                    <p className="text-[13px] text-[#555555] mt-3">
+                    <p className="text-[13px] text-[#555555] mt-1">
                       <span className="text-[#b89432] font-semibold">
                         RECEIPT NO.
                       </span>{" "}
-                      {invoice.receipt_number}
+                      {documentData.receipt_number || "-"}
                     </p>
 
                     <p className="text-[13px] text-[#555555] mt-1">
                       <span className="text-[#b89432] font-semibold">
                         PAID DATE
                       </span>{" "}
-                      {invoice.paid_date}
+                      {documentData.paid_date || "-"}
                     </p>
                   </>
                 )}
 
-                <div className="mt-4 inline-block border border-[#d8c28a] px-2 py-[4px] text-[10px] tracking-[2px] text-[#b89432]">
-                  {status.toUpperCase()}
-                </div>
+                {(!isQuotation || (status !== "draft" && status !== "pending")) && (
+                  <div className="mt-4 inline-block border border-[#d8c28a] px-2 py-[4px] text-[10px] tracking-[2px] text-[#b89432]">
+                    {status.toUpperCase()}
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-12 mt-2">
+            <div className="grid grid-cols-2 gap-6 mt-2">
               <div>
                 <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-4">
                   FROM
@@ -288,7 +325,7 @@ function sendEmail() {
                   Phuket 83130, Thailand
                 </p>
 
-                <p className="text-[12px] text-[#666666] mt-3 leading-5">
+                <p className="text-[12px] text-[#666666] mt-1 leading-5">
                   +66 (0) 94427 1265<br />
                   cole@coleley.com<br />
                   Tax ID: 0835566030354
@@ -297,33 +334,82 @@ function sendEmail() {
 
               <div>
                 <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-4">
-                  BILL TO
+                  {isQuotation ? "PREPARED FOR" : "BILL TO"}
                 </p>
 
                 <p className="text-[18px] font-semibold">
-                  {invoice.client || "-"}
+                  {documentData.client || "-"}
                 </p>
 
                 <p className="text-[12px] text-[#666666] mt-2 leading-5 whitespace-pre-line">
-                  {invoice.client_address || "-"}
+                  {documentData.client_address || "-"}
                 </p>
 
-                <p className="text-[12px] text-[#666666] mt-3">
-                  Tax ID: {invoice.client_tax_id || "-"}
+                <p className="text-[12px] text-[#666666] mt-1">
+                  Tax ID: {documentData.client_tax_id || "-"}
                 </p>
               </div>
             </div>
 
-            <div className="mt-2">
+            {(documentData.performance_type ||
+              documentData.venue ||
+              documentData.performance_time ||
+              documentData.soundcheck_time) && (
+              <div className="mt-5 border border-[#eadcae] p-4">
+                <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-1">
+                  EVENT DETAILS
+                </p>
+
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[12px] text-[#666666]">
+                  {documentData.performance_type && (
+                    <p>
+                      <span className="font-semibold text-[#111111]">
+                        Performance:
+                      </span>{" "}
+                      {documentData.performance_type}
+                    </p>
+                  )}
+
+                  {documentData.venue && (
+                    <p>
+                      <span className="font-semibold text-[#111111]">
+                        Venue:
+                      </span>{" "}
+                      {documentData.venue}
+                    </p>
+                  )}
+
+                  {documentData.performance_time && (
+                    <p>
+                      <span className="font-semibold text-[#111111]">
+                        Performance Time:
+                      </span>{" "}
+                      {documentData.performance_time}
+                    </p>
+                  )}
+
+                  {documentData.soundcheck_time && (
+                    <p>
+                      <span className="font-semibold text-[#111111]">
+                        Soundcheck:
+                      </span>{" "}
+                      {documentData.soundcheck_time}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-5">
               <div className="grid grid-cols-[1fr_70px_110px_120px] border-b border-[#d8c28a] pb-3 text-[11px] tracking-[2px] text-[#b89432] font-semibold">
                 <div>DESCRIPTION</div>
                 <div className="text-center">QTY</div>
-                <div className="text-right">UNIT</div>
-                <div className="text-right">AMOUNT</div>
+                <div className="relative z-20 text-right">UNIT</div>
+                <div className="relative z-20 text-right">AMOUNT</div>
               </div>
 
-              <div className="min-h-[320px]">
-                {invoice.items?.map((item, i) => {
+              <div className="min-h-[58px]">
+                {documentData.items?.map((item, i) => {
                   const qty = Number(item.qty) || 0;
                   const price = Number(item.price) || 0;
                   const lineTotal = qty * price;
@@ -331,9 +417,11 @@ function sendEmail() {
                   return (
                     <div
                       key={i}
-                      className="grid grid-cols-[1fr_70px_110px_120px] border-b border-[#eeeeee] py-4 text-[13px]"
+                      className="grid grid-cols-[1fr_70px_110px_120px] border-b border-[#eeeeee] py-1 text-[13px]"
                     >
-                      <div className="pr-6 leading-5">{item.description}</div>
+                      <div className="pr-6 leading-5">
+                        {item.description || item.name || "-"}
+                      </div>
                       <div className="text-center text-[#666666]">{qty}</div>
                       <div className="text-right text-[#666666]">
                         {price.toFixed(2)}
@@ -347,38 +435,20 @@ function sendEmail() {
               </div>
             </div>
 
-            <div className="flex justify-between items-start mt-6">
-              <div className="w-[300px] border border-[#eadcae] p-4">
-                <p className="text-[11px] tracking-[3px] text-[#b89432] font-semibold mb-4">
-                  PAYMENT DETAILS
-                </p>
-
-                <p className="text-[13px] font-semibold">Kasikorn Bank</p>
-
-                <p className="text-[12px] text-[#666666] mt-2 leading-5">
-                  Account Name: Cole Ley Co., Ltd.<br />
-                  Account No: 166 8505 097
-                </p>
-
-                <p className="text-[11px] text-[#777777] mt-4 leading-5">
-                  Please use invoice number as payment reference.
-                </p>
-              </div>
-
-              <div className="w-[285px]">
+            <div className="mt-auto flex justify-end print:break-before-page break-before-page"><div className="w-[225px] text-right">
                 <div className="flex justify-between text-[13px] text-[#666666] py-2">
                   <span>Subtotal</span>
                   <span>{subtotal.toFixed(2)} THB</span>
                 </div>
 
-                {invoice.tax_enabled && (
+                {taxEnabled && (
                   <div className="flex justify-between text-[13px] text-[#666666] py-2 border-t border-[#eeeeee]">
-                    <span>VAT ({invoice.tax_rate}%)</span>
+                    <span>VAT ({taxRate}%)</span>
                     <span>{tax.toFixed(2)} THB</span>
                   </div>
                 )}
 
-                <div className="flex justify-between items-end mt-3 pt-4 border-t border-[#d8c28a]">
+                <div className="flex justify-between items-end mt-1 pt-4 border-t border-[#d8c28a]">
                   <span className="text-[12px] tracking-[3px] text-[#b89432] font-semibold">
                     TOTAL
                   </span>
@@ -386,17 +456,54 @@ function sendEmail() {
                     {total.toFixed(2)} THB
                   </span>
                 </div>
+
+                {isQuotation && documentData.food_drinks && (
+                  <p className="mt-4 text-[10px] text-[#666666] leading-4">
+                    Food and beverages are required for performers unless agreed otherwise.
+                  </p>
+                )}
               </div>
             </div>
 
-            <div className="absolute left-[70px] right-[70px] bottom-[25px] flex justify-between text-[10px] text-[#999999] border-t border-[#eeeeee] pt-4">
-              <span>www.coleley.com</span>
-              <span>cole@coleley.com</span>
-              <span>+66 (0) 94427 1265</span>
             </div>
+
+            <div className="mt-auto">
+
+            {isQuotation && (
+              <div className="mt-8 border-t border-[#d8c28a] pt-5">
+                <p className="text-[10px] tracking-[3px] text-[#b89432] font-semibold mb-3">
+                  TERMS
+                </p>
+
+                <div className="text-[8px] leading-[13px] text-[#666666] whitespace-pre-line columns-2 gap-8">
+                  {documentData.terms || "Terms to be confirmed."}
+                </div>
+              </div>
+            )}
+
+
+            {isQuotation && documentData.rider && (
+              <div className="mt-4 border-t border-[#d8c28a] pt-5">
+                <p className="text-[10px] tracking-[3px] text-[#b89432] font-semibold mb-2">
+                  TECHNICAL RIDER
+                </p>
+                <div className="text-[7px] leading-[10px] text-[#666666] whitespace-pre-line columns-2 gap-10 break-words">
+                  {documentData.rider}
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          <div className="absolute left-[70px] right-[70px] bottom-[20px] flex justify-between items-center border-t border-[#eeeeee] pt-3 text-[9px] text-[#999999] bg-white z-50">
+            <span>www.coleley.com</span>
+            <span>cole@coleley.com</span>
+            <span>+66 (0) 94427 1265</span>
+          </div>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+  
   );
 }

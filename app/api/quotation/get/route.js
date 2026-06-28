@@ -18,9 +18,9 @@ export async function GET(req) {
     console.log("SEARCHING FOR:", id);
 
     const { data, error } = await supabase
-      .from("invoices")
+      .from("quotations")
       .select("*")
-      .eq("invoice_number", id)
+      .eq("quotation_number", id)
       .limit(1);
 
     console.log("RESULT:", data, error);
@@ -29,7 +29,7 @@ export async function GET(req) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ invoice: data[0] });
+    return NextResponse.json({ quotation: data[0] });
 
   } catch (err) {
     console.error("GET ERROR:", err);

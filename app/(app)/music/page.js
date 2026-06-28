@@ -18,8 +18,6 @@ export default function MusicPage() {
 
       setTracks(data || []);
     }
-console.log("VIDEO:", data.video_url);
-console.log("CINEMATIC:", data.cinematic_url);
     fetchMusic();
   }, []);
 
@@ -87,27 +85,6 @@ console.log("CINEMATIC:", data.cinematic_url);
     return (
     <div className="min-h-screen bg-black text-white">
 
-      {/* HERO */}
-      <div
-        className="h-[70vh] flex flex-col justify-center items-center text-center px-6 relative"
-        style={{
-          backgroundImage: "url('/cole-hero.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center"
-        }}
-      >
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-
-        <div className="relative z-10">
-          <h1 className="text-4xl md:text-6xl tracking-[0.3em] text-[#d4af37] mb-4">
-            COLE LEY
-          </h1>
-
-          <p className="text-white/70 max-w-xl">
-            Live vocalist for luxury events, beach clubs & private performances
-          </p>
-        </div>
-      </div>
 
       {/* PERFORMANCE SHOWCASE */}
       <div className="max-w-6xl mx-auto px-6 py-16">
@@ -221,7 +198,7 @@ console.log("CINEMATIC:", data.cinematic_url);
 
             <div className="rounded-2xl overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.9)]">
               <video
-                src={current.cinematic_url || current.video_url}
+                src={current.video_url}
                 controls
                 autoPlay
                 playsInline

@@ -32,7 +32,8 @@
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "resend": "^6.12.2",
-    "source-map-js": "^1.2.1"
+    "source-map-js": "^1.2.1",
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@types/node": "^20",

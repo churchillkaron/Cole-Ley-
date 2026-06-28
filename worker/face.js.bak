@@ -19,8 +19,6 @@ async function loadModels() {
   const modelPath = path.join(process.cwd(), "models");
 
   await faceapi.nets.ssdMobilenetv1.loadFromDisk(modelPath);
-  await faceapi.nets.faceLandmark68Net.loadFromDisk(modelPath);
-  await faceapi.nets.faceRecognitionNet.loadFromDisk(modelPath);
 
   modelsLoaded = true;
 }
@@ -31,24 +29,20 @@ export async function detectFace(imagePath) {
 
   const img = await canvas.loadImage(imagePath);
 
-  const detections = await faceapi
-    .detectAllFaces(
-      img,
-      new faceapi.SsdMobilenetv1Options({
-        minConfidence: 0.5,
-      })
-    )
-    .withFaceLandmarks()
-    .withFaceDescriptors();
+  const detections = await faceapi.detectAllFaces(
+    img,
+    new faceapi.SsdMobilenetv1Options({
+      minConfidence: 0.5,
+    })
+  );
 
   if (!detections.length) return [];
 
   return detections.map((d) => ({
-    x: d.detection.box.x + d.detection.box.width / 2,
-    y: d.detection.box.y + d.detection.box.height / 2,
-    width: d.detection.box.width,
-    height: d.detection.box.height,
-    descriptor: Array.from(d.descriptor || []),
+    x: d.box.x + d.box.width / 2,
+    y: d.box.y + d.box.height / 2,
+    width: d.box.width,
+    height: d.box.height,
   }));
 }
 

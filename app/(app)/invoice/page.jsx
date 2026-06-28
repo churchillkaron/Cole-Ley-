@@ -52,63 +52,100 @@ export default function InvoicePage() {
   };
 
   const riderPresets = {
-    "solo acoustic": `• 1 vocal microphone
-• 1 instrument input
-• 1 monitor speaker
-• Small PA system
-• 1 chair
+    "solo acoustic": `Stage & Audio
+• 1 vocal microphone with stand
+• 1 DI input for acoustic guitar
+• 1 floor monitor speaker
+• Professional PA system suitable for the venue
+• Power outlet available on stage
 
-Hospitality:
-• Water provided
-• Light snacks appreciated`,
+Hospitality
+• Drinking water during the performance
+• Light meal or refreshments for performances exceeding 3 hours
 
-    "solo + dj": `• 1 vocal microphone
-• DJ controller space
-• 2 monitor speakers
-• PA system with subwoofer
-• Table for DJ
+Performance
+• Soundcheck 20–30 minutes before performance`,
 
-Hospitality:
-• Water provided
-• 2 meals or food allowance`,
-
-    duo: `• 2 vocal microphones
-• 2 instrument inputs
-• 2 monitor speakers
-• PA system
-
-Hospitality:
-• Water provided
-• 2 meals or food allowance`,
-
-    trio: `• 3 vocal microphones
-• Full instrument inputs
-• 3 monitor speakers
-• PA system with subwoofer
-
-Hospitality:
-• Water provided
-• 3 meals or food allowance`,
-
-    "4 piece band": `• Full band setup (drums, bass, guitar, keys)
-• Minimum 4 monitor speakers
+    "solo + dj": `Stage & Audio
+• 1 vocal microphone with stand
 • Professional PA system
-• Stage space required
+• DJ table or suitable workspace
+• Stereo audio input for DJ equipment
+• 2 floor monitor speakers
+• Power outlets available
 
-Hospitality:
-• Water provided
-• Meals for 4 band members`,
+Hospitality
+• Drinking water during the performance
+• Meal for performances exceeding 3 hours
 
-    "full band": `• Full professional stage setup
-• Drum kit or space provided
-• 5+ monitor speakers
-• Full PA system with technician
-• Lighting preferred
+Performance
+• Soundcheck 30–45 minutes before performance`,
 
-Hospitality:
-• Water provided
-• Meals for all band members
-• Private space for preparation`,
+    duo: `Stage & Audio
+• 2 vocal microphones with stands
+• Instrument inputs as required
+• Professional PA system
+• 2 floor monitor speakers
+• Power outlets available
+
+Hospitality
+• Drinking water for both performers
+• Meals for performances exceeding 3 hours
+
+Performance
+• Soundcheck 30–45 minutes before performance`,
+
+    trio: `Stage & Audio
+• 3 vocal microphones with stands
+• Instrument inputs as required
+• Professional PA system
+• 3 floor monitor speakers
+• Power outlets available
+• Basic stage lighting preferred
+
+Hospitality
+• Drinking water for all performers
+• Meals for performances exceeding 3 hours
+
+Performance
+• Soundcheck 45 minutes before performance`,
+
+    "4 piece band": `Stage & Audio
+• Professional PA system suitable for the venue
+• Complete drum kit in good condition, fully miked (kick, snare, toms and overheads)
+• 4 floor monitor speakers
+• 4 vocal microphones with stands
+• DI boxes for keyboards or acoustic instruments where required
+• Power outlets available on stage
+• Basic stage lighting preferred
+
+Hospitality
+• Drinking water for all performers
+• Meals for all band members for performances exceeding 3 hours
+• Private dressing room or preparation area where available
+
+Performance
+• Soundcheck 45–60 minutes before performance
+• Performance schedule to be confirmed in advance`,
+
+    "full band": `Stage & Audio
+• Professional PA system suitable for the venue
+• Complete drum kit in good condition, fully miked (kick, snare, toms and overheads)
+• 3 floor monitor speakers
+• 3 vocal microphones with stands
+• DI boxes for instruments where required
+• Power outlets available on stage
+• Basic stage lighting preferred
+
+Hospitality
+• Drinking water for all performers
+• Meals for all band members for performances exceeding 3 hours
+• Private dressing room or preparation area where available
+
+Performance
+• Soundcheck 45–60 minutes before performance
+• Performance schedule to be confirmed in advance
+• Any technical or schedule changes should be communicated at least 48 hours before the event`,
   };
 
   const [items, setItems] = useState([
@@ -279,15 +316,31 @@ Hospitality:
 
       const data = await res.json();
 
-      if (!res.ok || !data?.invoice?.invoice_number) {
+      if (!res.ok) {
         throw new Error(data?.error || "Create failed");
       }
 
-      router.push(`/invoice/preview?id=${data.invoice.invoice_number}&type=${type}`);
+      const document =
+        type === "quotation"
+          ? data.quotation
+          : data.invoice;
+
+      const documentNumber =
+        type === "quotation"
+          ? document?.quotation_number
+          : document?.invoice_number;
+
+      if (!documentNumber) {
+        throw new Error("Document number missing");
+      }
+
+      router.push(
+        `/invoice/preview?id=${documentNumber}&type=${type}`
+      );
 
     } catch (err) {
       console.error(err);
-      alert("Error creating document");
+      alert(err.message); console.error(err);
     } finally {
       setLoading(false);
     }

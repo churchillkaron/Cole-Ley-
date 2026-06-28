@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 export const runtime = "nodejs";
 
 import { execFile } from "child_process";
@@ -21,19 +20,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
-
-function euclideanDistance(a, b) {
-  let sum = 0;
-
-  for (let i = 0; i < a.length; i++) {
-    const d = a[i] - b[i];
-    sum += d * d;
-  }
-
-  return Math.sqrt(sum);
-}
-
 
 export async function POST(req) {
   let inputPath = "";
@@ -99,52 +85,9 @@ export async function POST(req) {
         }
 
         if (Array.isArray(faces)) {
-
-          const supabase = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL,
-            process.env.SUPABASE_SERVICE_ROLE_KEY
-          );
-
-          const { data: artistFaces } = await supabase
-            .from("artist_faces")
-            .select("descriptor")
-            .eq("artist_name", "Cole Ley");
-
-          const descriptors =
-            (artistFaces || []).map((a) => a.descriptor);
-
           faces.forEach((face) => {
-
-            if (!face?.descriptor) return;
-
-            let bestDistance = 999;
-
-            descriptors.forEach((stored) => {
-              const d = euclideanDistance(
-                face.descriptor,
-                stored
-              );
-
-              if (d < bestDistance) {
-                bestDistance = d;
-              }
-            });
-
-            console.log(
-              "FACE:",
-              bestDistance.toFixed(3),
-              "X:",
-              Math.round(face.x)
-            );
-
-            if (
-              bestDistance < 0.65 &&
-              typeof face.x === "number"
-            ) {
-              console.log("MATCHED COLE:", bestDistance.toFixed(3));
+            if (face && typeof face.x === "number") {
               positions.push(face);
-            } else {
-              console.log("REJECTED:", bestDistance.toFixed(3));
             }
           });
         }
@@ -160,20 +103,19 @@ export async function POST(req) {
     );
 
     if (validPositions.length === 0) {
-      console.warn("NO COLE MATCH FOUND");
-      throw new Error("Cole not detected in video");
+      console.warn("No faces detected, using center fallback");
+      validPositions.push({ x: 250, y: 0 });
     }
 
     const avgX =
       validPositions.reduce((sum, face) => sum + face.x, 0) /
       validPositions.length;
 
-    console.log("AVG X:", avgX);
-const frameWidth = 500;
+    const frameWidth = 500;
     const videoWidth = 1280;
     const cropWidth = 720;
 
-    const scaledX = avgX;
+    const scaledX = (avgX / frameWidth) * videoWidth;
 
     const cropX = Math.max(
       0,
@@ -188,14 +130,14 @@ const frameWidth = 500;
         .outputOptions([
           `-vf scale=1280:-1,crop=720:1280:${cropX}:0`,
           "-c:v libx264",
-          "-preset slow",
-          "-crf 16",
+          "-preset medium",
+          "-crf 20",
           "-profile:v high",
           "-level 4.1",
           "-pix_fmt yuv420p",
           "-movflags +faststart",
           "-c:a aac",
-          "-b:a 320k",
+          "-b:a 192k",
           "-af loudnorm=I=-16:TP=-1.5:LRA=11,acompressor=threshold=-14dB:ratio=2:attack=200:release=1000",
           "-max_muxing_queue_size 1024",
         ])
@@ -205,28 +147,7 @@ const frameWidth = 500;
         .save(outputPath);
     });
 
-    
-const stat = fs.statSync(outputPath);
-console.log("OUTPUT SIZE MB:", (stat.size/1024/1024).toFixed(2));
-
-await new Promise((r)=>{
-  ffmpeg.ffprobe(outputPath,(err,data)=>{
-    if(!err){
-      const v=data.streams.find(s=>s.codec_type==="video");
-      console.log("VIDEO BITRATE:",v?.bit_rate);
-      console.log("WIDTH:",v?.width);
-      console.log("HEIGHT:",v?.height);
-    }
-    r();
-  });
-});
-
-console.log("Uploading...");
-
-
-    console.log("Cloud:", process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME);
-    console.log("Key:", process.env.CLOUDINARY_API_KEY ? "SET" : "MISSING");
-    console.log("Secret:", process.env.CLOUDINARY_API_SECRET ? "SET" : "MISSING");
+    console.log("Uploading...");
 
     const result = await cloudinary.uploader.upload(outputPath, {
       resource_type: "video",
@@ -234,17 +155,9 @@ console.log("Uploading...");
       format: "mp4",
     });
 
-    const cinematicUrl = cloudinary.url(result.public_id, {
-      resource_type: "video",
-      secure: true,
-      transformation: [
-        { width: 720, height: 1280, crop: "fill", gravity: "auto" }
-      ]
-    });
-
     return Response.json({
       video_url: result.secure_url,
-      cinematic_url: cinematicUrl,
+      cinematic_url: result.secure_url,
       public_id: result.public_id,
     });
   } catch (err) {

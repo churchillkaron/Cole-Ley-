@@ -149,9 +149,7 @@ export default function UploadPerformancePage() {
         `${base}/so_${offset},c_fit,b_black,w_720,h_720/${baseTransform}/${styleTransform}` +
         `/${logoLayer}/${logoApply}/${publicId}.mp4`;
 
-      const cinematicUrl =
-  `${base}/c_fill,g_auto,w_1280,h_720/${baseTransform}/${styleTransform}` +
-  `/l_${logo},h_360,c_fit/fl_layer_apply,g_south_west,x_20,y_20/${publicId}.mp4`;
+      const cinematicUrl = videoUrl;
       const reelUrl =
         `${base}/c_fill,g_auto,w_720,h_1280/${baseTransform}/${styleTransform}` +
         `/l_${logo},h_360,c_fit/fl_layer_apply,g_south,y_35/${publicId}.mp4`;
@@ -161,7 +159,7 @@ export default function UploadPerformancePage() {
       await supabase.from("music").insert({
         title: finalTitle,
         description,
-        video_url: cinematicUrl,
+        video_url: videoUrl,
         thumbnail_url: thumbnailUrl,
         preview_url: previewUrl,
         cinematic_url: cinematicUrl,
