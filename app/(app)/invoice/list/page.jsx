@@ -1,147 +1,19 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { getSupabase } from "@/lib/supabase";
+import { Suspense } from "react";
+import InvoiceListInner from "./InvoiceListInner";
 
-export default function InvoiceListPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const type = searchParams.get("type") || "invoice";
-
-  const [supabase, setSupabase] = useState(null);
-  const [invoices, setInvoices] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // ✅ Initialize Supabase ONLY in browser
-  useEffect(() => {
-    const client = getSupabase();
-    setSupabase(client);
-  }, []);
-
-  // 🔒 Protect page (owner only)
-  useEffect(() => {
-    if (!supabase) return;
-
-    async function checkUser() {
-      const { data } = await supabase.auth.getUser();
-
-      if (!data.user) {
-        router.push("/");
-        return;
-      }
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
-
-      const role = profile?.role?.trim().toLowerCase();
-
-      if (role !== "owner") {
-        router.push("/media");
-      }
-    }
-
-    checkUser();
-  }, [supabase, router]);
-
-  // 📄 Fetch invoices
-  useEffect(() => {
-    async function fetchInvoices() {
-      try {
-        const res = await fetch(
-          type === "quotation"
-            ? "/api/quotation/list"
-            : "/api/invoice/list"
-        );
-        const data = await res.json();
-
-        if (!res.ok) {
-          console.error(data);
-          return;
-        }
-
-        setInvoices(
-        type === "quotation"
-          ? (data.quotations || [])
-          : (data.invoices || [])
-      );
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchInvoices();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        Loading invoices...
-      </div>
-    );
-  }
-
+export default function Page() {
   return (
-    <div className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-2xl mb-8">{type === "quotation" ? "Quotations" : "Invoices"}</h1>
-
-      {invoices.length === 0 ? (
-        <p>{type === "quotation" ? "No quotations found" : "No invoices found"}</p>
-      ) : (
-        <div className="space-y-4">
-          {invoices.map((inv) => (
-            <div
-              key={inv.id || inv.quotation_number || inv.invoice_number}
-              onClick={() =>
-                router.push(
-                  `/invoice/preview?id=${inv.quotation_number || inv.invoice_number}&type=${type}&autoPdf=true`
-                )
-              }
-              className="p-5 bg-[#111] rounded cursor-pointer hover:bg-[#1a1a1a] transition"
-            >
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="text-[#d4af37] text-sm">
-                    {inv.invoice_number}
-                  </div>
-
-                  <div className="text-white text-lg font-medium">
-                    {inv.client}
-                  </div>
-
-                  <div className="text-white/40 text-xs">
-                    {inv.date}
-                  </div>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(
-                        `/invoice/edit?id=${inv.invoice_number}`
-                      );
-                    }}
-                    className="text-blue-400 text-xs mt-2 hover:underline"
-                  >
-                    Edit
-                  </button>
-                </div>
-
-                <div className="text-right">
-                  <div className="text-white text-lg font-semibold">
-                    {Number(inv.amount).toFixed(2)} THB
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          Loading...
         </div>
-      )}
-    </div>
+      }
+    >
+      <InvoiceListInner />
+    </Suspense>
   );
 }
