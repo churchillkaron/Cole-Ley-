@@ -57,6 +57,9 @@ export default function InvoicePreviewInner() {
 
         const doc = isQuotation ? data.quotation : data.invoice;
 
+console.log("API RESPONSE:", data);
+console.log("DOCUMENT:", doc);
+
         if (!res.ok || !doc) {
           setDocumentData(null);
           return;
@@ -539,6 +542,20 @@ export default function InvoicePreviewInner() {
             )}
 
           </div>
+
+          <div className="mt-6 border-t border-[#d8c28a] pt-4">
+            <p className="text-[10px] tracking-[3px] text-[#b89432] font-semibold mb-2">
+              BANK DETAILS
+            </p>
+
+            <div className="grid grid-cols-2 gap-x-10 gap-y-1 text-[10px] text-[#666666] leading-4">
+              <div><span className="font-semibold text-[#111111]">Bank:</span> Kasikorn Bank (KBank)</div>
+              <div><span className="font-semibold text-[#111111]">Account Name:</span> Cole Ley Co., Ltd.</div>
+              <div><span className="font-semibold text-[#111111]">Account Number:</span> 166-8-50509-7</div>
+              <div><span className="font-semibold text-[#111111]">SWIFT / BIC:</span> KASITHBK</div>
+            </div>
+          </div>
+
 
           <div className="absolute left-[70px] right-[70px] bottom-[20px] flex justify-between items-center border-t border-[#eeeeee] pt-3 text-[9px] text-[#999999] bg-white z-50">
             <span>www.coleley.com</span>
