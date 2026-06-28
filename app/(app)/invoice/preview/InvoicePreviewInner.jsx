@@ -199,6 +199,35 @@ export default function InvoicePreviewInner() {
     )}&body=${encodeURIComponent(body)}`;
   }
 
+  function editDocument() {
+    router.push(
+      `/invoice?edit=${documentNumber}&type=${type}`
+    );
+  }
+
+  async function approveQuotation() {
+    const res = await fetch("/api/quotation/convert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quotation_id: documentNumber,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Conversion failed");
+      return;
+    }
+
+    router.push(
+      `/invoice/preview?id=${data.invoice.invoice_number}&type=invoice`
+    );
+  }
+
   if (loading) return <div className="text-white p-10">Loading...</div>;
 
   if (!documentData) {
@@ -218,6 +247,22 @@ export default function InvoicePreviewInner() {
         >
           DOWNLOAD PDF
         </button>
+
+        <button
+          onClick={editDocument}
+          className="border px-4 py-2 text-sm border-yellow-500 text-yellow-500"
+        >
+          EDIT
+        </button>
+
+        {isQuotation && (
+          <button
+            onClick={approveQuotation}
+            className="border px-4 py-2 text-sm border-[#b89432] text-[#b89432]"
+          >
+            APPROVE
+          </button>
+        )}
 
         <button
           onClick={sharePDF}

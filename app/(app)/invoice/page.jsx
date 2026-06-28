@@ -1,12 +1,17 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { getSupabase } from "@/lib/supabase";
 
 export default function InvoicePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const editId = searchParams.get("edit");
+  const editType = searchParams.get("type");
+  const isEdit = !!editId;
 
   const [client, setClient] = useState("");
   const [clientAddress, setClientAddress] = useState("");
@@ -180,6 +185,61 @@ Performance
     checkUser();
   }, [router]);
 
+
+  useEffect(() => {
+    if (!isEdit) return;
+
+    async function loadDocument() {
+      const endpoint =
+        editType === "quotation"
+          ? "/api/quotation/get"
+          : "/api/invoice/get";
+
+      const res = await fetch(
+        `${endpoint}?id=${encodeURIComponent(editId)}`
+      );
+
+      const data = await res.json();
+
+      const doc =
+        editType === "quotation"
+          ? data.quotation
+          : data.invoice;
+
+      if (!doc) return;
+
+      setType(editType || "invoice");
+
+      setClient(doc.client || "");
+      setClientAddress(doc.client_address || "");
+      setClientTaxId(doc.client_tax_id || "");
+
+      setDate(doc.date || "");
+
+      setItems(
+        doc.items?.length
+          ? doc.items
+          : [{ description: "", qty: "", price: "" }]
+      );
+
+      setTaxEnabled(!!doc.tax_enabled);
+      setTaxRate(doc.tax_rate || 7);
+
+      setValidUntil(doc.valid_until || "");
+      setNotes(doc.notes || "");
+      setTerms(doc.terms || "");
+
+      setPerformanceType(doc.performance_type || "");
+      setVenue(doc.venue || "");
+      setPerformanceTime(doc.performance_time || "");
+      setSoundcheckTime(doc.soundcheck_time || "");
+      setFoodDrinks(!!doc.food_drinks);
+      setRider(doc.rider || "");
+    }
+
+    loadDocument();
+  }, [isEdit, editId, editType]);
+
   useEffect(() => {
     async function fetchClients() {
       const supabase = getSupabase();
@@ -282,10 +342,17 @@ Performance
         });
       }
 
-      const endpoint =
-        type === "quotation"
-          ? "/api/quotation/create"
-          : "/api/invoice/create";
+      const endpoint = isEdit
+        ? (
+            type === "quotation"
+              ? "/api/quotation/update"
+              : "/api/invoice/update"
+          )
+        : (
+            type === "quotation"
+              ? "/api/quotation/create"
+              : "/api/invoice/create"
+          );
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -311,6 +378,15 @@ Performance
           soundcheck_time: soundcheckTime,
           food_drinks: foodDrinks,
           rider,
+
+          ...(isEdit
+            ? (
+                type === "quotation"
+                  ? { quotation_number: editId }
+                  : { invoice_number: editId }
+              )
+            : {}),
+
         }),
       });
 
@@ -351,7 +427,7 @@ Performance
     <div className="w-full max-w-2xl">
 
       <h1 className="text-center text-[#d4af37] tracking-[0.4em] text-lg mb-8">
-        CREATE DOCUMENT
+        {isEdit ? "EDIT DOCUMENT" : "CREATE DOCUMENT"}
       </h1>
 
       <div className="relative rounded-3xl p-8 space-y-6 

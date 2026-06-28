@@ -144,18 +144,36 @@ return (
           </a>
         </div>
 
-         {/* INVOICE HISTORY */}
+         {/* QUOTATIONS */}
+        <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
+          <h2 className="text-xl font-serif mb-3 text-white">
+            Quotations
+          </h2>
+
+          <p className="text-white/50 text-sm mb-6">
+            View & manage quotations
+          </p>
+
+          <a
+            href="/invoice/list?type=quotation"
+            className="text-[#caa85a] text-sm tracking-[2px] flex items-center gap-2 group-hover:gap-3 transition"
+          >
+            Open →
+          </a>
+        </div>
+
+        {/* INVOICE HISTORY */}
         <div className="bg-white/[0.03] border border-[#caa85a]/20 p-8 backdrop-blur-xl hover:border-[#caa85a]/40 transition group">
           <h2 className="text-xl font-serif mb-3 text-white">
             Invoice history
           </h2>
 
           <p className="text-white/50 text-sm mb-6">
-            See old invoices
+            View invoices
           </p>
 
           <a
-            href="/invoice/list"
+            href="/invoice/list?type=invoice"
             className="text-[#caa85a] text-sm tracking-[2px] flex items-center gap-2 group-hover:gap-3 transition"
           >
             Open →

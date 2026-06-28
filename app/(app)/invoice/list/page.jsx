@@ -2,11 +2,13 @@
 export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 
 export default function InvoiceListPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get("type") || "invoice";
 
   const [supabase, setSupabase] = useState(null);
   const [invoices, setInvoices] = useState([]);
@@ -50,7 +52,11 @@ export default function InvoiceListPage() {
   useEffect(() => {
     async function fetchInvoices() {
       try {
-        const res = await fetch("/api/invoice/list");
+        const res = await fetch(
+          type === "quotation"
+            ? "/api/quotation/list"
+            : "/api/invoice/list"
+        );
         const data = await res.json();
 
         if (!res.ok) {
@@ -58,7 +64,11 @@ export default function InvoiceListPage() {
           return;
         }
 
-        setInvoices(data.invoices || []);
+        setInvoices(
+        type === "quotation"
+          ? (data.quotations || [])
+          : (data.invoices || [])
+      );
       } catch (err) {
         console.error(err);
       } finally {
@@ -79,18 +89,18 @@ export default function InvoiceListPage() {
 
   return (
     <div className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-2xl mb-8">Invoices</h1>
+      <h1 className="text-2xl mb-8">{type === "quotation" ? "Quotations" : "Invoices"}</h1>
 
       {invoices.length === 0 ? (
-        <p>No invoices found</p>
+        <p>{type === "quotation" ? "No quotations found" : "No invoices found"}</p>
       ) : (
         <div className="space-y-4">
           {invoices.map((inv) => (
             <div
-              key={inv.invoice_number}
+              key={inv.id || inv.quotation_number || inv.invoice_number}
               onClick={() =>
                 router.push(
-                  `/invoice/preview?id=${inv.invoice_number}&autoPdf=true`
+                  `/invoice/preview?id=${inv.quotation_number || inv.invoice_number}&type=${type}&autoPdf=true`
                 )
               }
               className="p-5 bg-[#111] rounded cursor-pointer hover:bg-[#1a1a1a] transition"
