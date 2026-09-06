@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { useRouter } from "next/navigation";
 
-const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login";
+const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login?brand=coleley";
 
 export default function Home() {
   const router = useRouter();
