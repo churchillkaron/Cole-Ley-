@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const AVANTIQO_BOOKING_INTAKE = "https://avantiqo.ai/api/public/cole-ley/booking-inquiry";
+const AVANTIQO_BOOKING_INTAKE = "https://vfsjqabpkcbiuerhzugk.supabase.co/functions/v1/cole-ley-booking-intake";
 
 function escapeHtml(value) {
   return String(value ?? "")
