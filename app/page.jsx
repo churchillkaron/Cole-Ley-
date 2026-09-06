@@ -1,95 +1,12 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { getSupabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+
+const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login";
 
 export default function Home() {
   const router = useRouter();
-  const [showLogin, setShowLogin] = useState(false);
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [loading, setLoading] = useState(false);
-const [loginError, setLoginError] = useState("");
-
-useEffect(() => {
-  async function checkSession() {
-    const supabase = getSupabase();
-    if (!supabase) return;
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) return;
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", session.user.id)
-      .single();
-
-    const role = (profile?.role || "").toLowerCase();
-
-    if (role === "client") {
-      router.replace("/media");
-    } else {
-      router.replace("/dashboard");
-    }
-  }
-
-  checkSession();
-}, [router]);
-
-  async function handleLogin() {
-    if (!email || !password) return;
-
-setLoading(true);
-setLoginError("");
-
-    try {
-      const supabase = getSupabase();
-      if (!supabase) return;
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-       setLoading(false);
-setLoginError(error.message);
-return;
-      }
-
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", data.user.id)
-        .single();
-
-      const role = profile?.role?.trim().toLowerCase();
-
-      if (role === "owner") {
-       setShowLogin(false);
-router.replace("/dashboard");
-        return;
-      }
-
-      if (role === "client") {
-       setShowLogin(false);
-router.replace("/media");
-      }
-
-      setShowLogin(false);
-router.replace("/dashboard");
-    } catch (err) {
-      console.error(err);
-      setLoading(false);
-setLoginError("Login failed");
-    }
-  }
 
   const performances = [
     {
@@ -148,17 +65,20 @@ setLoginError("Login failed");
             </button>
             <button onClick={() => router.push("/music")}>GALLERY</button>
             <button onClick={() => router.push("/booking")}>CONTACT</button>
-            <button onClick={() => setShowLogin(true)} className="border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full">
+            <a
+              href={AVANTIQO_LOGIN_URL}
+              className="border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full"
+            >
               LOGIN
-            </button>
+            </a>
           </div>
 
-          <button
-            onClick={() => setShowLogin(true)}
+          <a
+            href={AVANTIQO_LOGIN_URL}
             className="md:hidden border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full text-[11px] tracking-widest"
           >
             LOGIN
-          </button>
+          </a>
         </div>
       </nav>
 
@@ -347,63 +267,6 @@ setLoginError("Login failed");
           <p>cole@coleley.com · +66 (0) 94427 1265</p>
         </div>
       </footer>
-      {showLogin && (
-  <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-md">
-    <div className="w-full max-w-md rounded-3xl border border-[#d4af37]/30 bg-[#111] p-8 shadow-2xl">
-
-      <img
-        src="/logo-cole.png"
-        className="mx-auto w-40 mb-8"
-        alt="Cole Ley"
-      />
-
-      <h2 className="text-center text-[#d4af37] tracking-[0.3em] mb-8">
-        CLIENT LOGIN
-      </h2>
-
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full mb-4 rounded-xl bg-black border border-white/10 p-4 text-white"
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") handleLogin();
-        }}
-        className="w-full mb-4 rounded-xl bg-black border border-white/10 p-4 text-white"
-      />
-
-      {loginError && (
-        <div className="text-red-400 text-sm mb-4">
-          {loginError}
-        </div>
-      )}
-
-      <button
-        disabled={loading}
-        onClick={handleLogin}
-        className="w-full py-4 rounded-xl bg-gradient-to-r from-[#d4af37] to-[#f5d98f] text-black font-semibold"
-      >
-        {loading ? "SIGNING IN..." : "SIGN IN"}
-      </button>
-
-      <button
-        onClick={() => setShowLogin(false)}
-        className="w-full mt-3 text-white/60"
-      >
-        Cancel
-      </button>
-
-    </div>
-  </div>
-)}
     </main>
   );
 }
