@@ -3,22 +3,36 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login?brand=coleley";
 
-const links = [
+const primaryLinks = [
   ["/", "HOME"],
   ["/music", "GALLERY"],
   ["/live-dates", "DATES"],
   ["/performance-formats", "FORMATS"],
-  ["/live-music-phuket", "LIVE MUSIC"],
-  ["/wedding-singer-phuket", "WEDDINGS"],
   ["/about-cole-ley", "ABOUT"],
   ["/booking", "CONTACT"],
 ];
 
+const moreLinks = [
+  ["/live-music-phuket", "Live Music Phuket"],
+  ["/wedding-singer-phuket", "Wedding Singer Phuket"],
+  ["/jazz-singer-phuket", "Jazz Singer Phuket"],
+  ["/acoustic-singer-phuket", "Acoustic Singer Phuket"],
+  ["/live-band-phuket", "Live Band Phuket"],
+  ["/hotels-beach-clubs-phuket", "Hotels & Beach Clubs"],
+  ["/corporate-event-live-music-phuket", "Corporate Events"],
+  ["/private-party-live-music-phuket", "Private Parties"],
+  ["/press", "Press & Appearances"],
+];
+
 export default function PublicNav() {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isMoreActive = moreLinks.some(([href]) => pathname === href);
 
   return (
     <>
@@ -36,8 +50,8 @@ export default function PublicNav() {
             />
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 text-[12px] tracking-[0.25em] text-white/70">
-            {links.map(([href, label]) => (
+          <div className="hidden md:flex items-center gap-7 text-[11px] tracking-[0.22em] text-white/70">
+            {primaryLinks.map(([href, label]) => (
               <Link
                 key={href}
                 href={href}
@@ -46,16 +60,69 @@ export default function PublicNav() {
                 {label}
               </Link>
             ))}
+
+            <div className="relative group">
+              <button
+                type="button"
+                className={`${isMoreActive ? "text-[#d4af37]" : "hover:text-white"} py-8 transition`}
+                aria-haspopup="true"
+              >
+                MORE
+              </button>
+              <div className="invisible absolute right-0 top-[68px] w-[260px] translate-y-2 rounded-2xl border border-white/10 bg-[#17110e]/98 p-2 opacity-0 shadow-2xl backdrop-blur-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                {moreLinks.map(([href, label]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={`block rounded-xl px-4 py-3 text-[11px] tracking-[0.08em] ${pathname === href ? "bg-white/[0.06] text-[#d4af37]" : "text-white/70 hover:bg-white/[0.05] hover:text-white"}`}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             <a href={AVANTIQO_LOGIN_URL} className="border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full">
               LOGIN
             </a>
           </div>
 
-          <div className="md:hidden flex items-center gap-3">
-            <Link href="/music" className="text-[10px] tracking-[0.18em] text-white/75">GALLERY</Link>
-            <Link href="/booking" className="text-[10px] tracking-[0.18em] text-[#d4af37]">CONTACT</Link>
+          <div className="md:hidden flex items-center gap-4">
+            <Link href="/live-dates" className="text-[10px] tracking-[0.18em] text-white/75">DATES</Link>
+            <button
+              type="button"
+              onClick={() => setMobileOpen((open) => !open)}
+              className="text-[10px] tracking-[0.18em] text-[#d4af37]"
+              aria-expanded={mobileOpen}
+              aria-controls="cole-mobile-nav"
+            >
+              MENU
+            </button>
           </div>
         </div>
+
+        {mobileOpen ? (
+          <div id="cole-mobile-nav" className="md:hidden border-t border-white/10 bg-[#17110e]/98 px-5 py-5 max-h-[calc(100vh-84px)] overflow-y-auto">
+            <div className="grid grid-cols-2 gap-2">
+              {[...primaryLinks, ...moreLinks].map(([href, label]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`rounded-xl border border-white/[0.06] px-3 py-3 text-[10px] tracking-[0.08em] ${pathname === href ? "bg-white/[0.06] text-[#d4af37]" : "text-white/70"}`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+            <a
+              href={AVANTIQO_LOGIN_URL}
+              className="mt-4 block rounded-full border border-[#d4af37]/50 px-4 py-3 text-center text-[10px] tracking-[0.18em] text-[#d4af37]"
+            >
+              LOGIN
+            </a>
+          </div>
+        ) : null}
       </nav>
       <div className="h-[84px] md:h-[96px]" aria-hidden="true" />
     </>
