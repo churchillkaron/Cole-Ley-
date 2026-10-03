@@ -216,42 +216,42 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-10 max-w-4xl mx-auto items-start">
             <div className="group">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-black shadow-2xl">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-black shadow-2xl">
                 <video
                   src="/cole-stage-vertical-20s.mp4"
-                  autoPlay
-                  muted
-                  loop
+                  poster="/cole-stage-vertical-poster.jpg"
                   playsInline
                   controls
                   preload="metadata"
                   className="h-full w-full object-cover"
                 />
+                <div className="pointer-events-none absolute top-4 left-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[10px] tracking-[0.24em] text-white/80 backdrop-blur-md">
+                  LIVE STAGE
+                </div>
               </div>
               <div className="pt-5 text-left">
-                <p className="text-[#d4af37] tracking-[0.28em] text-xs mb-2">LIVE STAGE</p>
-                <p className="text-white/55 text-sm">Cole Ley performing live on stage.</p>
+                <p className="text-white/75 text-sm">Cole Ley performing live on stage.</p>
               </div>
             </div>
 
-            <div className="group md:mt-16">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-black shadow-2xl">
+            <div className="group">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-black shadow-2xl">
                 <video
                   src="/cole-beach-club-vertical-20s.mp4"
-                  autoPlay
-                  muted
-                  loop
+                  poster="/cole-beach-club-vertical-poster.jpg"
                   playsInline
                   controls
                   preload="metadata"
                   className="h-full w-full object-cover"
                 />
+                <div className="pointer-events-none absolute top-4 left-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[10px] tracking-[0.24em] text-white/80 backdrop-blur-md">
+                  BEACH CLUB
+                </div>
               </div>
               <div className="pt-5 text-left">
-                <p className="text-[#d4af37] tracking-[0.28em] text-xs mb-2">BEACH CLUB</p>
-                <p className="text-white/55 text-sm">Sunset energy, guests and live music in Phuket.</p>
+                <p className="text-white/75 text-sm">Sunset energy, guests and live music in Phuket.</p>
               </div>
             </div>
           </div>

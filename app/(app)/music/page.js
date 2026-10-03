@@ -96,33 +96,39 @@ export default function MusicPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-10 max-w-4xl mx-auto items-start">
           <div>
-            <div className="aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-[#080808]">
+            <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-[#080808] shadow-2xl">
               <video
                 src="/cole-stage-vertical-20s.mp4"
+                poster="/cole-stage-vertical-poster.jpg"
                 controls
                 playsInline
                 preload="metadata"
                 className="w-full h-full object-cover"
               />
+              <div className="pointer-events-none absolute top-4 left-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[10px] tracking-[0.24em] text-white/80 backdrop-blur-md">
+                LIVE STAGE
+              </div>
             </div>
-            <p className="text-[#d4af37] tracking-[0.25em] text-xs mt-5">LIVE STAGE</p>
-            <p className="text-white/55 text-sm mt-2">A focused 20-second live performance moment.</p>
+            <p className="text-white/65 text-sm mt-5">A focused 20-second live performance moment.</p>
           </div>
 
-          <div className="md:mt-14">
-            <div className="aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-[#080808]">
+          <div>
+            <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-[#080808] shadow-2xl">
               <video
                 src="/cole-beach-club-vertical-20s.mp4"
+                poster="/cole-beach-club-vertical-poster.jpg"
                 controls
                 playsInline
                 preload="metadata"
                 className="w-full h-full object-cover"
               />
+              <div className="pointer-events-none absolute top-4 left-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[10px] tracking-[0.24em] text-white/80 backdrop-blur-md">
+                BEACH CLUB
+              </div>
             </div>
-            <p className="text-[#d4af37] tracking-[0.25em] text-xs mt-5">BEACH CLUB</p>
-            <p className="text-white/55 text-sm mt-2">Sunset atmosphere, guests and live music in Phuket.</p>
+            <p className="text-white/65 text-sm mt-5">Sunset atmosphere, guests and live music in Phuket.</p>
           </div>
         </div>
       </section>
