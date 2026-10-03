@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
+import PublicBreadcrumbs from "../../components/PublicBreadcrumbs";
 
 export default function BookingPage() {
 const [form, setForm] = useState({
@@ -65,6 +66,7 @@ try {
 return (
  <>
   <PublicNav />
+  <PublicBreadcrumbs items={[{ label: 'Contact & Booking', href: '/booking' }]} />
   <div className="min-h-screen bg-black text-white relative px-6 md:px-10 py-24 md:py-32">
 
   {/* GRID LAYOUT */}

@@ -1,15 +1,29 @@
 import Link from 'next/link'
 import PublicNav from '../components/PublicNav'
 import PublicFooter from '../components/PublicFooter'
+import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 
 export const metadata = {
   title: 'About Cole Ley',
   description: 'About Cole Ley, a Phuket-based singer, musician and live performer known for soul, blues, jazz and contemporary music at venues, weddings and destination events.',
   alternates: { canonical: '/about-cole-ley' },
+  openGraph: {
+    title: 'About Cole Ley | Singer & Musician in Phuket',
+    description: 'Meet Cole Ley, a Phuket-based live singer and musician performing soul, blues, jazz and contemporary music.',
+    url: '/about-cole-ley',
+    images: ['/IMG_7181.JPG'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Cole Ley | Singer & Musician in Phuket',
+    description: 'Meet Cole Ley, a Phuket-based live singer and musician.',
+    images: ['/IMG_7181.JPG'],
+  },
 }
 
 export default function Page() {
   return <main className="min-h-screen bg-black text-white">\n    <PublicNav />
+    <PublicBreadcrumbs items={[{ label: 'About Cole Ley', href: '/about-cole-ley' }]} />
     <section className="px-6 md:px-16 pt-40 pb-20 bg-[#080808]">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>

@@ -84,6 +84,28 @@ const artistSchema = {
   sameAs: ['https://www.instagram.com/iamcoleley/'],
 }
 
+const businessSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': 'https://www.coleley.com/#organization',
+  name: 'Cole Ley Co., Ltd.',
+  url: 'https://www.coleley.com/',
+  logo: 'https://www.coleley.com/logo-cole.png',
+  email: 'mailto:cole@coleley.com',
+  telephone: '+66944271265',
+  sameAs: ['https://www.instagram.com/iamcoleley/'],
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://www.coleley.com/#website',
+  url: 'https://www.coleley.com/',
+  name: 'Cole Ley',
+  publisher: { '@id': 'https://www.coleley.com/#organization' },
+  about: { '@id': 'https://www.coleley.com/#cole-ley' },
+}
+
 const videoSchema = [
   {
     '@context': 'https://schema.org',
@@ -117,6 +139,18 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(artistSchema).replace(/</g, '\\u003c'),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(businessSchema).replace(/</g, '\\u003c'),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema).replace(/</g, '\\u003c'),
           }}
         />
         <script

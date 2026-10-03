@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { getSupabase } from "@/lib/supabase";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
+import PublicBreadcrumbs from "../../components/PublicBreadcrumbs";
 
 export default function MusicPage() {
   const [tracks, setTracks] = useState([]);
@@ -87,6 +88,7 @@ export default function MusicPage() {
     return (
     <div className="min-h-screen bg-black text-white">
       <PublicNav />
+      <PublicBreadcrumbs items={[{ label: 'Gallery', href: '/music' }]} />
 
       <section className="max-w-6xl mx-auto px-6 pt-12 pb-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
