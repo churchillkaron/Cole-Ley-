@@ -44,10 +44,10 @@ export const metadata = {
       'Live soul, blues, jazz and contemporary music for luxury events, weddings, beach clubs, hotels and private celebrations in Phuket and beyond.',
     images: [
       {
-        url: '/cole-hero.png',
-        width: 1528,
-        height: 1029,
-        alt: 'Cole Ley performing live',
+        url: '/cole-hero-2026.jpg',
+        width: 1672,
+        height: 941,
+        alt: 'Cole Ley, Phuket-based singer and live performer',
       },
     ],
   },
@@ -56,7 +56,7 @@ export const metadata = {
     title: 'Cole Ley | Live Singer & Musician in Phuket',
     description:
       'Live soul, blues, jazz and contemporary music for events in Phuket and destination performances across Asia.',
-    images: ['/cole-hero.png'],
+    images: ['/cole-hero-2026.jpg'],
   },
   robots: {
     index: true,
@@ -69,7 +69,7 @@ const artistSchema = {
   '@type': 'Person',
   name: 'Cole Ley',
   url: 'https://www.coleley.com/',
-  image: 'https://www.coleley.com/cole-hero.png',
+  image: 'https://www.coleley.com/cole-hero-2026.jpg',
   jobTitle: 'Singer, musician and live performer',
   description:
     'Live soul, blues, jazz and contemporary performer available for weddings, beach clubs, hotels, restaurants, corporate events and private celebrations.',

@@ -10,7 +10,7 @@ export const metadata = {
     description:
       'Watch live performances and explore booking options from solo acoustic sets to full-band shows.',
     url: '/music',
-    images: ['/cole-hero.png'],
+    images: ['/cole-hero-2026.jpg'],
   },
 }
 

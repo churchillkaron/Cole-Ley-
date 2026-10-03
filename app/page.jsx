@@ -85,9 +85,9 @@ export default function Home() {
         className="relative min-h-screen flex items-center px-6 md:px-16 pt-28"
         style={{
           backgroundImage:
-            "linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url('/cole-hero.png')",
+            "linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url('/cole-hero-2026.jpg')",
           backgroundSize: "cover",
-          backgroundPosition: "85% 95%",
+          backgroundPosition: "72% center",
         }}
       >
         <div className="max-w-2xl">

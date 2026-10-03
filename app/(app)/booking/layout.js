@@ -10,7 +10,7 @@ export const metadata = {
     description:
       'Request availability and a live music proposal for your wedding, venue or private event.',
     url: '/booking',
-    images: ['/cole-hero.png'],
+    images: ['/cole-hero-2026.jpg'],
   },
 }
 

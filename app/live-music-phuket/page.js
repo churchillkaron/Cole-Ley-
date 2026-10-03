@@ -13,7 +13,7 @@ export default function Page() {
     ['Full Band', 'High-energy live entertainment for beach clubs, galas and large celebrations.'],
   ]
   return <main className="min-h-screen bg-black text-white">
-    <section className="relative min-h-[78vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.45),rgba(0,0,0,.1)),url('/cole-hero.png')",backgroundSize:'cover',backgroundPosition:'center'}}>
+    <section className="relative min-h-[78vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.45),rgba(0,0,0,.1)),url('/cole-hero-2026.jpg')",backgroundSize:'cover',backgroundPosition:'center'}}>
       <div className="max-w-3xl">
         <p className="text-[#d4af37] tracking-[0.35em] text-xs mb-5">PHUKET · THAILAND</p>
         <h1 className="font-serif text-5xl md:text-8xl leading-none">Live Music in Phuket</h1>
