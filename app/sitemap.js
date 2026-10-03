@@ -52,6 +52,18 @@ export default function sitemap() {
       priority: 0.85,
     },
     {
+      url: `${baseUrl}/corporate-event-live-music-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/private-party-live-music-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
       url: `${baseUrl}/about-cole-ley`,
       lastModified,
       changeFrequency: 'monthly',

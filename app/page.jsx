@@ -37,24 +37,28 @@ export default function Home() {
       text: "Ceremony, cocktail hour, dinner and reception entertainment.",
       image: "/cole-event-wedding.png",
       position: "50% 42%",
+      href: "/wedding-singer-phuket",
     },
     {
       title: "BEACH CLUBS",
       text: "Sunset sessions, lounge music and party nights.",
       image: "/cole-event-beach-club.png",
       position: "50% 45%",
+      href: "/hotels-beach-clubs-phuket",
     },
     {
       title: "CORPORATE EVENTS",
       text: "Gala dinners, award nights, VIP events and product launches.",
       image: "/cole-event-corporate.png",
       position: "50% 40%",
+      href: "/corporate-event-live-music-phuket",
     },
     {
       title: "PRIVATE PARTIES",
       text: "Luxury villa parties, birthdays, anniversaries and special moments.",
       image: "/cole-event-private-party.png",
       position: "50% 42%",
+      href: "/private-party-live-music-phuket",
     },
   ];
 
@@ -172,17 +176,18 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {events.map((item) => (
-              <div
+              <Link
                 key={item.title}
-                className="relative h-[360px] rounded-[28px] overflow-hidden border border-white/10"
+                href={item.href}
+                className="group relative h-[360px] rounded-[28px] overflow-hidden border border-white/10 hover:border-[#d4af37]/35 transition"
               >
                 <Image
                   src={item.image}
-                  alt={item.title}
+                  alt={`${item.title} live music with Cole Ley`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectPosition: item.position }}
-                  className="object-cover opacity-90 transition duration-700"
+                  className="object-cover opacity-90 group-hover:scale-[1.015] transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
 
@@ -193,8 +198,11 @@ export default function Home() {
                   <p className="text-white/75 max-w-md leading-7">
                     {item.text}
                   </p>
+                  <span className="inline-flex items-center gap-3 mt-5 rounded-full border border-[#d4af37]/60 px-5 py-2 text-[10px] font-semibold tracking-[0.24em] text-[#d4af37] group-hover:bg-[#d4af37] group-hover:text-black transition">
+                    LEARN MORE <span aria-hidden="true">→</span>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
