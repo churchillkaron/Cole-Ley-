@@ -5,7 +5,7 @@ import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 import PublicFaq from '../components/PublicFaq'
 
 export const metadata = {
-  title: 'Cole Ley Performance Formats | Solo, Acoustic, DJ, Duo, Trio & Band',
+  title: 'Performance Formats | Solo, Acoustic, DJ, Duo, Trio & Band',
   description:
     'Explore Cole Ley performance formats in Phuket and beyond: solo vocal, solo acoustic, serenade, singer with DJ, duo, trio, full band and bespoke live entertainment.',
   alternates: { canonical: '/performance-formats' },

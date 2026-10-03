@@ -31,6 +31,32 @@ export default function Home() {
     },
   ];
 
+
+  const videoSchema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      name: "Cole Ley Live Stage Performance",
+      description: "Cole Ley performing live on stage in Phuket.",
+      thumbnailUrl: "https://www.coleley.com/cole-stage-vertical-poster.jpg",
+      uploadDate: "2026-10-03",
+      contentUrl: "https://www.coleley.com/cole-stage-vertical-20s.mp4",
+      url: "https://www.coleley.com/music",
+      about: { "@id": "https://www.coleley.com/#cole-ley" },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      name: "Cole Ley Beach Club Live Performance",
+      description: "Cole Ley performing live at a beach club in Phuket.",
+      thumbnailUrl: "https://www.coleley.com/cole-beach-club-vertical-poster.jpg",
+      uploadDate: "2026-10-03",
+      contentUrl: "https://www.coleley.com/cole-beach-club-vertical-20s.mp4",
+      url: "https://www.coleley.com/music",
+      about: { "@id": "https://www.coleley.com/#cole-ley" },
+    },
+  ];
+
   const events = [
     {
       title: "WEDDINGS",
@@ -64,6 +90,10 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema).replace(/</g, "\u003c") }}
+      />
       <PublicNav />
 
       <section

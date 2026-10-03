@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Book Cole Ley',
+  title: 'Booking & Availability',
   description:
     'Book Cole Ley for weddings, hotels, beach clubs, restaurants, corporate events and private parties in Phuket, Thailand and destination events across Asia.',
   alternates: {

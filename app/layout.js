@@ -116,31 +116,6 @@ const websiteSchema = {
   about: { '@id': 'https://www.coleley.com/#cole-ley' },
 }
 
-const videoSchema = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'VideoObject',
-    name: 'Cole Ley Live Stage Performance',
-    description: 'Cole Ley performing live on stage in Phuket.',
-    thumbnailUrl: 'https://www.coleley.com/cole-stage-vertical-poster.jpg',
-    uploadDate: '2026-10-03',
-    contentUrl: 'https://www.coleley.com/cole-stage-vertical-20s.mp4',
-    url: 'https://www.coleley.com/music',
-    about: { '@id': 'https://www.coleley.com/#cole-ley' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'VideoObject',
-    name: 'Cole Ley Beach Club Live Performance',
-    description: 'Cole Ley performing live at a beach club in Phuket.',
-    thumbnailUrl: 'https://www.coleley.com/cole-beach-club-vertical-poster.jpg',
-    uploadDate: '2026-10-03',
-    contentUrl: 'https://www.coleley.com/cole-beach-club-vertical-20s.mp4',
-    url: 'https://www.coleley.com/music',
-    about: { '@id': 'https://www.coleley.com/#cole-ley' },
-  },
-]
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -161,12 +136,6 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(websiteSchema).replace(/</g, '\\u003c'),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(videoSchema).replace(/</g, '\\u003c'),
           }}
         />
         {children}

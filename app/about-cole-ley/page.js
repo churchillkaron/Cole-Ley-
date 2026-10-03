@@ -5,12 +5,12 @@ import PublicFooter from '../components/PublicFooter'
 import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 
 export const metadata = {
-  title: 'About Cole Ley | Live Artist, Singer & Musician',
+  title: 'About | Live Artist, Singer & Musician',
   description:
     'Meet Cole Ley, a Phuket-based live artist, singer and musician performing as solo vocalist, solo acoustic, serenade, singer with DJ, duo, trio and full band for venues and events.',
   alternates: { canonical: '/about-cole-ley' },
   openGraph: {
-    title: 'About Cole Ley | Live Artist, Singer & Musician',
+    title: 'About | Live Artist, Singer & Musician',
     description:
       'From intimate serenades and acoustic sets to singer-with-DJ shows, duos, trios and full-band performances.',
     url: '/about-cole-ley',
@@ -18,7 +18,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About Cole Ley | Live Artist, Singer & Musician',
+    title: 'About | Live Artist, Singer & Musician',
     description:
       'A versatile Phuket-based live artist for intimate, acoustic, DJ-led and full-band performances.',
     images: ['/IMG_7181.JPG'],

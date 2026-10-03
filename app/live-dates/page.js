@@ -6,18 +6,18 @@ import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 export const revalidate = 300
 
 export const metadata = {
-  title: 'Cole Ley Live Dates | Phuket & International Shows',
+  title: 'Live Dates | Phuket & International Shows',
   description: 'See upcoming public Cole Ley live dates in Phuket, Thailand and international venues, published from the official Avantiqo Artist Agency booking calendar.',
   alternates: { canonical: '/live-dates' },
   openGraph: {
-    title: 'Cole Ley Live Dates | Phuket & International Shows',
+    title: 'Live Dates | Phuket & International Shows',
     description: 'Upcoming public performances from Cole Ley’s official artist booking calendar.',
     url: '/live-dates',
     images: ['/cole-hero-2026.jpg'],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cole Ley Live Dates | Phuket & International Shows',
+    title: 'Live Dates | Phuket & International Shows',
     description: 'Upcoming public performances from Cole Ley’s official artist booking calendar.',
     images: ['/cole-hero-2026.jpg'],
   },
