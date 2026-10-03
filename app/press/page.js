@@ -52,6 +52,13 @@ const references = [
     source: 'Apple Music',
   },
   {
+    type: 'OFFICIAL MUSIC PROFILE',
+    title: 'Cole Ley on Spotify',
+    text: 'Spotify maintains Cole Ley’s official artist profile and links it directly from credited releases.',
+    href: 'https://open.spotify.com/artist/2VBy8qDokhFWatU5GofoT9',
+    source: 'Spotify',
+  },
+  {
     type: 'OFFICIAL RELEASE',
     title: 'Show Me Love',
     text: 'Spotify credits Cole Ley alongside Andrey Exx and TuraniQa on the official release.',

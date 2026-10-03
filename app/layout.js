@@ -72,6 +72,7 @@ const officialProfiles = [
   'https://www.instagram.com/iamcoleley/',
   'https://www.facebook.com/113408238398926',
   'https://music.apple.com/fr/artist/cole-ley/1688271930',
+  'https://open.spotify.com/artist/2VBy8qDokhFWatU5GofoT9',
 ]
 
 const artistSchema = {

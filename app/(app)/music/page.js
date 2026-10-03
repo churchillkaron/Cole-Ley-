@@ -189,9 +189,14 @@ export default function MusicPage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <a href="https://music.apple.com/fr/artist/cole-ley/1688271930" target="_blank" rel="noopener noreferrer" className="inline-block px-7 py-3 rounded-full border border-white/20 text-white/75">
-              VIEW COLE LEY ON APPLE MUSIC
-            </a>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href="https://music.apple.com/fr/artist/cole-ley/1688271930" target="_blank" rel="noopener noreferrer" className="inline-block px-7 py-3 rounded-full border border-white/20 text-white/75">
+                VIEW COLE LEY ON APPLE MUSIC
+              </a>
+              <a href="https://open.spotify.com/artist/2VBy8qDokhFWatU5GofoT9" target="_blank" rel="noopener noreferrer" className="inline-block px-7 py-3 rounded-full border border-white/20 text-white/75">
+                VIEW COLE LEY ON SPOTIFY
+              </a>
+            </div>
           </div>
         </div>
       </section>
