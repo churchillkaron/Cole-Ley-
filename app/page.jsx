@@ -13,17 +13,20 @@ export default function Home() {
     {
       title: "SOLO PERFORMANCE",
       text: "Elegant vocals for ceremonies, cocktail hours, restaurants and intimate luxury events.",
-      image: "/IMG_7181.JPG",
+      image: "/cole-solo-performance.png",
+      position: "50% 35%",
     },
     {
       title: "DUO PERFORMANCE",
       text: "A refined live sound with Cole Ley and one musician for weddings, lounges and private dinners.",
-      image: "/1.JPG",
+      image: "/cole-duo-performance.png",
+      position: "50% 32%",
     },
     {
       title: "FULL BAND",
       text: "High-energy live entertainment for beach clubs, galas, parties and unforgettable nights.",
-      image: "/2.JPG",
+      image: "/cole-full-band.png",
+      position: "50% 24%",
     },
   ];
 
@@ -163,7 +166,8 @@ export default function Home() {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-700"
+                  style={{ objectPosition: item.position }}
+                  className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-[1.025] transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
 
