@@ -15,8 +15,9 @@ export default function PublicFooter() {
             className="w-[190px] h-auto object-contain mb-6"
           />
           <p className="max-w-md text-sm leading-7 text-white/55">
-            Cole Ley is a Phuket-based singer, musician and live performer for weddings,
-            hotels, beach clubs, restaurants, corporate events and private celebrations.
+            Cole Ley is a Phuket-based live artist, singer, musician and entertainer available as
+            solo vocal, solo acoustic, serenade, singer with DJ, duo, trio and full band for
+            weddings, hotels, beach clubs, restaurants, corporate events and private celebrations.
           </p>
           <p className="mt-5 text-xs tracking-[0.22em] text-[#d4af37]">
             PHUKET · THAILAND · DESTINATION EVENTS
@@ -27,6 +28,7 @@ export default function PublicFooter() {
           <p className="text-xs tracking-[0.25em] text-[#d4af37] mb-5">EXPLORE</p>
           <div className="flex flex-col gap-3 text-sm text-white/65">
             <Link href="/music" className="hover:text-white transition">Gallery</Link>
+            <Link href="/live-dates" className="hover:text-white transition">Live Dates</Link>
             <Link href="/live-music-phuket" className="hover:text-white transition">Live Music Phuket</Link>
             <Link href="/wedding-singer-phuket" className="hover:text-white transition">Weddings</Link>
             <Link href="/hotels-beach-clubs-phuket" className="hover:text-white transition">Hotels & Beach Clubs</Link>
@@ -47,6 +49,14 @@ export default function PublicFooter() {
               className="hover:text-white transition"
             >
               Instagram · @iamcoleley
+            </a>
+            <a
+              href="https://www.facebook.com/113408238398926"
+              target="_blank"
+              rel="me noreferrer"
+              className="hover:text-white transition"
+            >
+              Facebook · Cole Ley
             </a>
 
           </div>

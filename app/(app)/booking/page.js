@@ -140,10 +140,43 @@ value={form.location || ""}
 onChange={(e) => update("location", e.target.value)}
 />
 
+<select
+className="w-full bg-black border-b border-white/20 py-3 outline-none focus:border-[#d4af37] text-white/75"
+value={form.eventType || ""}
+onChange={(e) => update("eventType", e.target.value)}
+>
+  <option value="">Event Type</option>
+  <option>Wedding</option>
+  <option>Hotel / Resort</option>
+  <option>Beach Club</option>
+  <option>Restaurant / Lounge</option>
+  <option>Corporate Event</option>
+  <option>Private Party</option>
+  <option>Proposal / Anniversary / Serenade</option>
+  <option>Destination Event</option>
+  <option>Other</option>
+</select>
+
+<select
+className="w-full bg-black border-b border-white/20 py-3 outline-none focus:border-[#d4af37] text-white/75"
+value={form.performanceFormat || ""}
+onChange={(e) => update("performanceFormat", e.target.value)}
+>
+  <option value="">Preferred Performance Format</option>
+  <option>Solo Vocal</option>
+  <option>Solo Acoustic</option>
+  <option>Serenade</option>
+  <option>Singer + DJ</option>
+  <option>Duo</option>
+  <option>Trio</option>
+  <option>Full Band</option>
+  <option>Not Sure — Recommend the Best Format</option>
+</select>
+
   <textarea
     rows={4}
     className="w-full bg-transparent border-b border-white/20 py-3 outline-none focus:border-[#d4af37]"
-    placeholder="Event Details"
+    placeholder="Event Details, atmosphere, timing, guest size or special song requests"
     value={form.details || ""}
     onChange={(e) => update("details", e.target.value)}
   />

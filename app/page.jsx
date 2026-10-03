@@ -1,6 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PublicNav from "./components/PublicNav";
@@ -11,20 +12,20 @@ export default function Home() {
 
   const performances = [
     {
-      title: "SOLO PERFORMANCE",
-      text: "Elegant vocals for ceremonies, cocktail hours, restaurants and intimate luxury events.",
+      title: "SOLO VOCAL",
+      text: "Elegant live vocals for ceremonies, serenades, cocktail hours, restaurants and intimate luxury events.",
       image: "/cole-solo-performance.png",
       position: "50% 35%",
     },
     {
-      title: "DUO PERFORMANCE",
-      text: "A refined live sound with Cole Ley and one musician for weddings, lounges and private dinners.",
+      title: "ACOUSTIC & DUO",
+      text: "From stripped-back solo acoustic to a refined duo with one musician for weddings, lounges and private dinners.",
       image: "/cole-duo-performance.png",
       position: "50% 32%",
     },
     {
-      title: "FULL BAND",
-      text: "High-energy live entertainment for beach clubs, galas, parties and unforgettable nights.",
+      title: "DJ TO FULL BAND",
+      text: "Singer-with-DJ, trio and full-band formats for beach clubs, galas, parties and high-energy nights.",
       image: "/cole-full-band.png",
       position: "50% 24%",
     },
@@ -72,7 +73,7 @@ export default function Home() {
       >
         <div className="max-w-2xl">
           <p className="text-[#d4af37] tracking-[0.32em] text-xs md:text-sm mb-5">
-            LIVE SINGER · MUSICIAN · PHUKET
+            LIVE ARTIST · SINGER · MUSICIAN · PHUKET
           </p>
 
           <h1 className="font-serif text-5xl md:text-8xl leading-[0.95] max-w-3xl">
@@ -84,8 +85,7 @@ export default function Home() {
           </p>
 
           <p className="text-white/70 text-base md:text-xl mt-8 max-w-2xl leading-8">
-            Soul, blues, jazz and contemporary live music for weddings, beach clubs,
-            hotels, restaurants, private parties and destination events.
+            From intimate serenades and solo acoustic sets to singer-with-DJ, duo, trio and full-band shows for weddings, beach clubs, hotels, restaurants, private parties and destination events.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
@@ -112,14 +112,10 @@ export default function Home() {
             LIVE MUSIC IN PHUKET & BEYOND
           </p>
           <h2 className="font-serif text-4xl md:text-6xl mb-7">
-            Singer, Musician & Live Performer
+            Versatile Live Artist & Performer
           </h2>
           <p className="text-white/65 text-base md:text-lg leading-8 max-w-4xl mx-auto">
-            Cole Ley is a Phuket-based live singer and musician performing soul,
-            blues, jazz and contemporary music across Thailand and destination
-            events in Asia. Performances are available as solo, duo, trio and
-            full-band formats for weddings, luxury hotels, beach clubs,
-            restaurants, corporate events and private celebrations.
+            Cole Ley is a Phuket-based live artist, singer and musician performing across soul, blues, jazz and contemporary music. Her formats range from solo vocal, solo acoustic and serenade performances to singer-with-DJ, duo, trio and full-band shows for weddings, luxury hotels, beach clubs, restaurants, corporate events and private celebrations.
           </p>
         </div>
       </section>
@@ -131,7 +127,7 @@ export default function Home() {
           </p>
 
           <h2 className="font-serif text-4xl md:text-6xl mb-12">
-            Choose The Perfect Sound
+            Choose the Right Performance Format
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -140,11 +136,13 @@ export default function Home() {
                 key={item.title}
                 className="group relative h-[460px] rounded-[28px] overflow-hidden border border-white/10 bg-white/5"
               >
-                <img
+                <Image
                   src={item.image}
                   alt={item.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectPosition: item.position }}
-                  className="absolute inset-0 w-full h-full object-cover opacity-85 group-hover:scale-[1.025] transition duration-700"
+                  className="object-cover opacity-85 group-hover:scale-[1.025] transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
 
@@ -178,11 +176,13 @@ export default function Home() {
                 key={item.title}
                 className="relative h-[360px] rounded-[28px] overflow-hidden border border-white/10"
               >
-                <img
+                <Image
                   src={item.image}
                   alt={item.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ objectPosition: item.position }}
-                  className="absolute inset-0 w-full h-full object-cover opacity-90 transition duration-700"
+                  className="object-cover opacity-90 transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
 
@@ -295,7 +295,7 @@ export default function Home() {
         </p>
 
         <h2 className="font-serif text-4xl md:text-6xl mb-8">
-          Let's Create Something Unforgettable
+          Let&apos;s Create Something Unforgettable
         </h2>
 
         <p className="text-white/60 max-w-2xl mx-auto leading-8 mb-10">

@@ -15,11 +15,29 @@ function escapeHtml(value) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, phone, eventDate, location, details, company } = body;
+    const {
+      name,
+      email,
+      phone,
+      eventDate,
+      location,
+      eventType,
+      performanceFormat,
+      details,
+      company,
+    } = body;
 
     if (!name || !email || !eventDate) {
       return Response.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    const enrichedDetails = [
+      eventType ? `Event type: ${eventType}` : null,
+      performanceFormat ? `Performance format: ${performanceFormat}` : null,
+      details ? `Details: ${details}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     const intakeResponse = await fetch(AVANTIQO_BOOKING_INTAKE, {
       method: "POST",
@@ -33,7 +51,7 @@ export async function POST(req) {
         phone,
         eventDate,
         location,
-        details,
+        details: enrichedDetails,
         company: company || "",
       }),
       cache: "no-store",
@@ -56,6 +74,8 @@ export async function POST(req) {
     const safePhone = escapeHtml(phone || "-");
     const safeDate = escapeHtml(eventDate);
     const safeLocation = escapeHtml(location || "-");
+    const safeEventType = escapeHtml(eventType || "-");
+    const safePerformanceFormat = escapeHtml(performanceFormat || "-");
     const safeDetails = escapeHtml(details || "-").replace(/\n/g, "<br>");
     const safeBookingCode = escapeHtml(intake.booking_code || "Recorded in Avantiqo");
 
@@ -71,6 +91,8 @@ export async function POST(req) {
         <p><b>Phone:</b> ${safePhone}</p>
         <p><b>Date:</b> ${safeDate}</p>
         <p><b>Location:</b> ${safeLocation}</p>
+        <p><b>Event type:</b> ${safeEventType}</p>
+        <p><b>Performance format:</b> ${safePerformanceFormat}</p>
         <p><b>Details:</b><br>${safeDetails}</p>
       `,
     });

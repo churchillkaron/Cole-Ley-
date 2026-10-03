@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,6 +9,7 @@ const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login?brand=coleley";
 const links = [
   ["/", "HOME"],
   ["/music", "GALLERY"],
+  ["/live-dates", "DATES"],
   ["/live-music-phuket", "LIVE MUSIC"],
   ["/wedding-singer-phuket", "WEDDINGS"],
   ["/about-cole-ley", "ABOUT"],
@@ -22,7 +24,15 @@ export default function PublicNav() {
       <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-[#2b211b]/78 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto h-[84px] md:h-[96px] px-4 md:px-8 flex items-center justify-between">
           <Link href="/" aria-label="Cole Ley home">
-            <img src="/logo-cole.png" alt="Cole Ley" className="w-[120px] md:w-[210px] object-contain" />
+            <Image
+              src="/logo-cole.png"
+              alt="Cole Ley"
+              width={210}
+              height={144}
+              sizes="(max-width: 768px) 120px, 210px"
+              className="w-[120px] md:w-[210px] h-auto object-contain"
+              priority
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-[12px] tracking-[0.25em] text-white/70">
