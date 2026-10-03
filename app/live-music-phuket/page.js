@@ -3,6 +3,7 @@ import PublicNav from '../components/PublicNav'
 import PublicFooter from '../components/PublicFooter'
 import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 import PublicFaq from '../components/PublicFaq'
+import PublicServiceSchema from '../components/PublicServiceSchema'
 
 export const metadata = {
   title: 'Live Music Phuket',
@@ -30,6 +31,13 @@ export default function Page() {
   ]
   return <main className="min-h-screen bg-black text-white">
     <PublicNav />
+    <PublicServiceSchema
+      name="Live Music in Phuket"
+      description="Live music performance service by Cole Ley in Phuket for venues, weddings, corporate events and private celebrations."
+      url="/live-music-phuket"
+      serviceType="Live music performance"
+      image="/cole-hero-2026.jpg"
+    />
     <PublicBreadcrumbs items={[{ label: 'Live Music Phuket', href: '/live-music-phuket' }]} />
     <section className="relative min-h-[78vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.45),rgba(0,0,0,.1)),url('/cole-hero-2026.jpg')",backgroundSize:'cover',backgroundPosition:'center'}}>
       <div className="max-w-3xl">

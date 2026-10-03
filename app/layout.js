@@ -106,6 +106,7 @@ const websiteSchema = {
   '@id': 'https://www.coleley.com/#website',
   url: 'https://www.coleley.com/',
   name: 'Cole Ley',
+  alternateName: 'Cole Ley Official Website',
   publisher: { '@id': 'https://www.coleley.com/#organization' },
   about: { '@id': 'https://www.coleley.com/#cole-ley' },
 }

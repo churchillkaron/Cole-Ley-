@@ -21,6 +21,37 @@ export const metadata = {
   },
 }
 
+const contactPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  '@id': 'https://www.coleley.com/booking#contact-page',
+  url: 'https://www.coleley.com/booking',
+  name: 'Book Cole Ley',
+  description:
+    'Request availability for Cole Ley live performances for weddings, hotels, beach clubs, restaurants, corporate events and private events.',
+  mainEntity: {
+    '@id': 'https://www.coleley.com/#cole-ley',
+  },
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'booking enquiries',
+    telephone: '+66944271265',
+    email: 'cole@coleley.com',
+    areaServed: ['Phuket', 'Thailand', 'Asia'],
+    availableLanguage: ['English'],
+  },
+}
+
 export default function BookingLayout({ children }) {
-  return children
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(contactPageSchema).replace(/</g, '\\u003c'),
+        }}
+      />
+      {children}
+    </>
+  )
 }

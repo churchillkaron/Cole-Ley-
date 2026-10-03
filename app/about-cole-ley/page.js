@@ -22,8 +22,25 @@ export const metadata = {
   },
 }
 
+const profilePageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  '@id': 'https://www.coleley.com/about-cole-ley#profile-page',
+  url: 'https://www.coleley.com/about-cole-ley',
+  name: 'About Cole Ley',
+  mainEntity: {
+    '@id': 'https://www.coleley.com/#cole-ley',
+  },
+}
+
 export default function Page() {
   return <main className="min-h-screen bg-black text-white">
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(profilePageSchema).replace(/</g, '\\u003c'),
+      }}
+    />
     <PublicNav />
     <PublicBreadcrumbs items={[{ label: 'About Cole Ley', href: '/about-cole-ley' }]} />
     <section className="px-6 md:px-16 pt-40 pb-20 bg-[#080808]">

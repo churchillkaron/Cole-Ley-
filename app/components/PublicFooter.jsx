@@ -43,7 +43,7 @@ export default function PublicFooter() {
             <a
               href="https://www.instagram.com/iamcoleley/"
               target="_blank"
-              rel="noreferrer"
+              rel="me noreferrer"
               className="hover:text-white transition"
             >
               Instagram · @iamcoleley

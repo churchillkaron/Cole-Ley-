@@ -3,6 +3,7 @@ import PublicNav from '../components/PublicNav'
 import PublicFooter from '../components/PublicFooter'
 import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 import PublicFaq from '../components/PublicFaq'
+import PublicServiceSchema from '../components/PublicServiceSchema'
 
 export const metadata = {
   title: 'Live Music for Hotels & Beach Clubs',
@@ -25,6 +26,13 @@ export const metadata = {
 export default function Page() {
   return <main className="min-h-screen bg-black text-white">
     <PublicNav />
+    <PublicServiceSchema
+      name="Live Music for Phuket Hotels & Beach Clubs"
+      description="Live music by Cole Ley for Phuket hotels, resorts, restaurants, lounges and beach clubs."
+      url="/hotels-beach-clubs-phuket"
+      serviceType="Hospitality venue live music"
+      image="/cole-event-beach-club.png"
+    />
     <PublicBreadcrumbs items={[{ label: 'Hotels & Beach Clubs', href: '/hotels-beach-clubs-phuket' }]} />
     <section className="relative min-h-[76vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.42),rgba(0,0,0,.12)),url('/3.JPG')",backgroundSize:'cover',backgroundPosition:'center'}}>
       <div className="max-w-3xl">
