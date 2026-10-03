@@ -26,10 +26,10 @@ export const metadata = {
 const AVANTIQO_LIVE_DATES = 'https://avantiqo.ai/api/public/cole-ley/live-dates'
 
 const fallbackSchedule = [
-  { id: 'fallback-yona', day: 'SATURDAYS', venue: 'YONA Beach Club', time: '11:30–13:30', note: 'Morning Vibe live set' },
-  { id: 'fallback-catch', day: 'SUNDAYS', venue: 'Catch Beach Club', time: '16:00–19:00', note: 'Sunset set' },
-  { id: 'fallback-moonshine-thu', day: 'THURSDAYS', venue: 'Moonshine', time: '20:00–23:00', note: 'Live set' },
-  { id: 'fallback-moonshine-sun', day: 'SUNDAYS', venue: 'Moonshine', time: '20:00–23:00', note: 'Jazz & Blues' },
+  { id: 'fallback-yona', day: 'TUE · THU · SAT', venue: 'YONA Beach Club', time: '11:30–13:30', note: 'Morning Vibe live set' },
+  { id: 'fallback-churchill', day: 'WEDNESDAYS', venue: 'Churchill Restaurant & Bar', time: '19:30–23:00', note: 'Cole Ley live in Karon' },
+  { id: 'fallback-moonshine', day: 'THU · SUN', venue: 'Moonshine Phuket', time: '20:00–23:00', note: 'Jazz & Blues' },
+  { id: 'fallback-catch', day: 'SAT · SUN', venue: 'Catch Beach Club', time: '16:00–19:00', note: 'Sunset live music' },
 ]
 
 function dateLabel(value) {
@@ -63,9 +63,14 @@ async function loadLiveDates() {
     })
     if (!response.ok) return { connected: false, events: [] }
     const payload = await response.json()
+    const now = Date.now()
+    const events = (Array.isArray(payload?.events) ? payload.events : []).filter((event) => {
+      const end = new Date(event?.end_date || event?.start_date || '').getTime()
+      return Number.isFinite(end) && end >= now
+    })
     return {
       connected: true,
-      events: Array.isArray(payload?.events) ? payload.events : [],
+      events,
     }
   } catch {
     return { connected: false, events: [] }
@@ -156,7 +161,11 @@ export default async function LiveDatesPage() {
                   <h2 className="font-serif text-3xl mt-3">{event.title || event.venue || 'Cole Ley Live'}</h2>
                   {event.venue ? <p className="text-white/80 mt-3 text-lg">{event.venue}</p> : null}
                   <p className="text-white/50 mt-2">
-                    {[timeLabel(event.start_date), event.city, event.country].filter(Boolean).join(' · ')}
+                    {[
+                      event.end_date ? `${timeLabel(event.start_date)}–${timeLabel(event.end_date)}` : timeLabel(event.start_date),
+                      event.city,
+                      event.country,
+                    ].filter(Boolean).join(' · ')}
                   </p>
                   {event.performance_type ? <p className="text-white/40 mt-2 text-sm">{event.performance_type}</p> : null}
                   {event.ticket_url ? (
