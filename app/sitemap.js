@@ -22,6 +22,12 @@ export default function sitemap() {
       priority: 0.95,
     },
     {
+      url: `${baseUrl}/performance-formats`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/booking`,
       lastModified,
       changeFrequency: 'monthly',

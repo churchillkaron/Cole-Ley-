@@ -10,6 +10,7 @@ const links = [
   ["/", "HOME"],
   ["/music", "GALLERY"],
   ["/live-dates", "DATES"],
+  ["/performance-formats", "FORMATS"],
   ["/live-music-phuket", "LIVE MUSIC"],
   ["/wedding-singer-phuket", "WEDDINGS"],
   ["/about-cole-ley", "ABOUT"],

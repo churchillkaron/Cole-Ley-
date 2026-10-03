@@ -29,6 +29,7 @@ export default function PublicFooter() {
           <div className="flex flex-col gap-3 text-sm text-white/65">
             <Link href="/music" className="hover:text-white transition">Gallery</Link>
             <Link href="/live-dates" className="hover:text-white transition">Live Dates</Link>
+            <Link href="/performance-formats" className="hover:text-white transition">Performance Formats</Link>
             <Link href="/live-music-phuket" className="hover:text-white transition">Live Music Phuket</Link>
             <Link href="/wedding-singer-phuket" className="hover:text-white transition">Weddings</Link>
             <Link href="/hotels-beach-clubs-phuket" className="hover:text-white transition">Hotels & Beach Clubs</Link>

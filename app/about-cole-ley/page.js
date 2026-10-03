@@ -186,6 +186,9 @@ export default function Page() {
           <Link href="/music" className="px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37]">
             WATCH PERFORMANCES
           </Link>
+          <Link href="/performance-formats" className="px-8 py-4 rounded-full border border-white/20 text-white/80">
+            EXPLORE FORMATS
+          </Link>
           <Link href="/booking" className="px-8 py-4 rounded-full bg-[#d4af37] text-black font-semibold">
             BUILD A PERFORMANCE
           </Link>
