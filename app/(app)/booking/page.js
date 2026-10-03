@@ -12,6 +12,8 @@ name: "",
 email: "",
 phone: "",
 eventDate: "",
+eventStartTime: "",
+eventEndTime: "",
 location: "",
 details: "",
 });
@@ -73,6 +75,8 @@ try {
     email: "",
     phone: "",
     eventDate: "",
+    eventStartTime: "",
+    eventEndTime: "",
     location: "",
     details: "",
   });
@@ -157,6 +161,27 @@ className="w-full bg-transparent border-b border-white/20 py-3 outline-none focu
 value={form.eventDate || ""}
 onChange={(e) => update("eventDate", e.target.value)}
 />
+
+<div className="grid grid-cols-2 gap-5">
+  <label className="block">
+    <span className="text-[10px] tracking-[0.16em] text-white/40">PREFERRED START</span>
+    <input
+      type="time"
+      className="w-full bg-transparent border-b border-white/20 py-3 outline-none focus:border-[#d4af37]"
+      value={form.eventStartTime || ""}
+      onChange={(e) => update("eventStartTime", e.target.value)}
+    />
+  </label>
+  <label className="block">
+    <span className="text-[10px] tracking-[0.16em] text-white/40">PREFERRED END</span>
+    <input
+      type="time"
+      className="w-full bg-transparent border-b border-white/20 py-3 outline-none focus:border-[#d4af37]"
+      value={form.eventEndTime || ""}
+      onChange={(e) => update("eventEndTime", e.target.value)}
+    />
+  </label>
+</div>
 {availability ? (
   <p className={`text-xs ${availability === "unavailable" ? "text-amber-300" : availability === "limited" ? "text-[#d4af37]" : "text-emerald-300"}`}>
     {availability === "unavailable"

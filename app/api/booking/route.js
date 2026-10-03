@@ -20,6 +20,8 @@ export async function POST(req) {
       email,
       phone,
       eventDate,
+      eventStartTime,
+      eventEndTime,
       location,
       eventType,
       performanceFormat,
@@ -33,6 +35,8 @@ export async function POST(req) {
 
     const enrichedDetails = [
       eventType ? `Event type: ${eventType}` : null,
+      eventStartTime ? `Preferred start: ${eventStartTime}` : null,
+      eventEndTime ? `Preferred end: ${eventEndTime}` : null,
       performanceFormat ? `Performance format: ${performanceFormat}` : null,
       details ? `Details: ${details}` : null,
     ]
@@ -50,6 +54,9 @@ export async function POST(req) {
         email,
         phone,
         eventDate,
+        eventStartTime,
+        eventEndTime,
+        timezone_offset: "+07:00",
         location,
         details: enrichedDetails,
         company: company || "",
@@ -74,6 +81,8 @@ export async function POST(req) {
     const safePhone = escapeHtml(phone || "-");
     const safeDate = escapeHtml(eventDate);
     const safeLocation = escapeHtml(location || "-");
+    const safeStartTime = escapeHtml(eventStartTime || "-");
+    const safeEndTime = escapeHtml(eventEndTime || "-");
     const safeEventType = escapeHtml(eventType || "-");
     const safePerformanceFormat = escapeHtml(performanceFormat || "-");
     const safeDetails = escapeHtml(details || "-").replace(/\n/g, "<br>");
@@ -91,6 +100,7 @@ export async function POST(req) {
         <p><b>Phone:</b> ${safePhone}</p>
         <p><b>Date:</b> ${safeDate}</p>
         <p><b>Location:</b> ${safeLocation}</p>
+        <p><b>Preferred time:</b> ${safeStartTime} – ${safeEndTime}</p>
         <p><b>Event type:</b> ${safeEventType}</p>
         <p><b>Performance format:</b> ${safePerformanceFormat}</p>
         <p><b>Details:</b><br>${safeDetails}</p>
@@ -109,6 +119,7 @@ export async function POST(req) {
         <p><b>Submitted Details:</b></p>
         <p>Date: ${safeDate}</p>
         <p>Location: ${safeLocation}</p>
+        <p>Preferred time: ${safeStartTime} – ${safeEndTime}</p>
       `,
     });
 
