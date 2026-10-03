@@ -32,7 +32,7 @@ const fallbackSchedule = [
   { id: 'fallback-catch', day: 'SAT · SUN', venue: 'Catch Beach Club', time: '16:00–19:00', note: 'Sunset live music' },
 ]
 
-function dateLabel(value) {
+function dateLabel(value, timeZone = 'Asia/Bangkok') {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return 'Date to be announced'
   return new Intl.DateTimeFormat('en-US', {
@@ -40,18 +40,32 @@ function dateLabel(value) {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-    timeZone: 'Asia/Bangkok',
+    timeZone,
   }).format(date)
 }
 
-function timeLabel(value) {
+function dateOnlyLabel(value) {
+  const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (!match) return 'Date to be announced'
+  const [, year, month, day] = match
+  const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 12))
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+}
+
+function timeLabel(value, timeZone = 'Asia/Bangkok') {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return ''
   return new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: 'Asia/Bangkok',
+    timeZone,
   }).format(date)
 }
 
@@ -95,8 +109,8 @@ function musicEventSchema(event) {
     '@type': 'MusicEvent',
     '@id': `https://www.coleley.com/live-dates#${event.id}`,
     name: event.title || (event.venue ? `Cole Ley live at ${event.venue}` : 'Cole Ley Live'),
-    startDate: event.start_date,
-    endDate: event.end_date || undefined,
+    startDate: event.date_only ? (event.public_date || event.start_date) : event.start_date,
+    endDate: event.date_only ? undefined : (event.end_date || undefined),
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location,
@@ -157,16 +171,25 @@ export default async function LiveDatesPage() {
             <div className="grid md:grid-cols-2 gap-5">
               {events.map((event) => (
                 <article key={event.id} className="rounded-[28px] border border-white/10 bg-white/[0.035] p-7">
-                  <p className="text-[#d4af37] text-xs tracking-[0.18em]">{dateLabel(event.start_date).toUpperCase()}</p>
+                  <p className="text-[#d4af37] text-xs tracking-[0.18em]">
+                    {(event.date_only
+                      ? dateOnlyLabel(event.public_date)
+                      : dateLabel(event.start_date, event.timezone)
+                    ).toUpperCase()}
+                  </p>
                   <h2 className="font-serif text-3xl mt-3">{event.title || event.venue || 'Cole Ley Live'}</h2>
                   {event.venue ? <p className="text-white/80 mt-3 text-lg">{event.venue}</p> : null}
-                  <p className="text-white/50 mt-2">
-                    {[
-                      event.end_date ? `${timeLabel(event.start_date)}–${timeLabel(event.end_date)}` : timeLabel(event.start_date),
-                      event.city,
-                      event.country,
-                    ].filter(Boolean).join(' · ')}
-                  </p>
+                  {!event.date_only ? (
+                    <p className="text-white/50 mt-2">
+                      {[
+                        event.end_date
+                          ? `${timeLabel(event.start_date, event.timezone)}–${timeLabel(event.end_date, event.timezone)}`
+                          : timeLabel(event.start_date, event.timezone),
+                        event.city,
+                        event.country,
+                      ].filter(Boolean).join(' · ')}
+                    </p>
+                  ) : null}
                   {event.performance_type ? <p className="text-white/40 mt-2 text-sm">{event.performance_type}</p> : null}
                   {event.ticket_url ? (
                     <a href={event.ticket_url} target="_blank" rel="noreferrer" className="inline-block mt-5 text-[#d4af37] text-sm">
