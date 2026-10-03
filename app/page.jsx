@@ -52,7 +52,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
-      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-black/72 backdrop-blur-xl">
+      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-[#2b211b]/78 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto h-[84px] md:h-[96px] px-4 md:px-8 flex items-center justify-between">
           <img
             src="/logo-cole.png"
@@ -87,7 +87,7 @@ export default function Home() {
           backgroundImage:
             "linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url('/cole-hero-2026.jpg')",
           backgroundSize: "cover",
-          backgroundPosition: "72% center",
+          backgroundPosition: "72% 30%",
         }}
       >
         <div className="max-w-2xl">
