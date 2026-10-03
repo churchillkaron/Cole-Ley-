@@ -18,12 +18,21 @@ export function proxy(request) {
       },
       {
         status: 410,
-        headers: { "Cache-Control": "no-store" },
+        headers: {
+          "Cache-Control": "no-store",
+          "X-Robots-Tag": "noindex, nofollow, noarchive, nosnippet",
+        },
       },
     );
   }
 
-  return NextResponse.redirect(AVANTIQO_LOGIN, 307);
+  const response = NextResponse.redirect(AVANTIQO_LOGIN, 307);
+  response.headers.set(
+    "X-Robots-Tag",
+    "noindex, nofollow, noarchive, nosnippet",
+  );
+  response.headers.set("Cache-Control", "no-store");
+  return response;
 }
 
 export const config = {
