@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
 import PublicBreadcrumbs from "../../components/PublicBreadcrumbs";
@@ -17,6 +17,28 @@ details: "",
 });
 
 const [loading, setLoading] = useState(false);
+const [availability, setAvailability] = useState(null);
+
+useEffect(() => {
+  if (!form.eventDate) {
+    setAvailability(null);
+    return;
+  }
+
+  let cancelled = false;
+  fetch("/api/live-dates")
+    .then((response) => response.json())
+    .then((payload) => {
+      if (cancelled) return;
+      const row = Array.isArray(payload?.availability)
+        ? payload.availability.find((item) => item?.date === form.eventDate)
+        : null;
+      setAvailability(row?.state || "open");
+    })
+    .catch(() => { if (!cancelled) setAvailability(null); });
+
+  return () => { cancelled = true; };
+}, [form.eventDate]);
 
 function update(field, value) {
 setForm({ ...form, [field]: value });
@@ -132,6 +154,15 @@ className="w-full bg-transparent border-b border-white/20 py-3 outline-none focu
 value={form.eventDate || ""}
 onChange={(e) => update("eventDate", e.target.value)}
 />
+{availability ? (
+  <p className={`text-xs ${availability === "unavailable" ? "text-amber-300" : availability === "limited" ? "text-[#d4af37]" : "text-emerald-300"}`}>
+    {availability === "unavailable"
+      ? "That date already has a confirmed booking. You can still send the request for timing or routing review."
+      : availability === "limited"
+        ? "That date currently has a hold or active booking discussion. Send the request and we will check the exact timing."
+        : "No current Avantiqo booking conflict is blocking this date."}
+  </p>
+) : null}
 
 <input
 className="w-full bg-transparent border-b border-white/20 py-3 outline-none focus:border-[#d4af37]"
