@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PublicNav from "../../components/PublicNav";
+import PublicFooter from "../../components/PublicFooter";
 
 export default function BookingPage() {
 const [form, setForm] = useState({
@@ -147,6 +148,7 @@ onChange={(e) => update("location", e.target.value)}
     </div>
 
   </div>
+  <PublicFooter />
  </>
 );
 }

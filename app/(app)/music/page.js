@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { getSupabase } from "@/lib/supabase";
 import PublicNav from "../../components/PublicNav";
+import PublicFooter from "../../components/PublicFooter";
 
 export default function MusicPage() {
   const [tracks, setTracks] = useState([]);
@@ -326,6 +327,7 @@ export default function MusicPage() {
 
       </div>
 
+      <PublicFooter />
     </div>
   );
 }

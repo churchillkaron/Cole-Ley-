@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import PublicNav from '../components/PublicNav'
+import PublicFooter from '../components/PublicFooter'
 
 export const metadata = {
   title: 'About Cole Ley',
@@ -27,5 +28,6 @@ export default function Page() {
         <Link href="/booking" className="px-8 py-4 rounded-full bg-[#d4af37] text-black font-semibold">BOOK COLE LEY</Link>
       </div>
     </div></section>
+  <PublicFooter />
   </main>
 }

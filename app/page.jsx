@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import PublicNav from "./components/PublicNav";
+import PublicFooter from "./components/PublicFooter";
 
 export default function Home() {
   const router = useRouter();
@@ -310,12 +311,7 @@ export default function Home() {
         </button>
       </section>
 
-      <footer className="px-6 md:px-16 py-10 border-t border-white/10 bg-black text-white/40 text-sm">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-4">
-          <p>Cole Ley Entertainment · Phuket, Thailand</p>
-          <p>cole@coleley.com · +66 (0) 94427 1265</p>
-        </div>
-      </footer>
+      <PublicFooter />
     </main>
   );
 }

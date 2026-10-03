@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import PublicNav from '../components/PublicNav'
+import PublicFooter from '../components/PublicFooter'
 
 export const metadata = {
   title: 'Live Music Phuket',
@@ -28,5 +29,6 @@ export default function Page() {
       <div className="grid md:grid-cols-3 gap-6 mt-12">{items.map(([t,d]) => <div key={t} className="rounded-3xl border border-white/10 bg-white/[0.04] p-7"><h3 className="text-[#d4af37] tracking-[0.2em] mb-4">{t}</h3><p className="text-white/65 leading-7">{d}</p></div>)}</div>
     </div></section>
     <section className="px-6 py-24 text-center"><h2 className="font-serif text-4xl md:text-6xl mb-6">Book Live Music in Phuket</h2><p className="text-white/60 max-w-2xl mx-auto mb-9">Tell us the date, venue, event type and preferred performance format.</p><Link href="/booking" className="inline-block px-10 py-4 rounded-full bg-[#d4af37] text-black font-semibold">REQUEST A PROPOSAL</Link></section>
+  <PublicFooter />
   </main>
 }
