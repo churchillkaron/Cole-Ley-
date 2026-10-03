@@ -34,22 +34,26 @@ export default function Home() {
     {
       title: "WEDDINGS",
       text: "Ceremony, cocktail hour, dinner and reception entertainment.",
-      image: "/hero.JPG",
+      image: "/cole-event-wedding.png",
+      position: "50% 42%",
     },
     {
       title: "BEACH CLUBS",
       text: "Sunset sessions, lounge music and party nights.",
-      image: "/3.JPG",
+      image: "/cole-event-beach-club.png",
+      position: "50% 45%",
     },
     {
       title: "CORPORATE EVENTS",
       text: "Gala dinners, award nights, VIP events and product launches.",
-      image: "/bg.png",
+      image: "/cole-event-corporate.png",
+      position: "50% 40%",
     },
     {
       title: "PRIVATE PARTIES",
       text: "Luxury villa parties, birthdays, anniversaries and special moments.",
-      image: "/IMG_7180.JPG",
+      image: "/cole-event-private-party.png",
+      position: "50% 42%",
     },
   ];
 
@@ -204,7 +208,8 @@ export default function Home() {
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover opacity-65"
+                  style={{ objectPosition: item.position }}
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
 
