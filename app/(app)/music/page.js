@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { getSupabase } from "@/lib/supabase";
 import PublicNav from "../../components/PublicNav";
@@ -164,6 +165,8 @@ export default function MusicPage() {
                 {perf.thumbnail_url ? (
                   <img
                     src={perf.thumbnail_url}
+                    alt={perf.title ? `${perf.title} — Cole Ley live performance` : "Cole Ley live performance"}
+                    loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover group-hover:opacity-0 transition duration-300"
                   />
                 ) : (
@@ -271,6 +274,39 @@ export default function MusicPage() {
         </div>
       )}
 
+      <section className="border-y border-white/10 bg-[#080808] px-6 py-20">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-[#d4af37] tracking-[0.32em] text-xs mb-5 text-center">
+            LIVE MUSIC IN PHUKET
+          </p>
+          <h2 className="font-serif text-4xl md:text-6xl text-center">
+            Choose the Right Performance for Your Event
+          </h2>
+          <p className="mt-6 max-w-3xl mx-auto text-center text-white/60 leading-8">
+            Watch Cole Ley live, then explore music for Phuket weddings, hotels, beach clubs,
+            restaurants and private events. Performance formats range from acoustic and duo sets
+            to trio and full-band shows.
+          </p>
+          <div className="grid md:grid-cols-3 gap-5 mt-12">
+            <Link href="/wedding-singer-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 hover:border-[#d4af37]/40 transition">
+              <p className="text-[#d4af37] tracking-[0.18em] text-xs">WEDDINGS</p>
+              <h3 className="font-serif text-2xl mt-3">Wedding Singer Phuket</h3>
+              <p className="text-white/55 leading-7 mt-3">Ceremony, cocktail hour, dinner and reception live music.</p>
+            </Link>
+            <Link href="/hotels-beach-clubs-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 hover:border-[#d4af37]/40 transition">
+              <p className="text-[#d4af37] tracking-[0.18em] text-xs">VENUES</p>
+              <h3 className="font-serif text-2xl mt-3">Hotels & Beach Clubs</h3>
+              <p className="text-white/55 leading-7 mt-3">Sunset sets, dinner music, recurring performances and special events.</p>
+            </Link>
+            <Link href="/live-music-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 hover:border-[#d4af37]/40 transition">
+              <p className="text-[#d4af37] tracking-[0.18em] text-xs">PHUKET</p>
+              <h3 className="font-serif text-2xl mt-3">Live Music Phuket</h3>
+              <p className="text-white/55 leading-7 mt-3">Soul, blues, jazz and contemporary live performance for events and venues.</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* PACKAGES */}
       <div className="max-w-5xl mx-auto px-6 py-20 space-y-10">
 
@@ -316,16 +352,15 @@ export default function MusicPage() {
           Weddings • Beach Clubs • Private Events
         </p>
 
-        <a
-          href="booking"
-          target="_blank"
+        <Link
+          href="/booking"
           className="inline-block px-10 py-4 rounded-xl 
           bg-gradient-to-r from-[#d4af37] to-[#f5d98f] 
           text-black font-semibold tracking-widest
           hover:scale-[1.05] transition"
         >
           CONTACT NOW
-        </a>
+        </Link>
 
       </div>
 

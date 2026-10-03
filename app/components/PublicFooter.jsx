@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function PublicFooter() {
@@ -5,7 +6,14 @@ export default function PublicFooter() {
     <footer className="border-t border-white/10 bg-[#070707] px-6 md:px-16 py-14 text-white">
       <div className="max-w-7xl mx-auto grid gap-10 md:grid-cols-[1.35fr_1fr_1fr]">
         <div>
-          <img src="/logo-cole.png" alt="Cole Ley Co., Ltd." className="w-[190px] object-contain mb-6" />
+          <Image
+            src="/logo-cole.png"
+            alt="Cole Ley Co., Ltd."
+            width={190}
+            height={130}
+            sizes="190px"
+            className="w-[190px] h-auto object-contain mb-6"
+          />
           <p className="max-w-md text-sm leading-7 text-white/55">
             Cole Ley is a Phuket-based singer, musician and live performer for weddings,
             hotels, beach clubs, restaurants, corporate events and private celebrations.
@@ -40,6 +48,7 @@ export default function PublicFooter() {
             >
               Instagram · @iamcoleley
             </a>
+
           </div>
         </div>
       </div>

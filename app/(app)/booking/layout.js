@@ -12,6 +12,13 @@ export const metadata = {
     url: '/booking',
     images: ['/cole-hero-2026.jpg'],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Book Cole Ley for Live Music',
+    description:
+      'Request availability for weddings, hotels, beach clubs, private events and destination performances.',
+    images: ['/cole-hero-2026.jpg'],
+  },
 }
 
 export default function BookingLayout({ children }) {

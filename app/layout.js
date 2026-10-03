@@ -64,6 +64,10 @@ export const metadata = {
   },
 }
 
+const officialProfiles = [
+  'https://www.instagram.com/iamcoleley/',
+]
+
 const artistSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -81,7 +85,7 @@ const artistSchema = {
     name: 'Phuket, Thailand',
   },
   areaServed: ['Phuket', 'Thailand', 'Asia'],
-  sameAs: ['https://www.instagram.com/iamcoleley/'],
+  sameAs: officialProfiles,
 }
 
 const businessSchema = {
@@ -93,7 +97,7 @@ const businessSchema = {
   logo: 'https://www.coleley.com/logo-cole.png',
   email: 'mailto:cole@coleley.com',
   telephone: '+66944271265',
-  sameAs: ['https://www.instagram.com/iamcoleley/'],
+  sameAs: officialProfiles,
 }
 
 const websiteSchema = {

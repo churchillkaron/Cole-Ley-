@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
@@ -82,9 +83,22 @@ return (
         Booking Request
       </h1>
 
-      <p className="text-white/50 max-w-sm">
-        Submit your event details and we will get back to you
+      <p className="text-white/50 max-w-sm leading-7">
+        Request availability for live music in Phuket, Thailand or a destination event. Share
+        your date, location and event details and we will get back to you.
       </p>
+
+      <div className="mt-8 flex flex-col gap-3 text-sm text-white/60">
+        <Link href="/wedding-singer-phuket" className="hover:text-[#d4af37] transition">
+          Planning a Phuket wedding? Explore wedding music →
+        </Link>
+        <Link href="/hotels-beach-clubs-phuket" className="hover:text-[#d4af37] transition">
+          Booking for a hotel or beach club? View venue options →
+        </Link>
+        <Link href="/music" className="hover:text-[#d4af37] transition">
+          Watch Cole Ley live performances →
+        </Link>
+      </div>
     </div>
 
    {/* RIGHT SIDE (form) */}

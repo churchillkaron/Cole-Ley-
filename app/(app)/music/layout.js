@@ -12,6 +12,13 @@ export const metadata = {
     url: '/music',
     images: ['/cole-hero-2026.jpg'],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Cole Ley Live Performances & Music',
+    description:
+      'Watch Cole Ley live and explore acoustic, duo, trio and full-band performance options.',
+    images: ['/cole-hero-2026.jpg'],
+  },
 }
 
 export default function MusicLayout({ children }) {

@@ -29,7 +29,8 @@ export default function Page() {
     ['Dinner', 'Elegant live music that supports the atmosphere without overpowering the room.'],
     ['Reception', 'A bigger duo, trio or full-band setup when the celebration moves into party mode.'],
   ]
-  return <main className="min-h-screen bg-black text-white">\n    <PublicNav />
+  return <main className="min-h-screen bg-black text-white">
+    <PublicNav />
     <PublicBreadcrumbs items={[{ label: 'Wedding Singer Phuket', href: '/wedding-singer-phuket' }]} />
     <section className="relative min-h-[78vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.9),rgba(0,0,0,.45),rgba(0,0,0,.15)),url('/hero.JPG')",backgroundSize:'cover',backgroundPosition:'center'}}>
       <div className="max-w-3xl">

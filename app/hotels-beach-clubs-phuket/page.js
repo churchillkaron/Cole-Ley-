@@ -23,7 +23,8 @@ export const metadata = {
 }
 
 export default function Page() {
-  return <main className="min-h-screen bg-black text-white">\n    <PublicNav />
+  return <main className="min-h-screen bg-black text-white">
+    <PublicNav />
     <PublicBreadcrumbs items={[{ label: 'Hotels & Beach Clubs', href: '/hotels-beach-clubs-phuket' }]} />
     <section className="relative min-h-[76vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.42),rgba(0,0,0,.12)),url('/3.JPG')",backgroundSize:'cover',backgroundPosition:'center'}}>
       <div className="max-w-3xl">
