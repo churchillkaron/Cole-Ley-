@@ -75,5 +75,23 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/jazz-singer-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.88,
+    },
+    {
+      url: `${baseUrl}/acoustic-singer-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.88,
+    },
+    {
+      url: `${baseUrl}/live-band-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.88,
+    },
   ]
 }

@@ -225,6 +225,26 @@ export default function PerformanceFormatsPage() {
         </div>
       </section>
 
+      <section className="px-6 md:px-16 py-20 bg-black">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[#d4af37] tracking-[0.32em] text-xs mb-5">EXPLORE BY FORMAT</p>
+          <div className="grid md:grid-cols-3 gap-5">
+            <Link href="/acoustic-singer-phuket" className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 hover:border-[#d4af37]/40 transition">
+              <h3 className="font-serif text-2xl">Acoustic Singer Phuket</h3>
+              <p className="text-white/55 leading-7 mt-3">Solo vocals and guitar for weddings, sunsets, hotels and private events.</p>
+            </Link>
+            <Link href="/jazz-singer-phuket" className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 hover:border-[#d4af37]/40 transition">
+              <h3 className="font-serif text-2xl">Jazz Singer Phuket</h3>
+              <p className="text-white/55 leading-7 mt-3">Jazz, soul and blues for lounges, dinners, cocktails and premium events.</p>
+            </Link>
+            <Link href="/live-band-phuket" className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 hover:border-[#d4af37]/40 transition">
+              <h3 className="font-serif text-2xl">Live Band Phuket</h3>
+              <p className="text-white/55 leading-7 mt-3">Trio and full-band formats for receptions, parties, beach clubs and galas.</p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <PublicFaq title="Choosing a Cole Ley Performance Format" items={faqItems} />
 
       <section className="px-6 md:px-16 py-24 text-center">
