@@ -287,7 +287,12 @@ export default function MusicPage() {
             restaurants and private events. Performance formats range from acoustic and duo sets
             to trio and full-band shows.
           </p>
-          <div className="grid md:grid-cols-3 gap-5 mt-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
+            <Link href="/live-dates" className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 hover:border-[#d4af37]/40 transition">
+              <p className="text-[#d4af37] tracking-[0.18em] text-xs">DATES</p>
+              <h3 className="font-serif text-2xl mt-3">See Cole Ley Live</h3>
+              <p className="text-white/55 leading-7 mt-3">Upcoming confirmed public performances from the official artist calendar.</p>
+            </Link>
             <Link href="/wedding-singer-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 hover:border-[#d4af37]/40 transition">
               <p className="text-[#d4af37] tracking-[0.18em] text-xs">WEDDINGS</p>
               <h3 className="font-serif text-2xl mt-3">Wedding Singer Phuket</h3>

@@ -183,6 +183,9 @@ export default function Page() {
         </div>
 
         <div className="flex flex-wrap gap-4 mt-10">
+          <Link href="/live-dates" className="px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37]">
+            VIEW LIVE DATES
+          </Link>
           <Link href="/music" className="px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37]">
             WATCH PERFORMANCES
           </Link>

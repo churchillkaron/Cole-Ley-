@@ -280,7 +280,11 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-4 text-center">EXPLORE</p>
           <h2 className="font-serif text-4xl md:text-6xl mb-12 text-center">Find the Right Live Music</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link href="/live-dates" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">LIVE DATES</h3>
+              <p className="text-white/65 leading-7">See confirmed public performances from Cole Ley’s official artist calendar in Phuket and beyond.</p>
+            </Link>
             <Link href="/live-music-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">LIVE MUSIC PHUKET</h3>
               <p className="text-white/65 leading-7">Live performances for venues, private events, restaurants, hotels and celebrations across Phuket.</p>

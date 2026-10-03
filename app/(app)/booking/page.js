@@ -111,6 +111,9 @@ return (
       </p>
 
       <div className="mt-8 flex flex-col gap-3 text-sm text-white/60">
+        <Link href="/live-dates" className="hover:text-[#d4af37] transition">
+          See upcoming public Cole Ley live dates →
+        </Link>
         <Link href="/wedding-singer-phuket" className="hover:text-[#d4af37] transition">
           Planning a Phuket wedding? Explore wedding music →
         </Link>
