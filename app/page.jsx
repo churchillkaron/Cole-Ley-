@@ -310,7 +310,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-4 text-center">EXPLORE</p>
           <h2 className="font-serif text-4xl md:text-6xl mb-12 text-center">Find the Right Live Music</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
             <Link href="/live-dates" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">LIVE DATES</h3>
               <p className="text-white/65 leading-7">See confirmed public performances from Cole Ley’s official artist calendar in Phuket and beyond.</p>
@@ -326,6 +326,10 @@ export default function Home() {
             <Link href="/hotels-beach-clubs-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">HOTELS & BEACH CLUBS</h3>
               <p className="text-white/65 leading-7">Sunset sessions, recurring venue performances, special events and full-band nights.</p>
+            </Link>
+            <Link href="/press" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">PRESS & APPEARANCES</h3>
+              <p className="text-white/65 leading-7">Independent venue, editorial and official music-platform references for Cole Ley.</p>
             </Link>
           </div>
         </div>

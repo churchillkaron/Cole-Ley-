@@ -71,6 +71,7 @@ export const metadata = {
 const officialProfiles = [
   'https://www.instagram.com/iamcoleley/',
   'https://www.facebook.com/113408238398926',
+  'https://music.apple.com/fr/artist/cole-ley/1688271930',
 ]
 
 const artistSchema = {
@@ -91,6 +92,7 @@ const artistSchema = {
   },
   areaServed: ['Phuket', 'Thailand', 'Asia'],
   sameAs: officialProfiles,
+  subjectOf: { '@id': 'https://www.coleley.com/press#page' },
 }
 
 const businessSchema = {
