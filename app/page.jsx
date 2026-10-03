@@ -227,27 +227,71 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-6 md:px-16 py-24 bg-[#080808] text-center">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-6">
-            FEATURED MOMENTS
-          </p>
+      <section className="px-6 md:px-16 py-24 bg-[#080808]">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-6">
+              FEATURED MOMENTS
+            </p>
 
-          <h2 className="font-serif text-4xl md:text-6xl mb-8">
-            Elegant Music. Unforgettable Atmosphere.
-          </h2>
+            <h2 className="font-serif text-4xl md:text-6xl mb-8">
+              Elegant Music. Unforgettable Atmosphere.
+            </h2>
 
-          <p className="text-white/60 leading-8 mb-10">
-            From intimate wedding ceremonies to high-energy beach club nights,
-            Cole Ley creates a refined live music experience tailored to each event.
-          </p>
+            <p className="text-white/60 leading-8 mb-12">
+              Real live performances from Cole Ley — from focused stage moments
+              to high-energy beach club nights in Phuket.
+            </p>
+          </div>
 
-          <Link
-            href="/music"
-            className="inline-block px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37] tracking-[0.2em]"
-          >
-            WATCH PERFORMANCES
-          </Link>
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-4xl mx-auto">
+            <div className="group">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-black shadow-2xl">
+                <video
+                  src="/cole-stage-vertical-20s.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  preload="metadata"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="pt-5 text-left">
+                <p className="text-[#d4af37] tracking-[0.28em] text-xs mb-2">LIVE STAGE</p>
+                <p className="text-white/55 text-sm">Cole Ley performing live on stage.</p>
+              </div>
+            </div>
+
+            <div className="group md:mt-16">
+              <div className="relative aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-black shadow-2xl">
+                <video
+                  src="/cole-beach-club-vertical-20s.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  preload="metadata"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="pt-5 text-left">
+                <p className="text-[#d4af37] tracking-[0.28em] text-xs mb-2">BEACH CLUB</p>
+                <p className="text-white/55 text-sm">Sunset energy, guests and live music in Phuket.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/music"
+              className="inline-block px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37] tracking-[0.2em]"
+            >
+              WATCH MORE PERFORMANCES
+            </Link>
+          </div>
         </div>
       </section>
 
