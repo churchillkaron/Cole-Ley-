@@ -6,6 +6,33 @@ import PublicNav from "../../components/PublicNav";
 import PublicFooter from "../../components/PublicFooter";
 import PublicBreadcrumbs from "../../components/PublicBreadcrumbs";
 
+
+const officialReleases = [
+  {
+    title: "Show Me Love",
+    artists: "Andrey Exx, TuraniQa & Cole Ley",
+    year: "2023 / 2026",
+    apple: "https://music.apple.com/fr/song/1688271931",
+    spotify: "https://open.spotify.com/track/4aVD6rjT9Zm5YLoiudI0m5",
+  },
+  {
+    title: "Somebody",
+    artists: "Andrey Exx, TuraniQa & Cole Ley",
+    year: "2024",
+    apple: "https://music.apple.com/us/song/1759042533",
+    spotify: "https://open.spotify.com/track/1mpFtnJBhoBxKJgnDHgE6D",
+  },
+];
+
+const releaseSchema = officialReleases.map((release) => ({
+  "@context": "https://schema.org",
+  "@type": "MusicRecording",
+  name: release.title,
+  byArtist: { "@id": "https://www.coleley.com/#cole-ley" },
+  url: release.apple,
+  sameAs: [release.apple, release.spotify],
+}));
+
 export default function MusicPage() {
   const [tracks, setTracks] = useState([]);
   const [current, setCurrent] = useState(null);
@@ -88,6 +115,10 @@ export default function MusicPage() {
 
     return (
     <div className="min-h-screen bg-black text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(releaseSchema).replace(/</g, "\u003c") }}
+      />
       <PublicNav />
       <PublicBreadcrumbs items={[{ label: 'Gallery', href: '/music' }]} />
 
@@ -133,6 +164,34 @@ export default function MusicPage() {
               </div>
             </div>
             <p className="text-white/65 text-sm mt-5">Sunset atmosphere, guests and live music in Phuket.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-[#080808] px-6 py-20">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[#d4af37] tracking-[0.32em] text-xs mb-5 text-center">OFFICIAL RELEASES</p>
+          <h2 className="font-serif text-4xl md:text-6xl text-center">Cole Ley on Record</h2>
+          <p className="mt-6 max-w-3xl mx-auto text-center text-white/60 leading-8">
+            Official release credits connect Cole Ley’s recorded music with the live artist audiences see in Phuket and international venues.
+          </p>
+          <div className="grid md:grid-cols-2 gap-5 mt-12">
+            {officialReleases.map((release) => (
+              <article key={release.title} className="rounded-[28px] border border-white/10 bg-white/[0.04] p-7">
+                <p className="text-[#d4af37] tracking-[0.18em] text-xs">{release.year}</p>
+                <h3 className="font-serif text-3xl mt-3">{release.title}</h3>
+                <p className="text-white/55 leading-7 mt-3">{release.artists}</p>
+                <div className="flex flex-wrap gap-4 mt-6">
+                  <a href={release.apple} target="_blank" rel="noopener noreferrer" className="text-[#d4af37] text-sm">APPLE MUSIC →</a>
+                  <a href={release.spotify} target="_blank" rel="noopener noreferrer" className="text-[#d4af37] text-sm">SPOTIFY →</a>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <a href="https://music.apple.com/fr/artist/cole-ley/1688271930" target="_blank" rel="noopener noreferrer" className="inline-block px-7 py-3 rounded-full border border-white/20 text-white/75">
+              VIEW COLE LEY ON APPLE MUSIC
+            </a>
           </div>
         </div>
       </section>
