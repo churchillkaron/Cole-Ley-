@@ -82,7 +82,7 @@ export default function Home() {
       </nav>
 
       <section
-        className="relative min-h-screen flex items-center px-6 md:px-16 pt-[116px] md:pt-[132px] pb-16 md:pb-20"
+        className="relative mt-[84px] md:mt-[96px] min-h-[calc(100vh-84px)] md:min-h-[calc(100vh-96px)] flex items-center px-6 md:px-16 py-14 md:py-16"
         style={{
           backgroundImage:
             "linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url('/cole-hero-2026.jpg')",
