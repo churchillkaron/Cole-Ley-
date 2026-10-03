@@ -3,8 +3,7 @@ export const dynamic = "force-dynamic";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login?brand=coleley";
+import PublicNav from "./components/PublicNav";
 
 export default function Home() {
   const router = useRouter();
@@ -59,37 +58,10 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
-      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-[#2b211b]/78 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto h-[84px] md:h-[96px] px-4 md:px-8 flex items-center justify-between">
-          <img
-            src="/logo-cole.png"
-            alt="Cole Ley"
-            className="w-[120px] md:w-[210px] object-contain"
-          />
-
-          <div className="hidden md:flex items-center gap-8 text-[12px] tracking-[0.25em] text-white/70">
-            <Link href="/" className="text-[#d4af37]">HOME</Link>
-            <Link href="/music">GALLERY</Link>
-            <Link href="/live-music-phuket">LIVE MUSIC</Link>
-            <Link href="/wedding-singer-phuket">WEDDINGS</Link>
-            <Link href="/about-cole-ley">ABOUT</Link>
-            <Link href="/booking">CONTACT</Link>
-            <a href={AVANTIQO_LOGIN_URL} className="border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full">
-              LOGIN
-            </a>
-          </div>
-
-          <a
-            href={AVANTIQO_LOGIN_URL}
-            className="md:hidden border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full text-[11px] tracking-widest"
-          >
-            LOGIN
-          </a>
-        </div>
-      </nav>
+      <PublicNav />
 
       <section
-        className="relative mt-[84px] md:mt-[96px] min-h-[calc(100vh-84px)] md:min-h-[calc(100vh-96px)] flex items-center px-6 md:px-16 py-14 md:py-16"
+        className="relative min-h-[calc(100vh-84px)] md:min-h-[calc(100vh-96px)] flex items-center px-6 md:px-16 py-14 md:py-16"
         style={{
           backgroundImage:
             "linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url('/cole-hero-2026.jpg')",

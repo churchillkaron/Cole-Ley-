@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PublicNav from "../../components/PublicNav";
 
 export default function BookingPage() {
 const [form, setForm] = useState({
@@ -61,13 +62,9 @@ try {
 }
 
 return (
-
- <div className="min-h-screen bg-black text-white relative px-6 md:px-10 py-24 md:py-32">
-
-  {/* LOGO */}
-  <div className="absolute top-4 left-4 md:top-6 md:left-6">
-    <img src="/logo-cole.png" alt="Cole Ley" className="w-[220px] md:w-[420px]" />
-  </div>
+ <>
+  <PublicNav />
+  <div className="min-h-screen bg-black text-white relative px-6 md:px-10 py-24 md:py-32">
 
   {/* GRID LAYOUT */}
   <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
@@ -150,6 +147,6 @@ onChange={(e) => update("location", e.target.value)}
     </div>
 
   </div>
-
+ </>
 );
 }

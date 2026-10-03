@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import PublicNav from '../components/PublicNav'
 
 export const metadata = {
   title: 'Live Music Phuket',
@@ -12,7 +13,7 @@ export default function Page() {
     ['Duo & Trio', 'A fuller live sound for lounges, weddings, restaurants and sunset sessions.'],
     ['Full Band', 'High-energy live entertainment for beach clubs, galas and large celebrations.'],
   ]
-  return <main className="min-h-screen bg-black text-white">
+  return <main className="min-h-screen bg-black text-white">\n    <PublicNav />
     <section className="relative min-h-[78vh] flex items-end px-6 md:px-16 pb-20 pt-36" style={{backgroundImage:"linear-gradient(90deg,rgba(0,0,0,.88),rgba(0,0,0,.45),rgba(0,0,0,.1)),url('/cole-hero-2026.jpg')",backgroundSize:'cover',backgroundPosition:'center'}}>
       <div className="max-w-3xl">
         <p className="text-[#d4af37] tracking-[0.35em] text-xs mb-5">PHUKET · THAILAND</p>

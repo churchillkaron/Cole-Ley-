@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { getSupabase } from "@/lib/supabase";
+import PublicNav from "../../components/PublicNav";
 
 export default function MusicPage() {
   const [tracks, setTracks] = useState([]);
@@ -84,7 +85,47 @@ export default function MusicPage() {
 
     return (
     <div className="min-h-screen bg-black text-white">
+      <PublicNav />
 
+      <section className="max-w-6xl mx-auto px-6 pt-12 pb-6">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-5">FEATURED LIVE MOMENTS</p>
+          <h1 className="font-serif text-4xl md:text-6xl mb-6">Cole Ley Live</h1>
+          <p className="text-white/60 leading-8">
+            Two recent live moments — stage performance and beach club energy in Phuket.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div>
+            <div className="aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-[#080808]">
+              <video
+                src="/cole-stage-vertical-20s.mp4"
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <p className="text-[#d4af37] tracking-[0.25em] text-xs mt-5">LIVE STAGE</p>
+            <p className="text-white/55 text-sm mt-2">A focused 20-second live performance moment.</p>
+          </div>
+
+          <div className="md:mt-14">
+            <div className="aspect-[9/16] overflow-hidden rounded-[30px] border border-white/10 bg-[#080808]">
+              <video
+                src="/cole-beach-club-vertical-20s.mp4"
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <p className="text-[#d4af37] tracking-[0.25em] text-xs mt-5">BEACH CLUB</p>
+            <p className="text-white/55 text-sm mt-2">Sunset atmosphere, guests and live music in Phuket.</p>
+          </div>
+        </div>
+      </section>
 
       {/* PERFORMANCE SHOWCASE */}
       <div className="max-w-6xl mx-auto px-6 py-16">

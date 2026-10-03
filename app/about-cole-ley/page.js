@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import PublicNav from '../components/PublicNav'
 
 export const metadata = {
   title: 'About Cole Ley',
@@ -7,7 +8,7 @@ export const metadata = {
 }
 
 export default function Page() {
-  return <main className="min-h-screen bg-black text-white">
+  return <main className="min-h-screen bg-black text-white">\n    <PublicNav />
     <section className="px-6 md:px-16 pt-40 pb-20 bg-[#080808]">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
