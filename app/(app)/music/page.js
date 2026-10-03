@@ -201,7 +201,7 @@ export default function MusicPage() {
         </div>
       </section>
 
-      {/* PERFORMANCE SHOWCASE */}
+      {tracks.length > 0 ? (
       <div className="max-w-6xl mx-auto px-6 py-16">
 
         <h2 className="text-[#d4af37] tracking-widest text-center mb-10">
@@ -210,12 +210,7 @@ export default function MusicPage() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-          {tracks.length === 0 ? (
-            <div className="text-center text-white/40 py-20 col-span-full">
-              No performances uploaded yet
-            </div>
-          ) : (
-            tracks.map((perf, index) => (
+          {tracks.map((perf, index) => (
               <div
                 key={perf.id}
                 onClick={() => {
@@ -278,11 +273,12 @@ export default function MusicPage() {
                 </div>
 
               </div>
-            ))
-          )}
+            ))}
 
         </div>
       </div>
+
+      ) : null}
 
       {/* CINEMA PLAYER */}
       {current && (

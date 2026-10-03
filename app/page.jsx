@@ -32,31 +32,6 @@ export default function Home() {
   ];
 
 
-  const videoSchema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "VideoObject",
-      name: "Cole Ley Live Stage Performance",
-      description: "Cole Ley performing live on stage in Phuket.",
-      thumbnailUrl: "https://www.coleley.com/cole-stage-vertical-poster.jpg",
-      uploadDate: "2026-10-03",
-      contentUrl: "https://www.coleley.com/cole-stage-vertical-20s.mp4",
-      url: "https://www.coleley.com/music",
-      about: { "@id": "https://www.coleley.com/#cole-ley" },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "VideoObject",
-      name: "Cole Ley Beach Club Live Performance",
-      description: "Cole Ley performing live at a beach club in Phuket.",
-      thumbnailUrl: "https://www.coleley.com/cole-beach-club-vertical-poster.jpg",
-      uploadDate: "2026-10-03",
-      contentUrl: "https://www.coleley.com/cole-beach-club-vertical-20s.mp4",
-      url: "https://www.coleley.com/music",
-      about: { "@id": "https://www.coleley.com/#cole-ley" },
-    },
-  ];
-
   const events = [
     {
       title: "WEDDINGS",
@@ -90,10 +65,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema).replace(/</g, "\u003c") }}
-      />
       <PublicNav />
 
       <section
@@ -234,74 +205,6 @@ export default function Home() {
                 </div>
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 md:px-16 py-24 bg-[#080808]">
-        <div className="max-w-6xl mx-auto">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-6">
-              FEATURED MOMENTS
-            </p>
-
-            <h2 className="font-serif text-4xl md:text-6xl mb-8">
-              Elegant Music. Unforgettable Atmosphere.
-            </h2>
-
-            <p className="text-white/60 leading-8 mb-12">
-              Real live performances from Cole Ley — from focused stage moments
-              to high-energy beach club nights in Phuket.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-10 max-w-4xl mx-auto items-start">
-            <div className="group">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-black shadow-2xl">
-                <video
-                  src="/cole-stage-vertical-20s.mp4"
-                  poster="/cole-stage-vertical-poster.jpg"
-                  playsInline
-                  controls
-                  preload="metadata"
-                  className="h-full w-full object-cover"
-                />
-                <div className="pointer-events-none absolute top-4 left-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[10px] tracking-[0.24em] text-white/80 backdrop-blur-md">
-                  LIVE STAGE
-                </div>
-              </div>
-              <div className="pt-5 text-left">
-                <p className="text-white/75 text-sm">Cole Ley performing live on stage.</p>
-              </div>
-            </div>
-
-            <div className="group">
-              <div className="relative aspect-[9/16] overflow-hidden rounded-[28px] border border-white/10 bg-black shadow-2xl">
-                <video
-                  src="/cole-beach-club-vertical-20s.mp4"
-                  poster="/cole-beach-club-vertical-poster.jpg"
-                  playsInline
-                  controls
-                  preload="metadata"
-                  className="h-full w-full object-cover"
-                />
-                <div className="pointer-events-none absolute top-4 left-4 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-[10px] tracking-[0.24em] text-white/80 backdrop-blur-md">
-                  BEACH CLUB
-                </div>
-              </div>
-              <div className="pt-5 text-left">
-                <p className="text-white/75 text-sm">Sunset energy, guests and live music in Phuket.</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/music"
-              className="inline-block px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37] tracking-[0.2em]"
-            >
-              WATCH MORE PERFORMANCES
-            </Link>
           </div>
         </div>
       </section>
