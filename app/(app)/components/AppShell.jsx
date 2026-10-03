@@ -5,8 +5,12 @@ import { usePathname } from "next/navigation";
 export default function AppShell({ children }) {
   const pathname = usePathname();
 
-  // ❌ Skip shell for invoice preview
-  if (pathname.startsWith("/invoice/preview")) {
+  const publicRoutes = ["/music", "/booking"];
+
+  if (
+    pathname.startsWith("/invoice/preview") ||
+    publicRoutes.some((route) => pathname === route)
+  ) {
     return children;
   }
 

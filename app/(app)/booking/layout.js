@@ -1,0 +1,19 @@
+export const metadata = {
+  title: 'Book Cole Ley',
+  description:
+    'Book Cole Ley for weddings, hotels, beach clubs, restaurants, corporate events and private parties in Phuket, Thailand and destination events across Asia.',
+  alternates: {
+    canonical: '/booking',
+  },
+  openGraph: {
+    title: 'Book Cole Ley for Live Music',
+    description:
+      'Request availability and a live music proposal for your wedding, venue or private event.',
+    url: '/booking',
+    images: ['/cole-hero.png'],
+  },
+}
+
+export default function BookingLayout({ children }) {
+  return children
+}

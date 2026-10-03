@@ -62,15 +62,15 @@ try {
 
 return (
 
- <div className="min-h-screen bg-black text-white relative px-10 py-20">
+ <div className="min-h-screen bg-black text-white relative px-6 md:px-10 py-24 md:py-32">
 
   {/* LOGO */}
-  <div className="absolute top-6 left-6">
-    <img src="/logo-cole.png" className="w-[480px]" />
+  <div className="absolute top-4 left-4 md:top-6 md:left-6">
+    <img src="/logo-cole.png" alt="Cole Ley" className="w-[220px] md:w-[420px]" />
   </div>
 
   {/* GRID LAYOUT */}
-  <div className="max-w-6xl mx-auto grid grid-cols-2 gap-20 items-center">
+  <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-20 items-center">
 
     {/* LEFT SIDE (branding) */}
     <div>

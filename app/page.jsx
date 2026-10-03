@@ -1,6 +1,7 @@
 "use client";
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const AVANTIQO_LOGIN_URL = "https://avantiqo.ai/login?brand=coleley";
@@ -60,15 +61,13 @@ export default function Home() {
           />
 
           <div className="hidden md:flex items-start gap-8 text-[12px] tracking-[0.25em] text-white/70 -mt-14">
-            <button onClick={() => router.push("/")} className="text-[#d4af37]">
-              HOME
-            </button>
-            <button onClick={() => router.push("/music")}>GALLERY</button>
-            <button onClick={() => router.push("/booking")}>CONTACT</button>
-            <a
-              href={AVANTIQO_LOGIN_URL}
-              className="border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full"
-            >
+            <Link href="/" className="text-[#d4af37]">HOME</Link>
+            <Link href="/music">GALLERY</Link>
+            <Link href="/live-music-phuket">LIVE MUSIC</Link>
+            <Link href="/wedding-singer-phuket">WEDDINGS</Link>
+            <Link href="/about-cole-ley">ABOUT</Link>
+            <Link href="/booking">CONTACT</Link>
+            <a href={AVANTIQO_LOGIN_URL} className="border border-[#d4af37]/50 text-[#d4af37] px-4 py-2 rounded-full">
               LOGIN
             </a>
           </div>
@@ -92,34 +91,56 @@ export default function Home() {
         }}
       >
         <div className="max-w-2xl">
-          <p className="text-[#d4af37] tracking-[0.45em] text-xs md:text-sm mb-6">
-            
+          <p className="text-[#d4af37] tracking-[0.32em] text-xs md:text-sm mb-5">
+            LIVE SINGER · MUSICIAN · PHUKET
           </p>
 
           <h1 className="font-serif text-5xl md:text-8xl leading-[0.95] max-w-3xl">
-            OWN YOUR PASSION
+            COLE LEY
           </h1>
 
+          <p className="font-serif text-3xl md:text-5xl mt-5 text-white/90">
+            Own Your Passion
+          </p>
+
           <p className="text-white/70 text-base md:text-xl mt-8 max-w-2xl leading-8">
-            Every moment has a feeling.
-            Music gives it a voice.
+            Soul, blues, jazz and contemporary live music for weddings, beach clubs,
+            hotels, restaurants, private parties and destination events.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-10">
-            <button
-              onClick={() => router.push("/booking")}
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f5d98f] text-black font-semibold tracking-[0.2em]"
+            <Link
+              href="/booking"
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f5d98f] text-black font-semibold tracking-[0.2em] text-center"
             >
               BOOK COLE LEY
-            </button>
+            </Link>
 
-            <button
-              onClick={() => router.push("/music")}
-              className="px-8 py-4 rounded-full border border-white/30 text-white/80 tracking-[0.2em]"
+            <Link
+              href="/music"
+              className="px-8 py-4 rounded-full border border-white/30 text-white/80 tracking-[0.2em] text-center"
             >
               VIEW GALLERY
-            </button>
+            </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-16 py-20 bg-black border-y border-white/10">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-5">
+            LIVE MUSIC IN PHUKET & BEYOND
+          </p>
+          <h2 className="font-serif text-4xl md:text-6xl mb-7">
+            Singer, Musician & Live Performer
+          </h2>
+          <p className="text-white/65 text-base md:text-lg leading-8 max-w-4xl mx-auto">
+            Cole Ley is a Phuket-based live singer and musician performing soul,
+            blues, jazz and contemporary music across Thailand and destination
+            events in Asia. Performances are available as solo, duo, trio and
+            full-band formats for weddings, luxury hotels, beach clubs,
+            restaurants, corporate events and private celebrations.
+          </p>
         </div>
       </section>
 
@@ -212,30 +233,33 @@ export default function Home() {
             Cole Ley creates a refined live music experience tailored to each event.
           </p>
 
-          <button
-            onClick={() => router.push("/music")}
-            className="px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37] tracking-[0.2em]"
+          <Link
+            href="/music"
+            className="inline-block px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37] tracking-[0.2em]"
           >
             WATCH PERFORMANCES
-          </button>
+          </Link>
         </div>
       </section>
 
       <section className="px-6 md:px-16 py-24 bg-black">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-          {[
-            "The highlight of our wedding.",
-            "Professional, elegant and unforgettable.",
-            "A luxury performance our guests still talk about.",
-          ].map((quote) => (
-            <div
-              key={quote}
-              className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8"
-            >
-              <p className="text-[#d4af37] mb-4">★★★★★</p>
-              <p className="text-white/70 leading-7">"{quote}"</p>
-            </div>
-          ))}
+        <div className="max-w-6xl mx-auto">
+          <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-4 text-center">EXPLORE</p>
+          <h2 className="font-serif text-4xl md:text-6xl mb-12 text-center">Find the Right Live Music</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Link href="/live-music-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">LIVE MUSIC PHUKET</h3>
+              <p className="text-white/65 leading-7">Live performances for venues, private events, restaurants, hotels and celebrations across Phuket.</p>
+            </Link>
+            <Link href="/wedding-singer-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">PHUKET WEDDINGS</h3>
+              <p className="text-white/65 leading-7">Ceremony, cocktail hour, dinner and reception music with solo through full-band options.</p>
+            </Link>
+            <Link href="/hotels-beach-clubs-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">HOTELS & BEACH CLUBS</h3>
+              <p className="text-white/65 leading-7">Sunset sessions, recurring venue performances, special events and full-band nights.</p>
+            </Link>
+          </div>
         </div>
       </section>
 
