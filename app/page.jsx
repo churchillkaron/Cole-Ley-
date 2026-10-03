@@ -52,15 +52,15 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
-      <nav className="fixed top-0 left-0 w-full z-50 px-4 md:px-8 py-2 bg-transparent">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <nav className="fixed top-0 left-0 w-full z-50 border-b border-white/10 bg-black/72 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto h-[84px] md:h-[96px] px-4 md:px-8 flex items-center justify-between">
           <img
             src="/logo-cole.png"
             alt="Cole Ley"
-            className="w-[120px] md:w-[260px] object-contain"
+            className="w-[120px] md:w-[210px] object-contain"
           />
 
-          <div className="hidden md:flex items-start gap-8 text-[12px] tracking-[0.25em] text-white/70 -mt-14">
+          <div className="hidden md:flex items-center gap-8 text-[12px] tracking-[0.25em] text-white/70">
             <Link href="/" className="text-[#d4af37]">HOME</Link>
             <Link href="/music">GALLERY</Link>
             <Link href="/live-music-phuket">LIVE MUSIC</Link>
@@ -82,7 +82,7 @@ export default function Home() {
       </nav>
 
       <section
-        className="relative min-h-screen flex items-center px-6 md:px-16 pt-28"
+        className="relative min-h-screen flex items-center px-6 md:px-16 pt-[116px] md:pt-[132px] pb-16 md:pb-20"
         style={{
           backgroundImage:
             "linear-gradient(90deg, rgba(0,0,0,0.82), rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url('/cole-hero-2026.jpg')",
