@@ -26,10 +26,7 @@ const [loading, setLoading] = useState(false);
 const [availability, setAvailability] = useState(null);
 
 useEffect(() => {
-  if (!form.eventDate) {
-    setAvailability(null);
-    return;
-  }
+  if (!form.eventDate) return undefined;
 
   let cancelled = false;
   fetch("/api/live-dates")
@@ -47,7 +44,8 @@ useEffect(() => {
 }, [form.eventDate]);
 
 function update(field, value) {
-setForm({ ...form, [field]: value });
+setForm((current) => ({ ...current, [field]: value }));
+if (field === "eventDate" && !value) setAvailability(null);
 }
 
 async function submitForm() {
