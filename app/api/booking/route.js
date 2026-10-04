@@ -25,6 +25,8 @@ export async function POST(req) {
       location,
       eventType,
       performanceFormat,
+      bookingPath,
+      requestedArtistName,
       details,
       company,
     } = body;
@@ -34,6 +36,8 @@ export async function POST(req) {
     }
 
     const enrichedDetails = [
+      bookingPath ? `Booking path: ${bookingPath}` : null,
+      requestedArtistName ? `Preferred artist: ${requestedArtistName}` : null,
       eventType ? `Event type: ${eventType}` : null,
       eventStartTime ? `Preferred start: ${eventStartTime}` : null,
       eventEndTime ? `Preferred end: ${eventEndTime}` : null,
@@ -58,6 +62,10 @@ export async function POST(req) {
         eventEndTime,
         timezone_offset: "+07:00",
         location,
+        bookingPath,
+        eventType,
+        performanceFormat,
+        requestedArtistName,
         details: enrichedDetails,
         company: company || "",
       }),
@@ -83,6 +91,8 @@ export async function POST(req) {
     const safeLocation = escapeHtml(location || "-");
     const safeStartTime = escapeHtml(eventStartTime || "-");
     const safeEndTime = escapeHtml(eventEndTime || "-");
+    const safeBookingPath = escapeHtml(bookingPath || "recommend");
+    const safeRequestedArtistName = escapeHtml(requestedArtistName || "-");
     const safeEventType = escapeHtml(eventType || "-");
     const safePerformanceFormat = escapeHtml(performanceFormat || "-");
     const safeDetails = escapeHtml(details || "-").replace(/\n/g, "<br>");
@@ -101,6 +111,8 @@ export async function POST(req) {
         <p><b>Date:</b> ${safeDate}</p>
         <p><b>Location:</b> ${safeLocation}</p>
         <p><b>Preferred time:</b> ${safeStartTime} – ${safeEndTime}</p>
+        <p><b>Booking path:</b> ${safeBookingPath}</p>
+        <p><b>Preferred artist:</b> ${safeRequestedArtistName}</p>
         <p><b>Event type:</b> ${safeEventType}</p>
         <p><b>Performance format:</b> ${safePerformanceFormat}</p>
         <p><b>Details:</b><br>${safeDetails}</p>
