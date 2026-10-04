@@ -93,7 +93,29 @@ const artistSchema = {
   },
   areaServed: ['Phuket', 'Thailand', 'Asia'],
   sameAs: officialProfiles,
-  subjectOf: { '@id': 'https://www.coleley.com/press#page' },
+  subjectOf: [
+    { '@id': 'https://www.coleley.com/press#page' },
+    {
+      '@type': 'WebPage',
+      name: 'Marina Bay Sands · Skyline Jazz Sessions',
+      url: 'https://www.marinabaysands.com/world-of-paiza/paiza-sky-residence/skyline-jazz-sessions.html',
+    },
+    {
+      '@type': 'WebPage',
+      name: 'SISTIC · Live at Cool Cats',
+      url: 'https://www.sistic.com.sg/events/lite_coolcats12',
+    },
+    {
+      '@type': 'WebPage',
+      name: 'Phuket101 · Churchill Bar and Restaurant',
+      url: 'https://www.phuket101.net/churchill-bar-and-restaurant/',
+    },
+    {
+      '@type': 'WebPage',
+      name: 'Moonshine Phuket · What\'s On',
+      url: 'https://www.moonshinephuket.net/whats-on',
+    },
+  ],
 }
 
 const businessSchema = {
