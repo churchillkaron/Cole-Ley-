@@ -52,6 +52,22 @@ export default function Page() {
       <p className="text-white/65 leading-8 text-lg">A sunset set at a beach club needs a different pace from a wedding ceremony, hotel lounge or late-night private party. Cole Ley tailors the format, set list and energy to the room.</p>
       <div className="grid md:grid-cols-3 gap-6 mt-12">{items.map(([t,d]) => <div key={t} className="rounded-3xl border border-white/10 bg-white/[0.04] p-7"><h3 className="text-[#d4af37] tracking-[0.2em] mb-4">{t}</h3><p className="text-white/65 leading-7">{d}</p></div>)}</div>
     </div></section>
+    <section className="px-6 md:px-16 py-16 bg-black border-y border-white/10">
+      <div className="max-w-5xl mx-auto grid lg:grid-cols-[1.15fr_.85fr] gap-8 items-center">
+        <div>
+          <p className="text-[#d4af37] tracking-[0.28em] text-xs mb-4">NEED MORE THAN COLE?</p>
+          <h2 className="font-serif text-4xl md:text-5xl">Use Cole Ley Co., Ltd. as the Entertainment Agency</h2>
+          <p className="text-white/60 leading-8 mt-5">
+            If the event needs another singer, a DJ, a live band, saxophone, violin, several performers or a complete entertainment plan, the agency path can source and coordinate the right lineup instead of forcing every enquiry into one artist.
+          </p>
+        </div>
+        <div className="flex flex-col gap-4">
+          <Link href="/entertainment-agency-phuket" className="px-7 py-4 rounded-full bg-[#d4af37] text-black text-center font-semibold">EXPLORE THE AGENCY</Link>
+          <Link href="/booking" className="px-7 py-4 rounded-full border border-white/20 text-center">ASK US TO RECOMMEND THE BEST</Link>
+        </div>
+      </div>
+    </section>
+
     <PublicFaq
       title="Live Music in Phuket — Questions"
       items={[
