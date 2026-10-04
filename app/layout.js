@@ -19,7 +19,7 @@ export const metadata = {
     template: '%s | Cole Ley',
   },
   description:
-    'Book Cole Ley for live music in Phuket and destination events: solo vocal, acoustic, singer with DJ, duo, trio and full-band performances.',
+    'Book Cole Ley as a live artist or use Cole Ley Co., Ltd. as a Phuket entertainment agency for singers, DJs, bands and specialist musicians for weddings and events.',
   keywords: [
     'Cole Ley',
     'live singer Phuket',
@@ -84,7 +84,7 @@ const artistSchema = {
   image: 'https://www.coleley.com/cole-hero-2026.jpg',
   jobTitle: 'Live artist, singer, musician and entertainer',
   description:
-    'Versatile live artist performing as solo vocalist, solo acoustic, serenade, singer with DJ, duo, trio and full band across soul, blues, jazz and contemporary music for weddings, hotels, beach clubs, restaurants, corporate events and private celebrations.',
+    'Versatile live artist performing as solo vocalist, solo acoustic, serenade, singer with DJ, duo, trio and full band across soul, blues, jazz and contemporary music for weddings, hotels, beach clubs, restaurants, corporate events and private celebrations. Cole Ley Co., Ltd. also operates an artist-agency path for sourcing and coordinating other performers.',
   email: 'mailto:cole@coleley.com',
   telephone: '+66944271265',
   homeLocation: {
@@ -123,10 +123,24 @@ const businessSchema = {
   '@type': 'Organization',
   '@id': 'https://www.coleley.com/#organization',
   name: 'Cole Ley Co., Ltd.',
+  alternateName: ['Cole Ley Artist Agency', 'Cole Ley Entertainment Agency'],
   url: 'https://www.coleley.com/',
   logo: 'https://www.coleley.com/logo-cole.png',
   email: 'mailto:cole@coleley.com',
   telephone: '+66944271265',
+  description:
+    'Phuket-based artist and entertainment agency representing Cole Ley and coordinating singers, DJs, bands and specialist musicians for weddings, hospitality venues, corporate events and private celebrations.',
+  areaServed: ['Phuket', 'Thailand', 'Asia'],
+  knowsAbout: [
+    'live music booking',
+    'wedding entertainment',
+    'artist booking',
+    'DJs',
+    'bands',
+    'singers',
+    'specialist musicians',
+    'event entertainment',
+  ],
   sameAs: officialProfiles,
 }
 

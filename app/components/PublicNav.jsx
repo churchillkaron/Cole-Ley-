@@ -21,7 +21,9 @@ const formatLinks = [
 ];
 
 const eventLinks = [
-  ["/wedding-singer-phuket", "Weddings"],
+  ["/wedding-singer-phuket", "Book Cole for a Wedding"],
+  ["/wedding-entertainment-phuket", "Wedding Entertainment Agency"],
+  ["/entertainment-agency-phuket", "Entertainment Agency"],
   ["/hotels-beach-clubs-phuket", "Hotels & Beach Clubs"],
   ["/corporate-event-live-music-phuket", "Corporate Events"],
   ["/private-party-live-music-phuket", "Private Parties"],

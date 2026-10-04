@@ -118,8 +118,12 @@ export default function Home() {
             Versatile Live Artist & Performer
           </h2>
           <p className="text-white/65 text-base md:text-lg leading-8 max-w-4xl mx-auto">
-            Cole Ley is a Phuket-based live artist, singer and musician performing across soul, blues, jazz and contemporary music. Her formats range from solo vocal, solo acoustic and serenade performances to singer-with-DJ, duo, trio and full-band shows for weddings, luxury hotels, beach clubs, restaurants, corporate events and private celebrations.
+            Cole Ley is a Phuket-based live artist, singer and musician performing across soul, blues, jazz and contemporary music. Her formats range from solo vocal, solo acoustic and serenade performances to singer-with-DJ, duo, trio and full-band shows for weddings, luxury hotels, beach clubs, restaurants, corporate events and private celebrations. Through Cole Ley Co., Ltd., clients can also access an artist-agency network for other singers, DJs, bands and specialist musicians when the event needs more than Cole herself.
           </p>
+          <div className="flex flex-wrap justify-center gap-4 mt-8">
+            <Link href="/about-cole-ley" className="px-6 py-3 rounded-full border border-white/20 text-white/75">BOOK COLE LEY</Link>
+            <Link href="/entertainment-agency-phuket" className="px-6 py-3 rounded-full border border-[#d4af37]/50 text-[#d4af37]">USE THE AGENCY</Link>
+          </div>
         </div>
       </section>
 

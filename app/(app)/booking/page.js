@@ -258,12 +258,12 @@ onChange={(e) => update("performanceFormat", e.target.value)}
     <section className="md:col-span-2 mt-6 border-t border-white/10 pt-10">
       <p className="text-[#d4af37] tracking-[0.24em] text-xs mb-4">WHAT CAN YOU BOOK?</p>
       <p className="text-white/55 leading-7 max-w-4xl">
-        Cole Ley can perform as a solo vocalist, solo acoustic singer, singer with DJ, duo,
-        trio or full live band. Bookings range from Phuket weddings, hotels, restaurants and
-        beach clubs to corporate events, private celebrations and destination performances.
-        If you are not sure which setup fits the venue, guest count or event flow, send the
-        date and details and the Artist Agency workflow can recommend the most suitable format.
+        There are two booking paths. Cole Ley can perform as a solo vocalist, solo acoustic singer, singer with DJ, duo, trio or full live band. Through Cole Ley Co., Ltd., the Artist Agency can also source other singers, DJs, bands and specialist musicians when Cole herself is not the right fit or when the event needs a larger multi-artist lineup. If you are unsure, send the event brief and the agency workflow can recommend the best artist or combination.
       </p>
+      <div className="grid md:grid-cols-2 gap-4 mt-7">
+        <Link href="/wedding-singer-phuket" className="rounded-2xl border border-white/10 p-5 hover:border-[#d4af37]/40 transition"><p className="text-[#d4af37] text-xs tracking-[0.15em]">ARTIST PATH</p><p className="text-white mt-2">Book Cole Ley directly</p></Link>
+        <Link href="/entertainment-agency-phuket" className="rounded-2xl border border-white/10 p-5 hover:border-[#d4af37]/40 transition"><p className="text-[#d4af37] text-xs tracking-[0.15em]">AGENCY PATH</p><p className="text-white mt-2">Build an entertainment lineup</p></Link>
+      </div>
       <div className="flex flex-wrap gap-x-6 gap-y-3 mt-6 text-sm">
         <Link href="/performance-formats" className="text-white/65 hover:text-[#d4af37] transition">Compare performance formats →</Link>
         <Link href="/jazz-singer-phuket" className="text-white/65 hover:text-[#d4af37] transition">Jazz, soul & blues →</Link>
