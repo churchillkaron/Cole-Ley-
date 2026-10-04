@@ -98,6 +98,29 @@ export default function Page() {
     </section>
 
     <section className="px-6 md:px-16 py-20 bg-[#080808] border-y border-white/10">
+      <div className="max-w-6xl mx-auto">
+        <p className="text-[#d4af37] tracking-[0.3em] text-xs mb-4">SEARCHING FOR A SPECIFIC TYPE OF ENTERTAINMENT?</p>
+        <h2 className="font-serif text-4xl md:text-6xl max-w-5xl">Wedding DJs, Live Bands, Singers, Saxophone, Violin & More</h2>
+        <p className="text-white/60 leading-8 text-lg mt-6 max-w-4xl">
+          The agency can work from the service you already know you need or from a completely open brief. That means enquiries such as “wedding DJ Phuket,” “live band for wedding Phuket,” “female singer Phuket,” “saxophonist Phuket,” or “violinist for wedding Phuket” can all be handled through one coordinated booking path.
+        </p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+          {[
+            ['Wedding DJs in Phuket', 'DJ-only bookings or combined DJ + live performer setups for ceremony, cocktails and reception.'],
+            ['Live Wedding Bands', 'Duos, trios and full bands for dinner, dance-floor and party formats.'],
+            ['Wedding Singers', 'Female or male vocalists for ceremony, cocktail hour, dinner and reception.'],
+            ['Saxophone & Violin', 'Specialist musicians for ceremony moments, sunset cocktails, dinner and DJ-live combinations.'],
+            ['Corporate Entertainment', 'Artists and mixed lineups for brand events, launches, conferences and private company functions.'],
+            ['Hotels & Beach Clubs', 'Recurring or one-off entertainment programming for hospitality venues.'],
+          ].map(([title,text]) => <article key={title} className="rounded-3xl border border-white/10 bg-white/[0.035] p-7">
+            <h3 className="font-serif text-2xl">{title}</h3>
+            <p className="text-white/58 leading-7 mt-4">{text}</p>
+          </article>)}
+        </div>
+      </div>
+    </section>
+
+    <section className="px-6 md:px-16 py-20 bg-[#080808] border-y border-white/10">
       <div className="max-w-5xl mx-auto">
         <p className="text-[#d4af37] tracking-[0.3em] text-xs mb-4">HOW IT WORKS</p>
         <h2 className="font-serif text-4xl md:text-6xl">Tell Us the Event, Not the Artist Name</h2>
