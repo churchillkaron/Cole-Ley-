@@ -1,6 +1,6 @@
 export default function sitemap() {
   const baseUrl = 'https://www.coleley.com'
-  const lastModified = new Date('2026-10-03T00:00:00.000Z')
+  const lastModified = new Date('2026-10-04T00:00:00.000Z')
 
   return [
     {
@@ -18,7 +18,7 @@ export default function sitemap() {
     {
       url: `${baseUrl}/live-dates`,
       lastModified,
-      changeFrequency: 'weekly',
+      changeFrequency: 'daily',
       priority: 0.95,
     },
     {
@@ -72,7 +72,7 @@ export default function sitemap() {
     {
       url: `${baseUrl}/press`,
       lastModified,
-      changeFrequency: 'monthly',
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
