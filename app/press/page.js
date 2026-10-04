@@ -27,6 +27,9 @@ const fallbackReferences = [
   { type: 'OFFICIAL MUSIC PROFILE', title: 'Cole Ley on Apple Music', text: 'Apple Music maintains an artist profile for Cole Ley and catalogues official release credits.', href: 'https://music.apple.com/fr/artist/cole-ley/1688271930', source: 'Apple Music' },
   { type: 'OFFICIAL MUSIC PROFILE', title: 'Cole Ley on Spotify', text: 'Spotify maintains Cole Ley’s official artist profile and links it directly from credited releases.', href: 'https://open.spotify.com/artist/2VBy8qDokhFWatU5GofoT9', source: 'Spotify' },
   { type: 'OFFICIAL RELEASE', title: 'Show Me Love', text: 'Spotify credits Cole Ley alongside Andrey Exx and TuraniQa on the official release.', href: 'https://open.spotify.com/track/4aVD6rjT9Zm5YLoiudI0m5', source: 'Spotify' },
+  { type: 'INTERNATIONAL EVENT LISTING', title: 'Live at Cool Cats Singapore · Cole Ley', text: 'SISTIC lists Cole Ley for 23 and 24 October at Cool Cats Singapore and describes her as a soulful contemporary vocalist.', href: 'https://www.sistic.com.sg/events/lite_coolcats12', source: 'SISTIC Singapore' },
+  { type: 'INTERNATIONAL HEADLINER LISTING', title: 'Cole Ley · Live at Cool Cats', text: 'Eventbrite lists Cole Ley as a headliner in the Cool Cats Singapore live-music lineup organised by Vamp Productions.', href: 'https://www.eventbrite.sg/e/live-at-cool-cats-tickets-1673674839499?aff=ebdsoporgprofile', source: 'Eventbrite / Vamp Productions' },
+  { type: 'EDITORIAL VENUE COVERAGE', title: 'Moonshine Phuket · Cole Ley & The Band', text: 'Phuket101 independently names Cole Ley & The Band in Moonshine Phuket’s weekly live-entertainment programme.', href: 'https://www.phuket101.net/moonshine/', source: 'Phuket101' },
 ]
 
 async function loadReferences() {
@@ -60,8 +63,20 @@ export default async function PressPage() {
       itemListElement: references.map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: item.href,
-        name: item.title,
+        item: {
+          '@type': 'WebPage',
+          url: item.href,
+          name: item.title,
+          description: item.text || undefined,
+          publisher: item.source
+            ? {
+                '@type': 'Organization',
+                name: item.source,
+              }
+            : undefined,
+          datePublished: item.published_at || undefined,
+          about: { '@id': 'https://www.coleley.com/#cole-ley' },
+        },
       })),
     },
   }
