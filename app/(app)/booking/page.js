@@ -15,6 +15,10 @@ eventDate: "",
 eventStartTime: "",
 eventEndTime: "",
 location: "",
+bookingPath: "recommend",
+eventType: "",
+performanceFormat: "",
+requestedArtistName: "",
 details: "",
 });
 
@@ -78,6 +82,10 @@ try {
     eventStartTime: "",
     eventEndTime: "",
     location: "",
+    bookingPath: "recommend",
+    eventType: "",
+    performanceFormat: "",
+    requestedArtistName: "",
     details: "",
   });
 
@@ -198,6 +206,38 @@ placeholder="Event Location"
 value={form.location || ""}
 onChange={(e) => update("location", e.target.value)}
 />
+
+<div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+  <p className="text-[10px] tracking-[0.18em] text-[#d4af37] mb-3">WHO SHOULD WE BOOK?</p>
+  <div className="grid md:grid-cols-3 gap-3">
+    {[
+      ["cole_ley", "Book Cole Ley", "You specifically want Cole."],
+      ["agency", "Use the Agency", "You want us to source the right artist or lineup."],
+      ["recommend", "Recommend the Best", "You want us to decide which path fits best."],
+    ].map(([value, title, description]) => (
+      <button
+        key={value}
+        type="button"
+        onClick={() => update("bookingPath", value)}
+        className={form.bookingPath === value
+          ? "rounded-xl border border-[#d4af37]/70 bg-[#d4af37]/[0.06] p-4 text-left transition"
+          : "rounded-xl border border-white/10 p-4 text-left transition hover:border-white/25"}
+      >
+        <span className="block text-sm text-white">{title}</span>
+        <span className="mt-1 block text-xs leading-5 text-white/45">{description}</span>
+      </button>
+    ))}
+  </div>
+</div>
+
+{form.bookingPath !== "cole_ley" ? (
+  <input
+    className="w-full bg-transparent border-b border-white/20 py-3 outline-none focus:border-[#d4af37]"
+    placeholder="Preferred artist name, if any"
+    value={form.requestedArtistName || ""}
+    onChange={(e) => update("requestedArtistName", e.target.value)}
+  />
+) : null}
 
 <select
 className="w-full bg-black border-b border-white/20 py-3 outline-none focus:border-[#d4af37] text-white/75"
