@@ -1,14 +1,9 @@
-"use client";
-export const dynamic = "force-dynamic";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import PublicNav from "./components/PublicNav";
 import PublicFooter from "./components/PublicFooter";
 
 export default function Home() {
-  const router = useRouter();
 
   const performances = [
     {
@@ -16,18 +11,21 @@ export default function Home() {
       text: "Elegant live vocals for ceremonies, serenades, cocktail hours, restaurants and intimate luxury events.",
       image: "/cole-solo-performance.png",
       position: "50% 35%",
+      href: "/performance-formats",
     },
     {
       title: "ACOUSTIC & DUO",
       text: "From stripped-back solo acoustic to a refined duo with one musician for weddings, lounges and private dinners.",
       image: "/cole-duo-performance.png",
       position: "50% 32%",
+      href: "/acoustic-singer-phuket",
     },
     {
       title: "DJ TO FULL BAND",
       text: "Singer-with-DJ, trio and full-band formats for beach clubs, galas, parties and high-energy nights.",
       image: "/cole-full-band.png",
       position: "50% 24%",
+      href: "/live-band-phuket",
     },
   ];
 
@@ -137,9 +135,10 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {performances.map((item) => (
-              <div
+              <Link
                 key={item.title}
-                className="group relative h-[460px] rounded-[28px] overflow-hidden border border-white/10 bg-white/5"
+                href={item.href}
+                className="group relative h-[460px] rounded-[28px] overflow-hidden border border-white/10 bg-white/5 hover:border-[#d4af37]/35 transition"
               >
                 <Image
                   src={item.image}
@@ -158,8 +157,11 @@ export default function Home() {
                   <p className="text-white/75 leading-7 text-sm">
                     {item.text}
                   </p>
+                  <span className="inline-flex items-center gap-2 mt-5 text-[10px] font-semibold tracking-[0.22em] text-[#d4af37]">
+                    EXPLORE FORMAT <span aria-hidden="true">→</span>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -252,12 +254,12 @@ export default function Home() {
           experience for your venue, wedding or private celebration.
         </p>
 
-        <button
-          onClick={() => router.push("/booking")}
-          className="px-10 py-4 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f5d98f] text-black font-semibold tracking-[0.25em]"
+        <Link
+          href="/booking"
+          className="inline-block px-10 py-4 rounded-full bg-gradient-to-r from-[#d4af37] to-[#f5d98f] text-black font-semibold tracking-[0.25em]"
         >
           INQUIRE NOW
-        </button>
+        </Link>
       </section>
 
       <PublicFooter />
