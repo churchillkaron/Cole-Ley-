@@ -35,6 +35,11 @@ export const metadata = {
     'blues singer Phuket',
     'soul singer Phuket',
     'live band Phuket',
+    'entertainment agency Phuket',
+    'wedding entertainment Phuket',
+    'wedding DJ Phuket',
+    'wedding band Phuket',
+    'artist booking Phuket',
   ],
   alternates: {
     canonical: '/',
@@ -92,6 +97,7 @@ const artistSchema = {
     name: 'Phuket, Thailand',
   },
   areaServed: ['Phuket', 'Thailand', 'Asia'],
+  affiliation: { '@id': 'https://www.coleley.com/#organization' },
   sameAs: officialProfiles,
   subjectOf: [
     { '@id': 'https://www.coleley.com/press#page' },
@@ -141,6 +147,52 @@ const businessSchema = {
     'specialist musicians',
     'event entertainment',
   ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Cole Ley Co., Ltd. Entertainment Services',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Artist & Entertainment Agency Phuket',
+          url: 'https://www.coleley.com/entertainment-agency-phuket',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Wedding Entertainment Phuket',
+          url: 'https://www.coleley.com/wedding-entertainment-phuket',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Wedding Singer Phuket',
+          url: 'https://www.coleley.com/wedding-singer-phuket',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Corporate Event Entertainment Phuket',
+          url: 'https://www.coleley.com/corporate-event-live-music-phuket',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Hotel & Beach Club Entertainment Phuket',
+          url: 'https://www.coleley.com/hotels-beach-clubs-phuket',
+        },
+      },
+    ],
+  },
   sameAs: officialProfiles,
 }
 
