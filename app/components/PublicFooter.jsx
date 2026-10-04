@@ -35,7 +35,7 @@ export default function PublicFooter() {
             <Link href="/acoustic-singer-phuket" className="hover:text-white transition">Acoustic Singer Phuket</Link>
             <Link href="/live-band-phuket" className="hover:text-white transition">Live Band Phuket</Link>
             <Link href="/live-music-phuket" className="hover:text-white transition">Live Music Phuket</Link>
-            <Link href="/wedding-singer-phuket" className="hover:text-white transition">Weddings</Link>
+            <Link href="/wedding-singer-phuket" className="hover:text-white transition">Wedding Singer Phuket</Link>
             <Link href="/hotels-beach-clubs-phuket" className="hover:text-white transition">Hotels & Beach Clubs</Link>
             <Link href="/corporate-event-live-music-phuket" className="hover:text-white transition">Corporate Events</Link>
             <Link href="/private-party-live-music-phuket" className="hover:text-white transition">Private Parties</Link>

@@ -225,8 +225,8 @@ export default function Home() {
               <p className="text-white/65 leading-7">Live performances for venues, private events, restaurants, hotels and celebrations across Phuket.</p>
             </Link>
             <Link href="/wedding-singer-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
-              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">PHUKET WEDDINGS</h3>
-              <p className="text-white/65 leading-7">Ceremony, cocktail hour, dinner and reception music with solo through full-band options.</p>
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">WEDDING SINGER PHUKET</h3>
+              <p className="text-white/65 leading-7">Female live singer Cole Ley for ceremonies, cocktail hours, dinner and receptions, from solo through full-band formats.</p>
             </Link>
             <Link href="/hotels-beach-clubs-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">HOTELS & BEACH CLUBS</h3>
