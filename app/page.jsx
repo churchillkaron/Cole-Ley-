@@ -100,6 +100,13 @@ export default function Home() {
             </Link>
 
             <Link
+              href="/entertainment-agency-phuket"
+              className="px-8 py-4 rounded-full border border-[#d4af37]/60 text-[#d4af37] tracking-[0.16em] text-center"
+            >
+              USE THE AGENCY
+            </Link>
+
+            <Link
               href="/music"
               className="px-8 py-4 rounded-full border border-white/30 text-white/80 tracking-[0.2em] text-center"
             >
@@ -123,6 +130,27 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <Link href="/about-cole-ley" className="px-6 py-3 rounded-full border border-white/20 text-white/75">BOOK COLE LEY</Link>
             <Link href="/entertainment-agency-phuket" className="px-6 py-3 rounded-full border border-[#d4af37]/50 text-[#d4af37]">USE THE AGENCY</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-16 py-20 bg-[#070707] border-y border-white/10">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-[#d4af37] tracking-[0.35em] text-xs mb-4 text-center">TWO WAYS TO WORK WITH US</p>
+          <h2 className="font-serif text-4xl md:text-6xl text-center">Book Cole. Or Let the Agency Build the Lineup.</h2>
+          <div className="grid md:grid-cols-2 gap-6 mt-12">
+            <Link href="/about-cole-ley" className="rounded-[30px] border border-[#d4af37]/35 bg-[#d4af37]/[0.035] p-8 hover:border-[#d4af37]/60 transition">
+              <p className="text-[#d4af37] tracking-[0.18em] text-xs">PATH 1 · ARTIST</p>
+              <h3 className="font-serif text-4xl mt-4">Book Cole Ley</h3>
+              <p className="text-white/60 leading-7 mt-4">Choose Cole directly for solo vocal, acoustic, singer-with-DJ, duo, trio or full-band performances.</p>
+              <span className="inline-block mt-6 text-[#d4af37] text-sm">Explore Cole Ley →</span>
+            </Link>
+            <Link href="/entertainment-agency-phuket" className="rounded-[30px] border border-white/10 bg-white/[0.035] p-8 hover:border-[#d4af37]/40 transition">
+              <p className="text-[#d4af37] tracking-[0.18em] text-xs">PATH 2 · AGENCY</p>
+              <h3 className="font-serif text-4xl mt-4">Use Cole Ley Co., Ltd.</h3>
+              <p className="text-white/60 leading-7 mt-4">Ask the agency to source singers, DJs, bands, saxophone, violin or a complete multi-artist entertainment plan.</p>
+              <span className="inline-block mt-6 text-[#d4af37] text-sm">Explore the agency →</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -219,7 +247,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-4 text-center">EXPLORE</p>
           <h2 className="font-serif text-4xl md:text-6xl mb-12 text-center">Find the Right Live Music</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Link href="/live-dates" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">LIVE DATES</h3>
               <p className="text-white/65 leading-7">See confirmed public performances from Cole Ley’s official artist calendar in Phuket and beyond.</p>
@@ -235,6 +263,14 @@ export default function Home() {
             <Link href="/hotels-beach-clubs-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">HOTELS & BEACH CLUBS</h3>
               <p className="text-white/65 leading-7">Sunset sessions, recurring venue performances, special events and full-band nights.</p>
+            </Link>
+            <Link href="/entertainment-agency-phuket" className="rounded-[28px] border border-[#d4af37]/30 bg-[#d4af37]/[0.035] p-8 hover:bg-[#d4af37]/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">ENTERTAINMENT AGENCY</h3>
+              <p className="text-white/65 leading-7">Singers, DJs, bands and specialist musicians sourced through Cole Ley Co., Ltd.</p>
+            </Link>
+            <Link href="/wedding-entertainment-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">WEDDING ENTERTAINMENT</h3>
+              <p className="text-white/65 leading-7">Build ceremony, cocktails, dinner and reception entertainment around the right artists.</p>
             </Link>
             <Link href="/press" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">PRESS & APPEARANCES</h3>
