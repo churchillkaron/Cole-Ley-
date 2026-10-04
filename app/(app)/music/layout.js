@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'Live Performances & Music',
   description:
-    'Watch Cole Ley live performances and explore solo, acoustic, DJ, duo, trio and full-band options for weddings, beach clubs, hotels and private events in Phuket and beyond.',
+    'Watch Cole Ley live and explore acoustic, DJ, duo, trio and full-band performances for Phuket weddings, hotels, beach clubs and private events.',
   alternates: {
     canonical: '/music',
   },

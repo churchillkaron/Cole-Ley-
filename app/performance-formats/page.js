@@ -5,9 +5,9 @@ import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 import PublicFaq from '../components/PublicFaq'
 
 export const metadata = {
-  title: 'Performance Formats | Solo, Acoustic, DJ, Duo, Trio & Band',
+  title: 'Live Performance Formats | Solo to Full Band',
   description:
-    'Explore Cole Ley performance formats in Phuket and beyond: solo vocal, solo acoustic, serenade, singer with DJ, duo, trio, full band and bespoke live entertainment.',
+    'Explore Cole Ley live formats in Phuket: solo vocal, acoustic, serenade, singer with DJ, duo, trio, full band and bespoke event entertainment.',
   alternates: { canonical: '/performance-formats' },
   openGraph: {
     title: 'Cole Ley Performance Formats',

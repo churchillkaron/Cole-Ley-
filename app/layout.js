@@ -19,7 +19,7 @@ export const metadata = {
     template: '%s | Cole Ley',
   },
   description:
-    'Book Cole Ley, a versatile Phuket-based live artist, singer and musician for solo vocal, solo acoustic, serenade, singer-with-DJ, duo, trio and full-band performances across Thailand and destination events in Asia.',
+    'Book Cole Ley for live music in Phuket and destination events: solo vocal, acoustic, singer with DJ, duo, trio and full-band performances.',
   keywords: [
     'Cole Ley',
     'live singer Phuket',

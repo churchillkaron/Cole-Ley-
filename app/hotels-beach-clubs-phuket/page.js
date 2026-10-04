@@ -7,7 +7,7 @@ import PublicServiceSchema from '../components/PublicServiceSchema'
 
 export const metadata = {
   title: 'Live Music for Hotels & Beach Clubs',
-  description: 'Book Cole Ley for live music at hotels, resorts, restaurants, lounges and beach clubs in Phuket. Sunset sets, dinner music, recurring residencies and full-band nights.',
+  description: 'Book Cole Ley for Phuket hotels, resorts and beach clubs: sunset sets, dinner music, recurring residencies and full-band event nights.',
   alternates: { canonical: '/hotels-beach-clubs-phuket' },
   openGraph: {
     title: 'Live Music for Phuket Hotels & Beach Clubs | Cole Ley',

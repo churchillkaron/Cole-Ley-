@@ -1,7 +1,7 @@
 import PublicFormatLanding from '../components/PublicFormatLanding'
 
 export const metadata = {
-  title: 'Live Band Phuket',
+  title: 'Live Band in Phuket for Events & Venues',
   description: 'Book Cole Ley with trio or full live band for Phuket weddings, beach clubs, corporate events, private parties, hotels and destination celebrations.',
   alternates: { canonical: '/live-band-phuket' },
   openGraph: {

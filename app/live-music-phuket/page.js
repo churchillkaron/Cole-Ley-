@@ -6,8 +6,8 @@ import PublicFaq from '../components/PublicFaq'
 import PublicServiceSchema from '../components/PublicServiceSchema'
 
 export const metadata = {
-  title: 'Live Music Phuket',
-  description: 'Live music in Phuket with Cole Ley — soul, blues, jazz and contemporary performances for beach clubs, hotels, restaurants, weddings, corporate events and private parties.',
+  title: 'Live Music in Phuket for Events & Venues',
+  description: 'Book Cole Ley for live music in Phuket: soul, blues, jazz and contemporary sets for hotels, beach clubs, weddings, venues and private events.',
   alternates: { canonical: '/live-music-phuket' },
   openGraph: {
     title: 'Live Music Phuket | Cole Ley',

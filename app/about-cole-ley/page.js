@@ -7,7 +7,7 @@ import PublicBreadcrumbs from '../components/PublicBreadcrumbs'
 export const metadata = {
   title: 'About | Live Artist, Singer & Musician',
   description:
-    'Meet Cole Ley, a Phuket-based live artist, singer and musician performing as solo vocalist, solo acoustic, serenade, singer with DJ, duo, trio and full band for venues and events.',
+    'Meet Cole Ley, a Phuket-based live artist, singer and musician performing solo, acoustic, with DJ, duo, trio and full band for venues and events.',
   alternates: { canonical: '/about-cole-ley' },
   openGraph: {
     title: 'About | Live Artist, Singer & Musician',

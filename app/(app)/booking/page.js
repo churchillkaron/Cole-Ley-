@@ -255,6 +255,23 @@ onChange={(e) => update("performanceFormat", e.target.value)}
 
     </div>
 
+    <section className="md:col-span-2 mt-6 border-t border-white/10 pt-10">
+      <p className="text-[#d4af37] tracking-[0.24em] text-xs mb-4">WHAT CAN YOU BOOK?</p>
+      <p className="text-white/55 leading-7 max-w-4xl">
+        Cole Ley can perform as a solo vocalist, solo acoustic singer, singer with DJ, duo,
+        trio or full live band. Bookings range from Phuket weddings, hotels, restaurants and
+        beach clubs to corporate events, private celebrations and destination performances.
+        If you are not sure which setup fits the venue, guest count or event flow, send the
+        date and details and the Artist Agency workflow can recommend the most suitable format.
+      </p>
+      <div className="flex flex-wrap gap-x-6 gap-y-3 mt-6 text-sm">
+        <Link href="/performance-formats" className="text-white/65 hover:text-[#d4af37] transition">Compare performance formats →</Link>
+        <Link href="/jazz-singer-phuket" className="text-white/65 hover:text-[#d4af37] transition">Jazz, soul & blues →</Link>
+        <Link href="/acoustic-singer-phuket" className="text-white/65 hover:text-[#d4af37] transition">Solo acoustic →</Link>
+        <Link href="/live-band-phuket" className="text-white/65 hover:text-[#d4af37] transition">Trio & full band →</Link>
+      </div>
+    </section>
+
   </div>
   <PublicFooter />
  </>

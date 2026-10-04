@@ -1,7 +1,7 @@
 import PublicFormatLanding from '../components/PublicFormatLanding'
 
 export const metadata = {
-  title: 'Jazz Singer Phuket',
+  title: 'Jazz Singer in Phuket for Events & Venues',
   description: 'Book Cole Ley for jazz, soul and blues live vocals in Phuket hotels, lounges, restaurants, beach clubs, weddings and private events.',
   alternates: { canonical: '/jazz-singer-phuket' },
   openGraph: {
