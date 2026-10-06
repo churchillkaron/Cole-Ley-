@@ -105,5 +105,11 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.88,
     },
+    {
+      url: `${baseUrl}/corporate-entertainment-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.86,
+    },
   ]
 }

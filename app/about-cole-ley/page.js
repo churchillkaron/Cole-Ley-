@@ -158,7 +158,7 @@ export default function Page() {
           same show.
         </p>
 
-        <div className="grid md:grid-cols-3 gap-5 mt-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
           <Link href="/live-music-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 hover:border-[#d4af37]/40 transition">
             <p className="text-[#d4af37] text-xs tracking-[0.18em]">PHUKET</p>
             <h3 className="font-serif text-2xl mt-3">Live Music Phuket</h3>
@@ -178,6 +178,27 @@ export default function Page() {
             <h3 className="font-serif text-2xl mt-3">Hotels & Beach Clubs</h3>
             <p className="text-white/55 leading-7 mt-3">
               Acoustic sunsets, singer-with-DJ sets, recurring performances and full-band nights.
+            </p>
+          </Link>
+          <Link href="/entertainment-agency-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 hover:border-[#d4af37]/40 transition">
+            <p className="text-[#d4af37] text-xs tracking-[0.18em]">AGENCY</p>
+            <h3 className="font-serif text-2xl mt-3">Entertainment Agency Phuket</h3>
+            <p className="text-white/55 leading-7 mt-3">
+              Singers, DJs, musicians and custom entertainment lineups through Cole Ley Co., Ltd.
+            </p>
+          </Link>
+          <Link href="/live-band-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 hover:border-[#d4af37]/40 transition">
+            <p className="text-[#d4af37] text-xs tracking-[0.18em]">BANDS</p>
+            <h3 className="font-serif text-2xl mt-3">Live Band Phuket</h3>
+            <p className="text-white/55 leading-7 mt-3">
+              Singer-led duo, trio and full-band formats for venues, private events and corporate programmes.
+            </p>
+          </Link>
+          <Link href="/corporate-entertainment-phuket" className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 hover:border-[#d4af37]/40 transition">
+            <p className="text-[#d4af37] text-xs tracking-[0.18em]">CORPORATE</p>
+            <h3 className="font-serif text-2xl mt-3">Corporate Entertainment Phuket</h3>
+            <p className="text-white/55 leading-7 mt-3">
+              Live music and custom artist lineups for gala dinners, launches, awards and VIP events.
             </p>
           </Link>
         </div>
