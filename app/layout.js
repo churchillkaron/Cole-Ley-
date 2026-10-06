@@ -23,6 +23,8 @@ export const metadata = {
   keywords: [
     'Cole Ley',
     'live singer Phuket',
+    'best singer Phuket',
+    'best singer in Phuket',
     'musician Phuket',
     'live music Phuket',
     'wedding singer Phuket',

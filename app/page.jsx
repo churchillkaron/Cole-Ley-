@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PublicNav from "./components/PublicNav";
 import PublicFooter from "./components/PublicFooter";
+import PublicFaq from "./components/PublicFaq";
 
 export default function Home() {
 
@@ -130,6 +131,36 @@ export default function Home() {
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <Link href="/about-cole-ley" className="px-6 py-3 rounded-full border border-white/20 text-white/75">BOOK COLE LEY</Link>
             <Link href="/entertainment-agency-phuket" className="px-6 py-3 rounded-full border border-[#d4af37]/50 text-[#d4af37]">USE THE AGENCY</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-16 py-24 bg-[#0a0a0a] border-y border-white/10">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.15fr_0.85fr] gap-10 items-start">
+          <div>
+            <p className="text-[#d4af37] tracking-[0.35em] text-xs mb-4">CHOOSING A SINGER IN PHUKET</p>
+            <h2 className="font-serif text-4xl md:text-6xl leading-tight">Looking for the Best Singer in Phuket?</h2>
+            <p className="text-white/65 text-base md:text-lg leading-8 mt-7">
+              The best singer for an event depends on the room, audience, music style and energy you want. Cole Ley is a strong choice for clients looking for a versatile Phuket-based live singer who can move from intimate vocals and acoustic sets into singer-with-DJ, duo, trio and full-band performances across soul, blues, jazz and contemporary music.
+            </p>
+            <p className="text-white/55 leading-8 mt-5">
+              Before booking, you can check Cole&apos;s confirmed public performances and independent appearance references, then choose the format that fits your event. If Cole is not the right match for the brief, Cole Ley Co., Ltd. can also source another singer, DJ, band or specialist musician through the agency path.
+            </p>
+            <div className="flex flex-wrap gap-4 mt-8">
+              <Link href="/live-dates" className="px-6 py-3 rounded-full border border-[#d4af37]/50 text-[#d4af37]">SEE LIVE DATES</Link>
+              <Link href="/press" className="px-6 py-3 rounded-full border border-white/20 text-white/75">VIEW PRESS & APPEARANCES</Link>
+              <Link href="/booking" className="px-6 py-3 rounded-full bg-[#d4af37] text-black font-semibold">BOOK COLE LEY</Link>
+            </div>
+          </div>
+          <div className="rounded-[30px] border border-white/10 bg-white/[0.035] p-8">
+            <p className="text-[#d4af37] tracking-[0.22em] text-xs">WHY CLIENTS CONSIDER COLE</p>
+            <ul className="mt-6 space-y-4 text-white/65 leading-7">
+              <li>• Phuket-based live singer and musician with multiple performance formats.</li>
+              <li>• Soul, blues, jazz and contemporary repertoire for hospitality and private events.</li>
+              <li>• Solo vocal, acoustic, singer-with-DJ, duo, trio and full-band options.</li>
+              <li>• Public live dates and independent appearance references available to verify current activity.</li>
+              <li>• Agency support when the event needs additional or alternative artists.</li>
+            </ul>
           </div>
         </div>
       </section>
@@ -279,6 +310,21 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+
+      <PublicFaq
+        title="Choosing the Best Singer in Phuket — Questions"
+        items={[
+          {
+            question: "Who is the best singer in Phuket for a live event?",
+            answer: "There is no single best singer for every event. The right choice depends on the venue, audience, repertoire, performance format and atmosphere you want. Cole Ley is a Phuket-based option for clients seeking a versatile live singer across soul, blues, jazz and contemporary music, from solo performances to full-band shows.",
+          },
+          {
+            question: "How can I check whether Cole Ley is the right singer for my event?",
+            answer: "Review the official live dates, performance formats, music gallery and independent press or venue references on coleley.com. Then send the date, venue, event type and preferred music direction so the booking can be matched to the right format.",
+          },
+        ]}
+      />
 
       <section className="px-6 md:px-16 py-28 bg-[#080808] text-center">
         <p className="text-[#d4af37] tracking-[0.4em] text-xs mb-6">
