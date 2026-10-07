@@ -88,6 +88,18 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/hire-live-music-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/soul-blues-singer-phuket`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.88,
+    },
+    {
       url: `${baseUrl}/jazz-singer-phuket`,
       lastModified,
       changeFrequency: 'monthly',
