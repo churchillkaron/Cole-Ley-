@@ -122,8 +122,14 @@ export default function PublicNav() {
             </a>
           </div>
 
-          <div className="flex items-center gap-4 lg:hidden">
+          <div className="flex items-center gap-3 lg:hidden">
             <Link href="/live-dates" className="text-[10px] tracking-[0.18em] text-white/75">DATES</Link>
+            <a
+              href={AVANTIQO_LOGIN_URL}
+              className="rounded-full border border-[#d4af37]/50 px-3 py-2 text-[9px] tracking-[0.16em] text-[#d4af37]"
+            >
+              LOGIN
+            </a>
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
