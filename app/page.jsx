@@ -295,9 +295,17 @@ export default function Home() {
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">HOTELS & BEACH CLUBS</h3>
               <p className="text-white/65 leading-7">Sunset sessions, recurring venue performances, special events and full-band nights.</p>
             </Link>
+            <Link href="/hire-live-music-phuket" className="rounded-[28px] border border-[#d4af37]/30 bg-[#d4af37]/[0.035] p-8 hover:bg-[#d4af37]/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">HOW TO CHOOSE LIVE MUSIC</h3>
+              <p className="text-white/65 leading-7">Not sure which singer, musician or live band to hire in Phuket? Compare formats and get a recommendation.</p>
+            </Link>
             <Link href="/entertainment-agency-phuket" className="rounded-[28px] border border-[#d4af37]/30 bg-[#d4af37]/[0.035] p-8 hover:bg-[#d4af37]/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">ENTERTAINMENT AGENCY</h3>
               <p className="text-white/65 leading-7">Singers, DJs, bands and specialist musicians sourced through Cole Ley Co., Ltd.</p>
+            </Link>
+            <Link href="/soul-blues-singer-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
+              <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">SOUL & BLUES SINGER</h3>
+              <p className="text-white/65 leading-7">Soul and blues live vocals for lounges, weddings, dinners, sunset sessions and private events in Phuket.</p>
             </Link>
             <Link href="/wedding-entertainment-phuket" className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 hover:bg-white/[0.07] transition">
               <h3 className="text-[#d4af37] tracking-[0.2em] text-sm mb-4">WEDDING ENTERTAINMENT</h3>
