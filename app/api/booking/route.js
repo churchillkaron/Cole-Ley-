@@ -1,6 +1,16 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// First-party SMTP mailbox; no third-party email sending API.
+async function sendOwnedBookingEmail(message) {
+  const host = process.env.COLE_SMTP_HOST;
+  const user = process.env.COLE_SMTP_USER;
+  const password = process.env.COLE_SMTP_PASSWORD;
+  if (!host || !user || !password) return false;
+  const port = Number(process.env.COLE_SMTP_PORT || 465);
+  const transport = nodemailer.createTransport({ host, port, secure: port === 465, auth: { user, pass: password } });
+  await transport.sendMail({ ...message, from: `Cole Ley Booking <${user}>` });
+  return true;
+}
 const AVANTIQO_BOOKING_INTAKE = "https://avantiqo.ai/api/public/cole-ley/booking-inquiry";
 
 function escapeHtml(value) {
@@ -98,8 +108,9 @@ export async function POST(req) {
     const safeDetails = escapeHtml(details || "-").replace(/\n/g, "<br>");
     const safeBookingCode = escapeHtml(intake.booking_code || "Recorded in Avantiqo");
 
-    await resend.emails.send({
-      from: "Cole Ley Booking <cole@coleley.com>",
+    let mailNotificationsSent = false;
+    try {
+    const ownerSent = await sendOwnedBookingEmail({
       to: "cole@coleley.com",
       subject: `New Booking Request - ${name}`,
       html: `
@@ -119,8 +130,7 @@ export async function POST(req) {
       `,
     });
 
-    await resend.emails.send({
-      from: "Cole Ley Booking <booking@coleley.com>",
+    const guestSent = await sendOwnedBookingEmail({
       to: email,
       subject: "Booking Request Received",
       html: `
@@ -134,9 +144,14 @@ export async function POST(req) {
         <p>Preferred time: ${safeStartTime} – ${safeEndTime}</p>
       `,
     });
+    mailNotificationsSent = ownerSent && guestSent;
+    } catch (mailError) {
+      console.error("Owned SMTP booking notification failed", { message: mailError?.message });
+    }
 
     return Response.json({
       success: true,
+      email_notification_sent: mailNotificationsSent,
       inquiry_id: intake.inquiry_id,
       booking_code: intake.booking_code,
     });
