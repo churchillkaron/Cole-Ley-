@@ -10,7 +10,8 @@ export default function manifest() {
     background_color: "#101010",
     theme_color: "#101010",
     icons: [
-      { src: "/cole-ley-app-icon-512.png", type: "image/png", purpose: "any" },
+      { src: "/cole-ley-app-icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/cole-ley-app-icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
     ],
   };
 }
