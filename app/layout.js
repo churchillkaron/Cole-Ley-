@@ -14,6 +14,9 @@ const inter = Inter({
 
 export const metadata = {
   metadataBase: new URL('https://www.coleley.com'),
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { capable: true, title: 'Cole Ley', statusBarStyle: 'black-translucent' },
+  icons: { apple: '/cole-ley-app-icon-192.png' },
   title: {
     default: 'Cole Ley | Live Artist, Singer & Musician in Phuket',
     template: '%s | Cole Ley',
