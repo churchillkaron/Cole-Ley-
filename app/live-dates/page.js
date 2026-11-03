@@ -194,7 +194,7 @@ export default async function LiveDatesPage() {
             <>
               <p className="text-[#d4af37] tracking-[0.2em] text-xs mb-5">NOVEMBER 2026 · WEEKLY RESIDENCIES</p>
               <p className="text-white/55 leading-7 mb-8">
-                November performance schedule supplied by Cole Ley's team. The official Avantiqo booking feed currently has no published public dates, so these are advertised residency times rather than individually confirmed bookings. Singapore travel and one-off performances may supersede regular shows.
+                November performance schedule supplied by Cole Ley’s team. The official Avantiqo booking feed currently has no published public dates, so these are advertised residency times rather than individually confirmed bookings. Singapore travel and one-off performances may supersede regular shows.
               </p>
               <div className="grid md:grid-cols-2 gap-5">
                 {fallbackSchedule.map((event) => (
