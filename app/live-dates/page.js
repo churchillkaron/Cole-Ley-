@@ -124,6 +124,7 @@ function musicEventSchema(event) {
 
 export default async function LiveDatesPage() {
   const { connected, events } = await loadLiveDates()
+  const showResidencySchedule = events.length === 0
 
   const pageSchema = {
     '@context': 'https://schema.org',
@@ -174,40 +175,27 @@ export default async function LiveDatesPage() {
               {events.map((event) => (
                 <article key={event.id} className="rounded-[28px] border border-white/10 bg-white/[0.035] p-7">
                   <p className="text-[#d4af37] text-xs tracking-[0.18em]">
-                    {(event.date_only
-                      ? dateOnlyLabel(event.public_date)
-                      : dateLabel(event.start_date, event.timezone)
-                    ).toUpperCase()}
+                    {(event.date_only ? dateOnlyLabel(event.public_date) : dateLabel(event.start_date, event.timezone)).toUpperCase()}
                   </p>
                   <h2 className="font-serif text-3xl mt-3">{event.title || event.venue || 'Cole Ley Live'}</h2>
                   {event.venue ? <p className="text-white/80 mt-3 text-lg">{event.venue}</p> : null}
                   {!event.date_only ? (
                     <p className="text-white/50 mt-2">
-                      {[
-                        event.end_date
-                          ? `${timeLabel(event.start_date, event.timezone)}–${timeLabel(event.end_date, event.timezone)}`
-                          : timeLabel(event.start_date, event.timezone),
-                        event.city,
-                        event.country,
-                      ].filter(Boolean).join(' · ')}
+                      {[event.end_date ? `${timeLabel(event.start_date, event.timezone)}–${timeLabel(event.end_date, event.timezone)}` : timeLabel(event.start_date, event.timezone), event.city, event.country].filter(Boolean).join(' · ')}
                     </p>
                   ) : null}
                   {event.performance_type ? <p className="text-white/40 mt-2 text-sm">{event.performance_type}</p> : null}
-                  {event.ticket_url ? (
-                    <a href={event.ticket_url} target="_blank" rel="noreferrer" className="inline-block mt-5 text-[#d4af37] text-sm">
-                      VENUE / TICKETS →
-                    </a>
-                  ) : null}
+                  {event.ticket_url ? <a href={event.ticket_url} target="_blank" rel="noreferrer" className="inline-block mt-5 text-[#d4af37] text-sm">VENUE / TICKETS →</a> : null}
                 </article>
               ))}
             </div>
-          ) : connected ? (
-            <div className="rounded-[28px] border border-white/10 bg-white/[0.035] p-8">
-              <h2 className="font-serif text-3xl">No public dates are published right now.</h2>
-              <p className="text-white/55 leading-7 mt-4">New confirmed public shows will appear here automatically when they are published in Avantiqo.</p>
-            </div>
-          ) : (
+          ) : null}
+          {showResidencySchedule ? (
             <>
+              <p className="text-[#d4af37] tracking-[0.2em] text-xs mb-5">NOVEMBER 2026 · WEEKLY RESIDENCIES</p>
+              <p className="text-white/55 leading-7 mb-8">
+                November performance schedule supplied by Cole Ley's team. The official Avantiqo booking feed currently has no published public dates, so these are advertised residency times rather than individually confirmed bookings. Singapore travel and one-off performances may supersede regular shows.
+              </p>
               <div className="grid md:grid-cols-2 gap-5">
                 {fallbackSchedule.map((event) => (
                   <article key={event.id} className="rounded-[28px] border border-white/10 bg-white/[0.035] p-7">
@@ -218,11 +206,21 @@ export default async function LiveDatesPage() {
                   </article>
                 ))}
               </div>
+              <div className="mt-10 rounded-[28px] border border-[#d4af37]/30 p-7">
+                <p className="text-[#d4af37] text-xs tracking-[0.2em]">SPECIAL NOVEMBER APPEARANCES</p>
+                <ul className="mt-5 grid gap-4 text-white/75">
+                  <li>6 NOV · Marina Bay Sands, Singapore</li>
+                  <li>7 NOV · Private event, Singapore</li>
+                  <li>17 NOV · Barracuda Beach Club · Sunset</li>
+                  <li>28 NOV · ABBA Tribute Night · Cole Ley & The Band · Churchill, Karon · Show 20:00–23:00</li>
+                </ul>
+                <p className="text-white/40 text-sm leading-6 mt-5">6–7 November travel conflicts with the regular Friday/Saturday Phuket residencies. Please confirm individual performances with each venue.</p>
+              </div>
               <p className="text-white/40 text-sm leading-6 mt-6">
-                The live booking feed is temporarily unavailable. These are the supplied November residency times, not a confirmation of availability on every date; special events and travel may override regular shows.
+                {connected ? 'The Avantiqo calendar is connected but has no published dates.' : 'The Avantiqo booking feed is temporarily unavailable.'} New confirmed public bookings appear here automatically once published in Artist Agency.
               </p>
             </>
-          )}
+          ) : null}
         </div>
       </section>
 
