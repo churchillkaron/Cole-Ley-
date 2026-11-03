@@ -60,6 +60,7 @@ async function loadReferences() {
 
 export default async function PressPage() {
   const { references, connected } = await loadReferences()
+  const latestVerification = Math.max(0, ...references.map((item) => referenceTimestamp(item)))
 
   const schema = {
     '@context': 'https://schema.org',
@@ -106,7 +107,8 @@ export default async function PressPage() {
             Verified independent references to Cole Ley across international venues, Phuket live-music programmes, editorial coverage and official music platforms.
           </p>
           <p className="mt-5 text-xs tracking-[0.12em] text-white/35">
-            {connected ? 'UPDATED FROM AVANTIQO ARTIST AGENCY' : 'SHOWING LAST VERIFIED REFERENCES'}
+            {connected ? 'LIVE VERIFIED PRESS FEED FROM AVANTIQO' : 'SHOWING LAST VERIFIED REFERENCES'}
+            {latestVerification ? ` · LATEST REFERENCE VERIFIED OR PUBLISHED ${new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(latestVerification))}` : ''}
           </p>
         </div>
       </section>
@@ -120,6 +122,7 @@ export default async function PressPage() {
                 <div className="max-w-3xl">
                   <h2 className="font-serif text-3xl md:text-4xl">{item.title}</h2>
                   <p className="text-white/55 leading-7 mt-4">{item.text}</p>
+                  {item.published_at ? <p className="text-white/35 text-xs mt-4">Published {new Date(item.published_at).toLocaleDateString("en-GB", { timeZone: "UTC" })}</p> : item.verified_at ? <p className="text-white/35 text-xs mt-4">Verified {new Date(item.verified_at).toLocaleDateString("en-GB", { timeZone: "UTC" })}</p> : null}
                 </div>
                 <a href={item.href} target="_blank" rel="noopener noreferrer" className="shrink-0 text-[#d4af37] text-sm">
                   VIEW {(item.source || 'SOURCE').toUpperCase()} →
