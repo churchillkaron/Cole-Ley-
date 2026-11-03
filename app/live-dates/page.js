@@ -26,10 +26,12 @@ export const metadata = {
 const AVANTIQO_LIVE_DATES = 'https://avantiqo.ai/api/public/cole-ley/live-dates'
 
 const fallbackSchedule = [
-  { id: 'fallback-yona', day: 'TUE · THU · SAT', venue: 'YONA Beach Club', time: '11:30–13:30', note: 'Morning Vibe live set' },
-  { id: 'fallback-churchill', day: 'WEDNESDAYS', venue: 'Churchill Restaurant & Bar', time: '19:30–23:00', note: 'Cole Ley live in Karon' },
-  { id: 'fallback-moonshine', day: 'THU · SUN', venue: 'Moonshine Phuket', time: '20:00–23:00', note: 'Jazz & Blues' },
-  { id: 'fallback-catch', day: 'SAT · SUN', venue: 'Catch Beach Club', time: '16:00–19:00', note: 'Sunset live music' },
+  { id: 'fallback-yona', day: 'TUE · THU · SUN', venue: 'YONA Beach Club', time: '11:30–13:30', note: 'Morning package' },
+  { id: 'fallback-catch', day: 'FRI · SUN', venue: 'Catch Beach Club', time: '15:00–18:00', note: 'Sunset set' },
+  { id: 'fallback-churchill', day: 'WEDNESDAYS', venue: 'Churchill Restaurant & Bar', time: '20:00–23:00', note: 'Cole Ley & The Band' },
+  { id: 'fallback-moonshine-thursday', day: 'THURSDAYS', venue: 'Moonshine Phuket', time: '20:00–23:00', note: 'Ladies Night' },
+  { id: 'fallback-moonshine-sunday', day: 'SUNDAYS', venue: 'Moonshine Phuket', time: '20:00–23:00', note: 'Sauce & Blues' },
+  { id: 'fallback-anantara', day: 'SATURDAYS', venue: 'Anantara Layan', time: '12:00–15:00', note: 'Brunch performance' },
 ]
 
 function dateLabel(value, timeZone = 'Asia/Bangkok') {
@@ -217,7 +219,7 @@ export default async function LiveDatesPage() {
                 ))}
               </div>
               <p className="text-white/40 text-sm leading-6 mt-6">
-                The Avantiqo live calendar is temporarily unavailable, so the most recently published residency schedule is shown as a fallback.
+                The live booking feed is temporarily unavailable. These are the supplied November residency times, not a confirmation of availability on every date; special events and travel may override regular shows.
               </p>
             </>
           )}
