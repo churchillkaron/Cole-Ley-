@@ -1,4 +1,21 @@
-export default function sitemap() {
+export const revalidate = 3600
+
+async function latestVerifiedPressChange() {
+  const fallback = new Date('2026-10-04T00:00:00.000Z')
+  try {
+    const response = await fetch('https://avantiqo.ai/api/public/cole-ley/press', { next: { revalidate: 3600 } })
+    if (!response.ok) return fallback
+    const data = await response.json()
+    const timestamps = (Array.isArray(data?.items) ? data.items : [])
+      .map((item) => Date.parse(item?.verified_at || item?.published_at || ''))
+      .filter(Number.isFinite)
+    return timestamps.length ? new Date(Math.max(...timestamps)) : fallback
+  } catch { return fallback }
+}
+
+export default async function sitemap() {
+  const pressLastModified = await latestVerifiedPressChange()
+  const liveDatesLastModified = new Date('2026-11-03T00:00:00.000Z')
   const baseUrl = 'https://www.coleley.com'
   const lastModified = new Date('2026-10-04T00:00:00.000Z')
 
@@ -17,7 +34,7 @@ export default function sitemap() {
     },
     {
       url: `${baseUrl}/live-dates`,
-      lastModified,
+      lastModified: liveDatesLastModified,
       changeFrequency: 'daily',
       priority: 0.95,
     },
@@ -83,7 +100,7 @@ export default function sitemap() {
     },
     {
       url: `${baseUrl}/press`,
-      lastModified,
+      lastModified: pressLastModified,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
