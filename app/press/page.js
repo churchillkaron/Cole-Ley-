@@ -52,8 +52,7 @@ async function loadReferences() {
     if (!response.ok) return { references: newestFirst(fallbackReferences), connected: false }
     const payload = await response.json()
     const items = Array.isArray(payload?.items) ? payload.items : []
-    const combined = [...new Map([...items, ...fallbackReferences].filter((item) => /^https:\/\//.test(item.href || "")).map((item) => [item.href, item])).values()]
-    return { references: newestFirst(combined), connected: true }
+    return { references: newestFirst(items.length ? items : fallbackReferences), connected: true }
   } catch {
     return { references: newestFirst(fallbackReferences), connected: false }
   }
@@ -61,6 +60,7 @@ async function loadReferences() {
 
 export default async function PressPage() {
   const { references, connected } = await loadReferences()
+  const latestVerification = Math.max(0, ...references.map((item) => referenceTimestamp(item)))
 
   const schema = {
     '@context': 'https://schema.org',
@@ -99,49 +99,48 @@ export default async function PressPage() {
       <PublicNav />
       <PublicBreadcrumbs items={[{ label: 'Press & Appearances', href: '/press' }]} />
 
-      <section className="border-b border-white/10 bg-[#090909] px-6 pb-14 pt-12 md:px-16 md:pb-20 md:pt-20">
-        <div className="mx-auto grid max-w-6xl items-end gap-12 lg:grid-cols-[1.5fr_0.6fr]">
-          <div>
-            <p className="mb-5 text-[11px] font-semibold tracking-[0.28em] text-[#d4af37]">COLE LEY / MEDIA &amp; APPEARANCES</p>
-            <h1 className="font-serif text-5xl leading-[1.07] tracking-tight md:text-7xl">The voice.<br/><span className="text-[#d4af37]">The story.</span></h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-white/60 md:text-lg">Independent editorial coverage, international performances, venue features and official music releases. Explore verified sources directly from their publishers.</p>
-          </div>
-          <div className="border-l border-[#d4af37]/55 pl-6">
-            <p className="text-[10px] font-semibold tracking-[0.22em] text-[#d4af37]">PRESS CONTACT</p>
-            <h2 className="mt-4 font-serif text-2xl">Booking &amp; media enquiries</h2>
-            <p className="mt-3 text-sm leading-6 text-white/50">For interviews, performances and partnerships, contact Cole Ley Co., Ltd.</p>
-            <Link href="/booking" className="mt-5 inline-block border-b border-[#d4af37]/50 pb-2 text-xs tracking-[0.15em] text-[#d4af37]">GET IN TOUCH ↗</Link>
-          </div>
+      <section className="px-6 md:px-16 pt-32 md:pt-40 pb-20 bg-[#080808]">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[#d4af37] tracking-[0.35em] text-xs mb-5">PRESS · VENUES · RELEASES</p>
+          <h1 className="font-serif text-5xl md:text-8xl leading-none">Cole Ley in Public</h1>
+          <p className="text-white/65 text-lg leading-8 mt-8 max-w-3xl">
+            Verified independent references to Cole Ley across international venues, Phuket live-music programmes, editorial coverage and official music platforms.
+          </p>
+          <p className="mt-5 text-xs tracking-[0.12em] text-white/35">
+            {connected ? 'LIVE VERIFIED PRESS FEED FROM AVANTIQO' : 'SHOWING LAST VERIFIED REFERENCES'}
+            {latestVerification ? ` · LATEST REFERENCE VERIFIED OR PUBLISHED ${new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(latestVerification))}` : ''}
+          </p>
         </div>
       </section>
 
-      <section className="px-6 py-14 md:px-16 md:py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex flex-col justify-between gap-5 border-b border-white/10 pb-7 md:flex-row md:items-end">
-            <div><p className="mb-3 text-[10px] font-semibold tracking-[0.22em] text-[#d4af37]">01 / EXTERNAL SOURCES</p><h2 className="font-serif text-4xl md:text-5xl">In the press &amp; on stage</h2></div>
-            <div className="max-w-sm text-sm leading-6 text-white/45">Original publisher links. Publication dates are shown only when available; verification dates are not presented as publication dates.</div>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {references.map((item, index) => (
-              <article key={item.href} className={`flex min-h-[260px] flex-col border p-7 md:p-9 ${index === 0 ? 'border-[#d4af37]/40 bg-[#1d1810]' : 'border-white/10 bg-white/[0.025]'}`}>
-                <div className="flex flex-wrap items-center justify-between gap-2 text-[10px] tracking-[0.18em]"><span className="text-[#d4af37]">{item.type || 'EXTERNAL REFERENCE'}</span><span className="text-white/40">{item.source || 'PUBLISHER'}</span></div>
-                <h3 className="mt-6 font-serif text-2xl leading-[1.3] md:text-3xl">{item.title}</h3>
-                {item.text ? <p className="mt-4 text-sm leading-7 text-white/55">{item.text}</p> : null}
-                <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
-                  <span className="text-xs text-white/40">{item.published_at ? `Published ${new Date(item.published_at).toLocaleDateString('en-GB', { timeZone: 'UTC' })}` : 'Original publisher'}</span>
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-xs tracking-[0.08em] text-[#d4af37] hover:text-white">READ ORIGINAL ↗</a>
+      <section className="px-6 md:px-16 py-20">
+        <div className="max-w-5xl mx-auto grid gap-5">
+          {references.map((item) => (
+            <article key={item.href} className="rounded-[28px] border border-white/10 bg-white/[0.035] p-7 md:p-9">
+              <p className="text-[#d4af37] text-xs tracking-[0.2em]">{item.type}</p>
+              <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+                <div className="max-w-3xl">
+                  <h2 className="font-serif text-3xl md:text-4xl">{item.title}</h2>
+                  <p className="text-white/55 leading-7 mt-4">{item.text}</p>
+                  {item.published_at ? <p className="text-white/35 text-xs mt-4">Published {new Date(item.published_at).toLocaleDateString("en-GB", { timeZone: "UTC" })}</p> : item.verified_at ? <p className="text-white/35 text-xs mt-4">Verified {new Date(item.verified_at).toLocaleDateString("en-GB", { timeZone: "UTC" })}</p> : null}
                 </div>
-              </article>
-            ))}
-          </div>
-          {!connected ? <p className="mt-6 text-xs leading-6 text-white/40">Showing established references. The live discovery feed is currently unavailable; publication is limited to existing sourced references.</p> : null}
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="shrink-0 text-[#d4af37] text-sm">
+                  VIEW {(item.source || 'SOURCE').toUpperCase()} →
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
-      <section className="border-y border-white/10 bg-[#0d0d0d] px-6 py-16 md:px-16">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-          <div><p className="mb-3 text-[10px] font-semibold tracking-[0.22em] text-[#d4af37]">NEXT PERFORMANCE</p><h2 className="font-serif text-3xl md:text-5xl">Experience Cole Ley live.</h2><p className="mt-3 text-sm text-white/50">See the official schedule and enquire about bookings.</p></div>
-          <div className="flex flex-wrap gap-3"><Link href="/live-dates" className="border border-[#d4af37]/60 px-7 py-4 text-xs tracking-widest text-[#d4af37]">LIVE DATES</Link><Link href="/booking" className="bg-[#d4af37] px-7 py-4 text-xs font-semibold tracking-widest text-black">BOOK COLE LEY</Link></div>
+      <section className="px-6 md:px-16 py-24 bg-[#080808] text-center border-y border-white/10">
+        <h2 className="font-serif text-4xl md:text-6xl">See Cole Ley Live</h2>
+        <p className="text-white/60 leading-8 mt-6 max-w-2xl mx-auto">
+          View current public dates or send an event request directly into Cole Ley’s Avantiqo Artist Agency booking workflow.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
+          <Link href="/live-dates" className="px-8 py-4 rounded-full border border-[#d4af37]/50 text-[#d4af37]">LIVE DATES</Link>
+          <Link href="/booking" className="px-8 py-4 rounded-full bg-[#d4af37] text-black font-semibold">BOOKING</Link>
         </div>
       </section>
 
